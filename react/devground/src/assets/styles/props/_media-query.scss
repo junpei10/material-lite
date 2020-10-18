@@ -1,0 +1,39 @@
+@mixin max-width-bp($bp) {
+  @media screen and (max-width: $bp - 1) { @content; }
+}
+
+@mixin min-width-bp($before-bp, $after-bp: 0) {
+  @if $after-bp == 0 {
+    @media screen and (min-width: $before-bp + 1) { @content; }
+  } @else if $before-bp == 0 {
+    @media screen and (min-width: 0) and (max-width: $after-bp) { @content; }
+  } @else  {
+    @media screen and (min-width: $before-bp + 1) and (max-width: $before-bp) { @content; }
+  }
+}
+
+
+
+$platform: 1024px;
+$size: 500px;
+
+@mixin pc {
+  @include min-width-bp($platform) { @content; }
+}
+
+@mixin mp {
+  @include min-width-bp(0, $platform) { @content; }
+}
+@mixin mobile-phone { @include mp { @content; } }
+
+
+
+@mixin medium {
+  @include min-width-bp($size) { @content; }
+}
+@mixin md { @include medium { @content; } }
+
+@mixin small {
+  @include min-width-bp(0, $size) { @content; }
+}
+@mixin sm { @include small { @content; } }

@@ -1,0 +1,7 @@
+@import './Button/theme';
+@import './ripple/theme';
+
+@mixin set-all-theme() {
+  @include set-button-theme();
+  @include set-ripple-theme();
+}

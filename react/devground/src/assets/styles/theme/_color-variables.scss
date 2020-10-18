@@ -1,0 +1,36 @@
+$base: var(--theme-base);
+$opposite-base: var(--theme-opposite-base);
+$background: var(--theme-background);
+$primary-container:   var(--theme-primary-container);
+$secondary-container: var(--theme-secondary-container);
+$tertiary-container:  var(--theme-tertiary-container);
+$disabled-container: var(--theme-disabled-container);
+
+$text:      var(--theme-text);
+$secondary-text: var(--theme-secondary-text);
+$hint-text: var(--theme-hint-text);
+$hint:      $hint-text;
+$disabled-text: var(--theme-disabled-text);
+
+
+$primary: var(--theme-primary);
+$accent:  var(--theme-accent);
+$warn:    var(--theme-warn);
+
+$primary-text-contrast: var(--theme-primary-text-contrast);
+$accent-text-contrast : var(--theme-accent-text-contrast);
+$warn-text-contrast   : var(--theme-warn-text-contrast);
+
+$primary-lighter: var(--theme-primary-lighter);
+$accent-lighter: var(--theme-accent-lighter);
+$warn-lighter: var(--theme-warn-lighter);
+$primary-lighter-contrast: var(--theme-primary-lighter-contrast);
+$accent-lighter-contrast: var(--theme-accent-lighter-contrast);
+$warn-lighter-contrast: var(--theme-warn-lighter-contrast);
+
+$primary-darker: var(--theme-primary-darker);
+$accent-darker: var(--theme-accent-darker);
+$warn-darker: var(--theme-warn-darker);
+$primary-darker-contrast: var(--theme-primary-darker-contrast);
+$accent-darker-contrast: var(--theme-accent-darker-contrast);
+$warn-darker-contrast: var(--theme-warn-darker-contrast);

@@ -1,0 +1,137 @@
+@import '../../assets/styles/entry/props';
+
+$overlay-opacity: 0.056;
+
+.Mat-button-lite {
+  position: relative;
+  user-select: none;
+  cursor: pointer;
+  overflow: hidden;
+  font-weight: 500;
+}
+
+.Mat-button-lite-wrapper {
+  @include flex(row, center, center)
+}
+
+// Square button
+.Mbl-basic,
+.Mbl-raised,
+.Mbl-stroked,
+.Mbl-flat {
+  min-width: 64px;
+  min-height: 36px;
+  padding: 0 16px;
+  border-radius: 4px;
+}
+
+// Circle button
+.Mbl-fab,
+.Mbl-icon {
+  min-height: 40px;
+  min-width: 40px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+
+// "Type 1" button style
+.Mbl-basic,
+.Mbl-stroked,
+.Mbl-icon {
+  --mbl-ripple: var(--mbl-color);
+  background-color: transparent;
+  color: var(--mbl-color);
+
+  &.Mbl-default-color {
+    --mbl-ripple: #{$opposite-base} !important;
+    --mbl-color: #{$text} !important;
+  }
+}
+
+// "Type 2" button style
+.Mbl-raised,
+.Mbl-flat,
+.Mbl-fab {
+  --mbl-ripple: var(--mbl-contrast);
+  background: var(--mbl-color);
+  color: var(--mbl-contrast);
+
+  &.Mbl-default-color {
+    --mbl-ripple: #{$opposite-base} !important;
+    --mbl-color:  #{$secondary-container} !important;
+    --mbl-contrast: #{$text} !important;
+  }
+}
+
+// Enabled overlay style
+.Mbl-basic {
+  .Mat-button-lite-overlay {
+    display: inherit;
+    background-color: var(--mbl-ripple);
+    opacity: 0;
+    transition: opacity map-get($mat-amt-duration, fast) map-get($mat-amt-function, deceleration);
+  }
+  &:hover .Mat-button-lite-overlay {
+    opacity: $overlay-opacity;
+  }
+}
+
+.Mbl-raised {
+  transition: box-shadow map-get($mat-amt-duration, slow) map-get($mat-amt-function, standard);
+
+  &:not(:active) {
+    @include mat-elevation(2);
+  }
+  &:active {
+    @include mat-elevation(8);
+  }
+}
+
+.Mbl-stroked {
+  padding: 0 15px; // <= borderが入るため、1pxを引く
+
+  .Mat-button-lite-overlay {
+    display: block;
+    background-color: transparent;
+    border: 1px solid var(--theme-opposite-base);
+    opacity: 0.12;
+    transition: background-color map-get($mat-amt-duration, fast) map-get($mat-amt-function, deceleration);
+  }
+
+  &:hover .Mat-button-lite-overlay {
+    opacity: $overlay-opacity;
+    background-color: var(--mbl-ripple);
+  }
+}
+
+.Mbl-fab {
+  transition: box-shadow map-get($mat-amt-duration, slow) map-get($mat-amt-function, standard);
+  &:not(:active) {
+    z-index: $z-resting-fab;
+    @include mat-elevation($z-resting-fab);
+  }
+  &:active {
+    z-index: $z-pressed-fab;
+    @include mat-elevation($z-pressed-fab);
+  }
+}
+
+.Mbl-disabled {
+  pointer-events: none;
+  background-color: $disabled-container !important;
+  color: $disabled-text !important;
+  box-shadow: 0 0 0 0 transparent !important;
+}
+
+.Mat-button-lite-overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0; left: 0;
+  pointer-events: none;
+}
+
+
+// Disabled overlay style
+.Mat-button-lite-overlay { display: none; }
