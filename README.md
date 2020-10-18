@@ -3,15 +3,15 @@
 
 ## 詳細
 
-”[Angular material](https://material.angular.io/)”のデザインをパクったコンポーネントです。<br>
-
+”[Angular material](https://material.angular.io/)”のデザインをパクったコンポーネントです。
 <br>
+
 | 相違点 | AM | AM Lite |
 | :-: | :-: | :-: |
 | パフォーマンス |   | ◎ |
 | カスタマイズ性 | ◎ |   |
-<br>
 
+<br>
 きっかけは、”[Angular material](https://material.angular.io/)”を使用しているとき、
 ”Change detection”発生量が多いComponentがあることに気づき、"Change detection"を極力少なくし、もう少し軽量なライブラリが欲しくなったからです。<br>
 ”One action”につき、”One change detection”を目指して作成しています。
