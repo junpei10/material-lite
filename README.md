@@ -4,6 +4,7 @@
 ## 詳細
 
 ”[Angular material](https://material.angular.io/)”のデザインをパクったコンポーネントです。
+
 <br>
 
 | 相違点 | AM | AM Lite |
