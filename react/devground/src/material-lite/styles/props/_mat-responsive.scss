@@ -1,0 +1,138 @@
+// @mixin mat-responsive-padding($direction, $level: 2, $type: shorthand, $important: false) {
+//   $base: (8px * $level);
+
+//   // Set
+//   $top: 0; $bottom: 0;
+//   $right: 0; $left: 0;
+
+//   @if $direction == all or $direction == xy {
+//     $top: $base; $bottom: $base; $right: $base; $left: $base;
+//   } @else if $direction == y {
+//     $top: $base; $bottom: $base;
+//   } @else if $direction == x {
+//     $right: $base; $left: $base;
+//   } @else {
+//     @each $dir in $direction {
+//       @if $dir == top { $top: $base; }
+//       @else if $dir == bottom { $bottom: $base; }
+//       @else if $dir == right { $right: $base; }
+//       @else if $dir == left { $left: $base; }
+//     }
+//   }
+
+//   // Entry
+//   @if $type == split {
+//     @if $top == 0 { $top: null; } @if $bottom == 0 { $bottom: null; }
+//     @if $right == 0 { $right: null; } @if $left == 0 { $left: null; }
+
+//     @if $important == false {
+//       @include medium {
+//         padding-top: $top; padding-bottom: $bottom;
+//         padding-right: $right; padding-left: $left;
+//       }
+//       @include small {
+//         padding-top: $top * 0.5; padding-bottom: $bottom * 0.5;
+//         padding-right: $right * 0.5; padding-left: $left * 0.5;
+//       }
+//     }
+//     @else {
+//       @include medium {
+//         padding-top: $top !important; padding-bottom: $bottom !important;
+//         padding-right: $right !important; padding-left: $left !important;
+//       }
+//       @include small {
+//         padding-top: $top * 0.5 !important; padding-bottom: $bottom * 0.5 !important;
+//         padding-right: $right * 0.5 !important; padding-left: $left * 0.5 !important;
+//       }
+//     }
+//   } @else {
+//     @if $important == false {
+//       @include medium {
+//         padding: $top $right $bottom $left
+//       } @include small {
+//         padding: ($top * 0.5) ($right * 0.5) ($bottom * 0.5) ($left * 0.5)
+//       }
+//     }
+//     @else {
+//       @include medium {
+//         padding: $top $right $bottom $left !important
+//       } @include small {
+//         padding: ($top * 0.5) ($right * 0.5) ($bottom * 0.5) ($left * 0.5) !important
+//       }
+//     }
+//   }
+// }
+
+// @mixin mat-responsive-margin($direction, $level: 2, $type: shorthand, $important: false) {
+//   $base: (8px * $level);
+//   // $sm-base: $ns-value * 0.5;
+
+//   // Set
+//   $top: 0; $bottom: 0;
+//   $right: 0; $left: 0;
+
+//   @if $direction == all {
+//     $top: $base; $bottom: $base; $right: $base; $left: $base;
+//   } @else if $direction == y {
+//     $top: $base; $bottom: $base;
+//   } @else if $direction == x {
+//     $right: $base; $left: $base;
+//   } @else {
+//     @each $dir in $direction {
+//       @if $dir == top { $top: $base; }
+//       @else if $dir == bottom { $bottom: $base; }
+//       @else if $dir == right { $right: $base; }
+//       @else if $dir == left { $left: $base; }
+//     }
+//   }
+
+//   // Entry
+//   @if $type == split {
+//     @if $top == 0 { $top: null; } @if $bottom == 0 { $bottom: null; }
+//     @if $right == 0 { $right: null; } @if $left == 0 { $left: null; }
+
+//     @if $important == false {
+//       @include medium {
+//         margin-top: $top; margin-bottom: $bottom;
+//         margin-right: $right; margin-left: $left;
+//       }
+//       @include small {
+//         margin-top: $top * 0.5; margin-bottom: $bottom * 0.5;
+//         margin-right: $right * 0.5; margin-left: $left * 0.5;
+//       }
+//     }
+//     @else {
+//       @include medium {
+//         margin-top: $top !important; margin-bottom: $bottom !important;
+//         margin-right: $right !important; margin-left: $left !important;
+//       }
+//       @include small {
+//         margin-top: $top * 0.5 !important; margin-bottom: $bottom * 0.5 !important;
+//         margin-right: $right * 0.5 !important; margin-left: $left * 0.5 !important;
+//       }
+//     }
+//   } @else {
+//     @if $important == false {
+//       @include medium {
+//         margin: $top $right $bottom $left
+//       } @include small {
+//         margin: ($top * 0.5) ($right * 0.5) ($bottom * 0.5) ($left * 0.5)
+//       }
+//     }
+//     @else {
+//       @include medium {
+//         margin: $top $right $bottom $left !important
+//       } @include small {
+//         margin: ($top * 0.5) ($right * 0.5) ($bottom * 0.5) ($left * 0.5) !important
+//       }
+//     }
+//   }
+// }
+
+// @mixin mat-icon-size($size) {
+//   font-size: $size;
+//   width: $size;
+//   height: $size;
+// }
+
+

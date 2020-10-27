@@ -2,17 +2,14 @@ import React, {
   Component,
   createRef
 } from 'react';
-import './Ripple.css';
+import './style.css';
 import { listen } from '../common';
 
 export interface MatRippleProps {
-  color?: string;
-  theme?: MatLiteThemePalette;
   target?: any;
-  nesting?: boolean;
-  fitted?: boolean;
   disabled?: boolean;
   centered?: boolean;
+  color?: string;
   opacity?: number;
   amtDuration?: { enter?: number, leave?: number } | number;
 }
@@ -24,6 +21,7 @@ export type EntryMatRippleProps = MatRippleProps & {
 
 class MatRipple extends Component<MatRippleProps> {
   ref: React.RefObject<any>;
+  elementRef: HTMLElement
 
   containerRect: DOMRect | null;
 
@@ -46,10 +44,10 @@ class MatRipple extends Component<MatRippleProps> {
 
   /** @lifecycle */
   componentDidMount() {
-    this.componentDidUpdate();
+    this.elementRef = this.ref.current.parentElement;
+    this.elementRef.classList.add('Mat-ripple-lite-container');
 
-    // @ts-ignore: GC
-    this.ref = null;
+    this.componentDidUpdate();
   }
 
   /** @lifecycle */
@@ -78,32 +76,25 @@ class MatRipple extends Component<MatRippleProps> {
 
       this.prevDisabled = true;
     } else {
-      const listenerTargetProp = this.props.target;
-      if (this.prevTarget !== listenerTargetProp || this.prevDisabled) {
+      const targetPropRef = this.props.target;
+      if (this.prevTarget !== targetPropRef || this.prevDisabled) {
+        // @ts-ignore
+        this.prevTarget = this.props.target;
+
         // Remove listener
         this.pointerdownHandler();
 
-        const refElement = this.ref.current;
-        const hostElement = refElement.parentElement;
+        // @ts-ignore: Non nullable
+        const hostElement = this.ref.current.parentElement as HTMLElement;
 
-        const containerElement =
-          (this.props.nesting) ? refElement : hostElement;
-
-        const listenerTarget: HTMLElement =
-          (listenerTargetProp) ? listenerTargetProp : hostElement;
-
-        this.prevTarget?.classList.remove('Ml-ripple-container');
-        listenerTarget.classList.add('Ml-ripple-container');
+        const listenerTarget: HTMLElement = (!targetPropRef) ? hostElement : targetPropRef;
 
         // Listen
         this.pointerdownHandler = listen(listenerTarget, 'pointerdown',
           (event: PointerEvent) => this.fadeInRipple(
-            containerElement, listenerTarget,
+            hostElement, listenerTarget,
             event.clientX, event.clientY
           ));
-
-        // @ts-ignore
-        this.prevTarget = listenerTarget;
       }
 
       this.prevDisabled = false;
@@ -120,6 +111,7 @@ class MatRipple extends Component<MatRippleProps> {
     listenerTarget: HTMLElement | HTMLDivElement,
     clientX: number, clientY: number
   ) {
+
     //TODO: 要素のrectを取得するのを、子供か親のどちらにするか決めないといけない
     const containerRect = this.containerRect =
       this.containerRect || containerElement.getBoundingClientRect();
@@ -130,7 +122,7 @@ class MatRipple extends Component<MatRippleProps> {
     if (this.props.centered) {
       x = containerRect.left + containerRect.width * 0.5;
       y = containerRect.top + containerRect.height * 0.5;
-    } else if (!this.props.target || this.props.fitted) {
+    } else if (!this.props.target) {
       x = clientX;
       y = clientY;
     } else {
@@ -161,23 +153,15 @@ class MatRipple extends Component<MatRippleProps> {
 
     const ripple: HTMLElement = document.createElement('div');
 
-    /**
-     * left: ${x - containerRect.left - distance}px
-     * top: ${y - containerRect.top - distance}px
-     * width: ${size}px
-     * height: ${size}px
-     * transition-duration: ${this.amtDuration.enter}ms
-     * opacity: ${this.props.opacity || 0.12}
-     */
-    let rippleStyles: string =
-      `left:${x - containerRect.left - distance}px;top: ${y - containerRect.top - distance}px;width: ${size}px;height: ${size}px;transition-duration: ${this.amtDuration.enter}ms;opacity: ${this.props.opacity || 0.12};`;
+    const rippleStyles: string =
+      'left:' + (x - containerRect.left - distance) + 'px;' +
+      'top:' + (y - containerRect.top - distance) + 'px;' +
+      'width:' + size + 'px;height:' + size + 'px;' +
+      'background-color:' + (this.props.color || 'var(--theme-opposite-base)') + ';' +
+      'transition-duration:' + this.amtDuration.enter + 'ms;' +
+      'opacity:' + (this.props.opacity || 0.12);
 
-    // themeがないとき
-    (this.props.theme) ?
-      ripple.classList.add(`Ml-${this.props.theme}-bg`) :
-      rippleStyles += `background-color: ${this.props.color};`;
-
-    ripple.classList.add('Ml-ripple-element');
+    ripple.classList.add('Mat-ripple-lite-element');
     ripple.setAttribute('style', rippleStyles);
 
     containerElement.appendChild(ripple);
@@ -232,7 +216,14 @@ class MatRipple extends Component<MatRippleProps> {
 
 
   render() {
-    return <div className={this.props.nesting ? 'Ml-ripple-nest' : 'Ml-ref'} ref={this.ref}></div>
+    if (this.elementRef) {
+      return <></>
+    } else {
+      return <span className='Mat-ripple-lite-ref' ref={this.ref}></span>
+    }
+
+
+    // return <span className='Mat-ripple-lite-ref' ref={this.ref}></span>
   }
 }
 

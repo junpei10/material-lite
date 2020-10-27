@@ -1,0 +1,80 @@
+$mat-lite-default-light-theme: (
+  base: white,
+  opposite-base: black,
+
+  background: #f5f5f5,
+  primary-container: #fafafa,
+  secondary-container: white,
+  tertiary-container: #eeeeee,
+  disabled-container: rgba(0,0,0,.12),
+
+  divider: rgba(0,0,0,.12),
+  elevation: black,
+  scrollbar: rgba(0,0,0,.12),
+
+  text: rgba(0,0,0,.87),
+  secondary-text: rgba(0,0,0,.54),
+  hint-text: rgba(0,0,0,.38),
+  disabled-text: rgba(0,0,0,.38),
+
+  primary: #673ab7,
+  accent: #ffd740,
+  warn: #f44336,
+  primary-contrast: #fff,
+  accent-contrast: rgba(0,0,0,.87),
+  warn-contrast: #fff
+);
+
+$mat-lite-default-dark-theme: (
+  base: black,
+  opposite-base: white,
+
+  background: #212121,
+  primary-container: #303030,
+  secondary-container: #424242,
+  tertiary-container: #616161,
+  disabled-container: hsla(0,0%,100%,.12),
+
+  divider: rgba(255,255,255,.12),
+  elevation: black,
+  scrollbar: rgba(255,255,255,.12),
+
+  text: #fff,
+  secondary-text: rgba(255,255,255,.7),
+  hint-text: rgba(255,255,255,.5),
+  disabled-text: hsla(0,0%,100%,.3),
+
+  primary: #388e3c,
+  accent: #ffd740,
+  warn: #f44336,
+  primary-contrast: #fff,
+  accent-contrast: rgba(0,0,0,.87),
+  warn-contrast: #fff,
+);
+
+$mat-lite-default-css-variables-theme: (
+  base: var(--ml-base),
+  opposite-base: var(--ml-opposite-base),
+
+  background: var(--ml-background),
+  primary-container: var(--ml-primary-container),
+  secondary-container: var(--ml-secondary-container),
+  tertiary-container: var(--ml-tertiary-container),
+  disabled-container: var(--ml-disabled-container),
+
+  divider: var(--ml-divider),
+  elevation: var(--ml-elevation),
+  scrollbar: var(--ml-scrollbar),
+
+  text: var(--ml-text),
+  secondary-text: var(--ml-secondary-text),
+  hint-text: var(--ml-hint-text),
+  disabled-text: var(--ml-disabled-text),
+
+  primary: var(--ml-primary),
+  accent: var(--ml-accent),
+  warn: var(--ml-warn),
+  primary-contrast: var(--ml-primary-contrast),
+  accent-contrast: var(--ml-accent-contrast),
+  warn-contrast: var(--ml-accent-contrast),
+);

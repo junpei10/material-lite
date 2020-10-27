@@ -1,0 +1,97 @@
+@import '../styles/props';
+@import '../theming';
+@import './theme';
+
+
+@if $mat-lite-module-theme {
+  @include set-mat-button-lite-theme($mat-lite-module-theme, $mat-lite-module-base, true);
+}
+
+@function opacity-transition-value() {
+  @return opacity map-get($mat-amt-duration, fast) map-get($mat-amt-function, deceleration);
+}
+
+@mixin active-elevation($off, $on) {
+  .Ml-ripple-nest {
+    transition: mat-elevation-transition-property-value();
+
+    @include mat-elevation($off);
+  }
+
+  &:active .Ml-ripple-nest {
+    @include mat-elevation($on);
+  }
+}
+
+$overlay-opacity: 0.056;
+
+.Ml-button {
+  display: inline-flex;
+  overflow: visible !important;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  font-weight: 500;
+  font-family: inherit;
+  font-size: 14px;
+
+  border: none;
+  outline: none;
+
+  box-sizing: border-box;
+}
+
+.Ml-square-button {
+  min-width: 64px;
+  min-height: 36px;
+  padding: 0 16px;
+  border-radius: 4px;
+}
+
+.Ml-circle-button {
+  min-height: 32px;
+  min-width: 32px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.Ml-raised-button {
+  @include active-elevation(2, 8);
+}
+
+.Ml-stroked-button {
+  padding: 0 15px; // <= borderが入るため、1pxを引く
+  border: 1px solid currentColor;
+}
+
+.Ml-fab {
+  @include active-elevation($z-resting-fab, $z-pressed-fab);
+}
+
+.Ml-disabled-button {
+  pointer-events: none;
+  box-shadow: 0 0 0 0 transparent !important;
+}
+
+.Ml-button-opacity {
+  .Ml-button-overlay {
+    display: inline;
+    opacity: 0;
+    transition: opacity-transition-value();
+  }
+  &:hover .Ml-button-overlay,
+  &:focus .Ml-button-overlay {
+    opacity: $overlay-opacity;
+  }
+}
+
+.Ml-button-overlay {
+  display: none;
+
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0; left: 0;
+  pointer-events: none;
+}

@@ -1,1 +1,4 @@
-@import './assets/styles/entry/styles';
+@import './App';
+@import './material-lite/theming';
+
+@include mat-lite-theme-init;
