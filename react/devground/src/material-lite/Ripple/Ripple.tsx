@@ -14,7 +14,8 @@ export interface MatRippleProps {
   disabled?: boolean;
   centered?: boolean;
   opacity?: number;
-  amtDuration?: { enter?: number, leave?: number } | number;
+  amtEnterDuration?: number;
+  amtLeaveDuration?: number;
 }
 
 export type EntryMatRippleProps = MatRippleProps & {
@@ -29,13 +30,7 @@ class MatRipple extends Component<MatRippleProps> {
 
   existingRippleCount: number = 0;
 
-  prevTarget: HTMLElement | null = null;
   prevDisabled: boolean;
-
-  amtDuration: EntryMatRippleProps['amtDuration'] = {
-    enter: 440,
-    leave: 400
-  };
 
   pointerdownHandler: () => void = () => { };
 
@@ -46,40 +41,21 @@ class MatRipple extends Component<MatRippleProps> {
 
   /** @lifecycle */
   componentDidMount() {
-    this.componentDidUpdate();
-
-    // @ts-ignore: GC
-    this.ref = null;
+    this.componentDidUpdate({
+      target: null
+    });
   }
 
   /** @lifecycle */
-  componentDidUpdate() {
-    // propsの整理： amtDuration(local変数)へ
-    const amtDurationPropRef = this.props.amtDuration;
-    if (amtDurationPropRef) {
-      this.amtDuration = (() => {
-        if (typeof amtDurationPropRef === 'number') {
-          const duration = amtDurationPropRef * 0.5;
-          return {
-            enter: duration,
-            leave: duration
-          }
-        } else {
-          return {
-            enter: amtDurationPropRef.enter || this.amtDuration.enter,
-            leave: amtDurationPropRef.leave || this.amtDuration.leave
-          }
-        }
-      })()
-    }
-
+  componentDidUpdate(prevProps: MatRippleProps) {
     if (this.props.disabled) {
       this.pointerdownHandler();
-
       this.prevDisabled = true;
     } else {
       const listenerTargetProp = this.props.target;
-      if (this.prevTarget !== listenerTargetProp || this.prevDisabled) {
+      const prevTarget = prevProps.target;
+      if (listenerTargetProp !== prevTarget || this.prevDisabled) {
+        console.log('更新！');
         // Remove listener
         this.pointerdownHandler();
 
@@ -92,7 +68,7 @@ class MatRipple extends Component<MatRippleProps> {
         const listenerTarget: HTMLElement =
           (listenerTargetProp) ? listenerTargetProp : hostElement;
 
-        this.prevTarget?.classList.remove('Ml-ripple-container');
+        prevTarget?.classList.remove('Ml-ripple-container');
         listenerTarget.classList.add('Ml-ripple-container');
 
         // Listen
@@ -102,11 +78,8 @@ class MatRipple extends Component<MatRippleProps> {
             event.clientX, event.clientY
           ));
 
-        // @ts-ignore
-        this.prevTarget = listenerTarget;
+        this.prevDisabled = false;
       }
-
-      this.prevDisabled = false;
     }
   }
 
@@ -161,16 +134,17 @@ class MatRipple extends Component<MatRippleProps> {
 
     const ripple: HTMLElement = document.createElement('div');
 
+    const enterDuration = this.props.amtEnterDuration || 450;
     /**
      * left: ${x - containerRect.left - distance}px
      * top: ${y - containerRect.top - distance}px
      * width: ${size}px
      * height: ${size}px
-     * transition-duration: ${this.amtDuration.enter}ms
+     * transition-duration: ${enterDuration}ms
      * opacity: ${this.props.opacity || 0.12}
      */
     let rippleStyles: string =
-      `left:${x - containerRect.left - distance}px;top: ${y - containerRect.top - distance}px;width: ${size}px;height: ${size}px;transition-duration: ${this.amtDuration.enter}ms;opacity: ${this.props.opacity || 0.12};`;
+      `left:${x - containerRect.left - distance}px;top: ${y - containerRect.top - distance}px;width: ${size}px;height: ${size}px;transition-duration: ${enterDuration}ms;opacity: ${this.props.opacity || 0.12};`;
 
     // themeがないとき
     (this.props.theme) ?
@@ -194,7 +168,7 @@ class MatRipple extends Component<MatRippleProps> {
       (listenerEventHasFired) ?
         this.fadeOutRipple(ripple, containerElement)
         : rippleHasEntered = true;
-    }, this.amtDuration.enter);
+    }, enterDuration);
 
     const pointerupHandler: () => void = listen(listenerTarget, 'pointerup', () => handlerEvent());
     const pointerleaveHandler: () => void = listen(listenerTarget, 'pointerleave', () => handlerEvent());
@@ -214,7 +188,7 @@ class MatRipple extends Component<MatRippleProps> {
 
   /** @description 出現しているRippleを削除する */
   fadeOutRipple(rippleElement: HTMLElement, containerElement: HTMLElement) {
-    const leaveTiming = this.amtDuration.leave;
+    const leaveTiming = this.props.amtLeaveDuration || 400;
 
     rippleElement.style.transitionDuration = leaveTiming + 'ms';
     rippleElement.style.opacity = '0';
