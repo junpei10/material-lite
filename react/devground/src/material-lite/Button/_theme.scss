@@ -38,6 +38,10 @@ $divider: map-get($theme, divider);
       }
     }
   }
+
+  &.Ml-disabled-button {
+    background-color: map-get($theme, disabled-container) !important;
+  }
 }
 
 .Ml-stroked-button {
@@ -45,8 +49,11 @@ $divider: map-get($theme, divider);
 }
 
 .Ml-disabled-button {
-  background-color: map-get($theme, disabled-container) !important;
   color: map-get($theme, disabled-text) !important;
+
+  .Ml-ripple-nest {
+    box-shadow: 0 0 0 0 transparent !important;
+  }
 }
 
 .Ml-button-overlay {

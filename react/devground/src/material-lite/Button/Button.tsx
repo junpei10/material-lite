@@ -1,17 +1,18 @@
 import './Button.scss';
 
 import React, {
-  Component, createRef,
+  Component, createRef
 } from 'react';
 import MatRipple from '../Ripple/Ripple';
 
-type Variant = 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
+export type MatButtonVariant = 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
 
-interface MatButtonProps {
+export interface MatButtonProps {
   color?: string;
   contrast?: string;
   theme?: MatLiteThemePalette;
-  variant?: Variant;
+  variant?: MatButtonVariant | null;
+  disabled?: boolean;
   hoverAction?: 'enable' | 'disable' | 'default';
 }
 
@@ -31,11 +32,14 @@ class MatButton extends Component<MatButtonProps> {
   componentDidMount() {
     this.hostElement = this.overlayRef.current.parentElement;
     this.hostElement.classList.add('Ml-button');
-    this.componentDidUpdate({});
+    this.componentDidUpdate({
+      variant: null,
+    });
   }
 
   componentDidUpdate(prevProps: MatButtonProps) {
     const hostElementClassList = this.hostElement.classList;
+
     if (this.props.variant !== prevProps.variant) {
       const v = this.props.variant;
       hostElementClassList.remove(...this.addedClassList);
@@ -92,6 +96,13 @@ class MatButton extends Component<MatButtonProps> {
       hostElementClassList.add(...this.addedClassList);
     }
 
+
+    if (this.props.disabled) {
+      hostElementClassList.add('Ml-disabled-button');
+    } else if (prevProps.disabled) {
+      hostElementClassList.remove('Ml-disabled-button');
+    }
+
     const themeProp = this.props.theme;
     if (themeProp && themeProp !== prevProps.theme) {
       hostElementClassList.remove(this.addedThemeClass);
@@ -107,6 +118,7 @@ class MatButton extends Component<MatButtonProps> {
       const propColor = this.props.color;
       hostElementStyle.color =
         (propColor) ? propColor : '';
+
     } else {
       const propColor = this.props.color;
       hostElementStyle.backgroundColor =
@@ -116,12 +128,10 @@ class MatButton extends Component<MatButtonProps> {
       hostElementStyle.color =
         (propContrast) ? propContrast : '';
     }
-
-    console.log(this.addedClassList);
   }
 
   setSimpleButton(): void {
-    if (this.props.hoverAction === 'disable') {
+    if (this.props.hoverAction !== 'disable') {
       this.addedClassList.push('Ml-button-opacity');
     }
 

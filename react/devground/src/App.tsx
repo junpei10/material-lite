@@ -8,7 +8,7 @@ function App() {
       <Router>
         <Route path='/route'></Route>
         <div>
-          <MatButton variant='raised' contrast='green' />
+          <MatButton variant='raised' contrast='green' disabled />
           <span>Button</span>
         </div>
       </Router>
