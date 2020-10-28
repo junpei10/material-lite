@@ -53,7 +53,7 @@
 | Dialog           | △ |   |
 | Divider          |   |   |
 | Expansion panel  |   |   |
-| Form field       | ✓ | ✓ |
+| Form field       |   |   |
 | (Grid list)      |   |   |
 | Header           |   |   |
 | Icon             | ✓ |   |
