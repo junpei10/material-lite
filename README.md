@@ -11,9 +11,9 @@
 | パフォーマンス | ◎ |   |
 | カスタマイズ性 |    | ◎ |
 
-きっかけは、”[Angular material](https://material.angular.io/)”を使用しているとき、
-”Change detection”発生量が多いコンポーネントがあることに気づき、"Change detection"を極力少なくし、もう少し軽量なライブラリが欲しくなったからです。<br>
-”One action”につき、”One change detection”を目指して作成しています。
+きっかけは、[`Angular material`](https://material.angular.io/)を使用しているとき、
+`Change detection`発生量が多いコンポーネントがあることに気づき、`Change detection`を極力少なくし、もう少し軽量なライブラリが欲しくなったからです。<br>
+`One action`につき`One change detection`を目指して作成しています。
 
 また、Reactにも **ほとんど** 同じ動作をするComponentsを提供できるよう制作しています。<br>
 進行優先順位は基本、Angular => React としています。 
@@ -27,9 +27,11 @@
 依存関係は極力作らないように努めています。
 
 ### Angular
+(`angular-cLI`を使用)
 ・なし
 
 ### React
+(`react-create-app`を使用)
 ・ node-sass
 
 
