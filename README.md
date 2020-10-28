@@ -3,7 +3,7 @@
 
 ## 詳細
 
-`[Angular material](https://material.angular.io/)`のデザインをパクったコンポーネントです。
+[`Angular material`](https://material.angular.io/)のデザインをパクったコンポーネントです。
 <br>
 
 | 相違点 | Material lite | Angular material |
