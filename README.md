@@ -27,11 +27,11 @@
 依存関係は極力作らないように努めています。
 
 ### Angular
-(`angular-cLI`を使用)
+(`angular-cLI`を使用) <br>
 ・なし
 
 ### React
-(`react-create-app`を使用)
+(`react-create-app`を使用) <br>
 ・ node-sass
 
 
