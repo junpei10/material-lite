@@ -15,10 +15,10 @@
 `Change detection`発生量が多いコンポーネントがあることに気づき、`Change detection`を極力少なくし、もう少し軽量なライブラリが欲しくなったからです。<br>
 `One action`につき`One change detection`を目指して作成しています。
 
-また、Reactにも **ほとんど** 同じ動作をするComponentsを提供できるよう制作しています。<br>
-進行優先順位は基本、Angular => React としています。 
+また、`React`にも **ほとんど** 同じ動作をする`Components`を提供できるよう制作しています。<br>
+進行優先順位は基本、`Angular` => `React` としています。 
 
-（最終的な目標は npm に公開することです。Vue版の制作は検討中です。）
+（最終的な目標は `npm`に公開することです。`Vue`版の制作は検討中です。）
 
 
 
