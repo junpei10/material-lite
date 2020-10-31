@@ -55,7 +55,6 @@ class MatRipple extends Component<MatRippleProps> {
       const listenerTargetProp = this.props.target;
       const prevTarget = prevProps.target;
       if (listenerTargetProp !== prevTarget || this.prevDisabled) {
-        console.log('更新！');
         // Remove listener
         this.pointerdownHandler();
 

@@ -12,8 +12,9 @@ export interface MatButtonProps {
   contrast?: string;
   theme?: MatLiteThemePalette;
   variant?: MatButtonVariant | null;
-  disabled?: boolean;
   hoverAction?: 'enable' | 'disable' | 'default';
+  disabled?: boolean;
+  disableRipple?: boolean;
 }
 
 class MatButton extends Component<MatButtonProps> {
@@ -23,6 +24,8 @@ class MatButton extends Component<MatButtonProps> {
   currentStyleType: 'simple' | 'filled';
   addedThemeClass: string;
   addedClassList: string[] = [];
+
+  centeredRipple: boolean;
 
   constructor(props: MatButtonProps) {
     super(props);
@@ -42,6 +45,7 @@ class MatButton extends Component<MatButtonProps> {
 
     if (this.props.variant !== prevProps.variant) {
       const v = this.props.variant;
+      this.centeredRipple = false;
       hostElementClassList.remove(...this.addedClassList);
 
       if (!v || v === 'basic') {
@@ -67,6 +71,7 @@ class MatButton extends Component<MatButtonProps> {
           'Ml-simple-button'
         ];
         this.setSimpleButton();
+        this.centeredRipple = true;
 
       } else if (v === 'fab') {
         this.addedClassList = [
@@ -150,7 +155,12 @@ class MatButton extends Component<MatButtonProps> {
     return (
       <>
         <span ref={this.overlayRef} className='Ml-button-overlay'></span>
-        <MatRipple color='currentColor' nesting />
+        <MatRipple
+          color='currentColor'
+          disabled={this.props.disableRipple}
+          centered={this.centeredRipple}
+          nesting
+        />
       </>
     )
   }
