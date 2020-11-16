@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "devground"
+    }
+  },
+  "defaultProject": "devground",
+  "cli": {
+    "analytics": "16eea57d-1f6d-4873-b0ad-eb74b5e1e3c0"
+  }
 }

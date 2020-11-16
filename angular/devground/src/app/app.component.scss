@@ -1,0 +1,19 @@
+@import '../material-lite/theming';
+
+@include ml-theme(light, deepPurpleAmber);
+
+body {
+  margin: 0;
+}
+
+
+::ng-deep {
+  .test-enter, .test-leave-to {
+    opacity: 0;
+  }
+
+  .test-enter-action, .test-leave-action {
+    transition: opacity .5s;
+  }
+}
+

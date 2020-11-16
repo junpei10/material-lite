@@ -1,0 +1,24 @@
+{
+  "name": "angular-material-lite",
+  "version": "1.0.0",
+  "author": "Miura Junpei",
+  "description": "Material lite components for Angular",
+  "keywords": [
+    "angular",
+    "material",
+    "material design",
+    "components"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/junpei10/material-lite"
+  },
+  "homepage": "",
+  "bugs": {
+    "url": "https://github.com/junpei10/material-lite/issues"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

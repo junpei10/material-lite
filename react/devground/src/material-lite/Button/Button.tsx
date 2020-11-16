@@ -3,32 +3,35 @@ import './Button.scss';
 import React, {
   Component, createRef
 } from 'react';
-import MatRipple from '../Ripple/Ripple';
+import MatRipple from '../core/Ripple/Ripple';
 
 export type MatButtonVariant = 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
 
 export interface MatButtonProps {
-  color?: string;
-  contrast?: string;
+  // color?: string;
+  // contrast?: string;
+  inlineLink?: boolean;
   theme?: MatLiteThemePalette;
   variant?: MatButtonVariant | null;
   hoverAction?: 'enable' | 'disable' | 'default';
   disabled?: boolean;
   disableRipple?: boolean;
 }
+export interface MatButtonState {
+  centeredRipple: boolean;
+}
 
-class MatButton extends Component<MatButtonProps> {
+class MatButton extends Component<MatButtonProps, MatButtonState> {
   overlayRef: React.RefObject<any>;
   hostElement: HTMLElement;
 
-  currentStyleType: 'simple' | 'filled';
+  // currentStyleType: 'simple' | 'filled';
   addedThemeClass: string;
   addedClassList: string[] = [];
 
-  centeredRipple: boolean;
-
   constructor(props: MatButtonProps) {
     super(props);
+    this.state = { centeredRipple: false }
     this.overlayRef = createRef();
   }
 
@@ -40,75 +43,82 @@ class MatButton extends Component<MatButtonProps> {
     });
   }
 
-  componentDidUpdate(prevProps: MatButtonProps) {
-    const hostElementClassList = this.hostElement.classList;
+  static getDerivedStateFromProps(nextProps: MatButtonProps) {
+    return { centeredRipple: nextProps.variant === 'icon' };
+  }
 
-    if (this.props.variant !== prevProps.variant) {
-      const v = this.props.variant;
-      this.centeredRipple = false;
+  componentDidUpdate(prevProps: MatButtonProps) {
+    console.log(this.state);
+    const { hostElement, props } = this;
+    const hostElementClassList = hostElement.classList;
+
+    /** @changes variant */
+    if (props.variant !== prevProps.variant) {
+      const v = props.variant;
+
       hostElementClassList.remove(...this.addedClassList);
 
       if (!v || v === 'basic') {
         this.addedClassList = [
           'Ml-basic-button',
-          'Ml-square-button',
           'Ml-simple-button',
         ];
-        this.setSimpleButton();
+        // this.currentStyleType = 'simple';
+        this.setHoverActionForEnabledByDefault();
 
       } else if (v === 'raised') {
         this.addedClassList = [
           'Ml-raised-button',
-          'Ml-square-button',
           'Ml-filled-button'
         ];
-        this.setFilledButton();
+        // this.currentStyleType = 'filled';
+        this.setHoverActionForDisabledByDefault();
 
       } else if (v === 'icon') {
         this.addedClassList = [
           'Ml-icon-button',
-          'Ml-circle-button',
           'Ml-simple-button'
         ];
-        this.setSimpleButton();
-        this.centeredRipple = true;
+        // this.currentStyleType = 'simple';
+        this.setHoverActionForDisabledByDefault();
 
       } else if (v === 'fab') {
         this.addedClassList = [
           'Ml-fab',
-          'Ml-circle-button',
           'Ml-filled-button'
         ];
-        this.setFilledButton();
+        // this.currentStyleType = 'filled';
+        this.setHoverActionForDisabledByDefault();
 
       } else if (v === 'flat') {
         this.addedClassList = [
           'Ml-flat-button',
-          'Ml-square-button',
           'Ml-filled-button'
         ];
-        this.setFilledButton();
+        // this.currentStyleType = 'filled';
+        this.setHoverActionForDisabledByDefault();
 
       } else if (v === 'stroked') {
         this.addedClassList = [
           'Ml-stroked-button',
-          'Ml-square-button',
           'Ml-simple-button',
         ];
-        this.setSimpleButton();
+        // this.currentStyleType = 'simple';
+        this.setHoverActionForEnabledByDefault();
       }
 
       hostElementClassList.add(...this.addedClassList);
     }
 
-
-    if (this.props.disabled) {
+    /** @changes disabled */
+    if (props.disabled) {
       hostElementClassList.add('Ml-disabled-button');
     } else if (prevProps.disabled) {
       hostElementClassList.remove('Ml-disabled-button');
     }
 
-    const themeProp = this.props.theme;
+    /** @changes theme */
+    const themeProp = props.theme;
     if (themeProp && themeProp !== prevProps.theme) {
       hostElementClassList.remove(this.addedThemeClass);
 
@@ -118,37 +128,47 @@ class MatButton extends Component<MatButtonProps> {
       this.addedThemeClass = newThemeClass;
     }
 
-    const hostElementStyle = this.hostElement.style;
-    if (this.currentStyleType === 'simple') {
-      const propColor = this.props.color;
-      hostElementStyle.color =
-        (propColor) ? propColor : '';
-
-    } else {
-      const propColor = this.props.color;
-      hostElementStyle.backgroundColor =
-        (propColor) ? propColor : '';
-
-      const propContrast = this.props.contrast;
-      hostElementStyle.color =
-        (propContrast) ? propContrast : '';
+    const linkProp = props.inlineLink;
+    if (linkProp !== prevProps.inlineLink) {
+      const className = 'Ml-link-button';
+      linkProp
+        ? hostElementClassList.add(className)
+        : hostElementClassList.remove(className);
     }
+
+    /** @changes color or contrast */
+    // const hostElementStyle = this.hostElement.style;
+    // if (this.currentStyleType === 'simple') {
+    //   const currentColor = this.props.color;
+    //   if (currentColor === prevProps.color) {
+
+    //   }
+    //   const propColor = this.props.color;
+    //   hostElementStyle.color =
+    //     (propColor) ? propColor : '';
+    //   hostElementStyle.background = '';
+
+    // } else {
+    //   const propColor = this.props.color;
+    //   hostElementStyle.backgroundColor =
+    //     (propColor) ? propColor : '';
+
+    //   const propContrast = this.props.contrast;
+    //   hostElementStyle.color =
+    //     (propContrast) ? propContrast : '';
+    // }
   }
 
-  setSimpleButton(): void {
+  setHoverActionForEnabledByDefault(): void {
     if (this.props.hoverAction !== 'disable') {
-      this.addedClassList.push('Ml-button-opacity');
+      this.addedClassList.push('Ml-button-hover-action');
     }
-
-    this.currentStyleType = 'simple';
   }
 
-  setFilledButton(): void {
+  setHoverActionForDisabledByDefault(): void {
     if (this.props.hoverAction === 'enable') {
-      this.addedClassList.push('Ml-button-opacity');
+      this.addedClassList.push('Ml-button-hover-action');
     }
-
-    this.currentStyleType = 'filled';
   }
 
   render() {
@@ -156,10 +176,9 @@ class MatButton extends Component<MatButtonProps> {
       <>
         <span ref={this.overlayRef} className='Ml-button-overlay'></span>
         <MatRipple
-          color='currentColor'
           disabled={this.props.disableRipple}
-          centered={this.centeredRipple}
-          nesting
+          centered={this.state.centeredRipple}
+          wrapped
         />
       </>
     )

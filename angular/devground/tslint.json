@@ -52,14 +52,14 @@
       "trace"
     ],
     "no-empty": false,
-    "no-inferrable-types": [
-      true,
-      "ignore-params"
-    ],
+    // Added
+    "no-inferrable-types": false,
     "no-non-null-assertion": true,
     "no-redundant-jsdoc": true,
     "no-switch-case-fall-through": true,
     "no-var-requires": false,
+    // Added
+    "no-bitwise": false,
     "object-literal-key-quotes": [
       true,
       "as-needed"
@@ -108,7 +108,10 @@
       "options": [
         "ban-keywords",
         "check-format",
-        "allow-pascal-case"
+        // Added
+        "allow-pascal-case",
+        // Added
+        "allow-leading-underscore"
       ]
     },
     "whitespace": {
@@ -140,12 +143,16 @@
       true,
       "attribute",
       "app",
+      // Added
+      "ml",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
       "app",
+      // Added
+      "ml",
       "kebab-case"
     ]
   }

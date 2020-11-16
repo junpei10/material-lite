@@ -1,0 +1,28 @@
+.Ml-ripple {
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+.Ml-ripple-element {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+
+  transition: opacity, transform 0ms cubic-bezier(0, 0, 0.2, 1);
+  transform: scale(0);
+}
+
+.Ml-ripple-unbounded {
+  overflow: visible !important;
+}
+
+.Ml-ripple-outlet {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  pointer-events: none;
+}

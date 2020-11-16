@@ -1,0 +1,13 @@
+@mixin mat-lite-card-theme($_theme, $base, $skip-init) {
+
+$theme: init-mat-lite-theme($_theme, $base, $skip-init);
+
+$text: map-get($theme, text);
+$secondary-container: map-get($theme, secondary-container);
+
+.Ml-card {
+  color: $text;
+  background-color: $secondary-container;
+}
+
+}

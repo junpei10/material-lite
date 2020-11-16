@@ -9,7 +9,7 @@ function App() {
   return (
     <>
       <Router>
-        <Suspense fallback={<div></div>}>
+        <Suspense fallback={<></>}>
           <Switch>
             <Route path='/ripple' component={RipplePage}></Route>
             <Route path='/button' component={ButtonPage}></Route>

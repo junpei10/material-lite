@@ -1,0 +1,23 @@
+.ButtonPage- {
+
+&playground {
+  display: flex;
+}
+
+&list {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+
+  .Ml-button {
+    height: 36px;
+  }
+
+  .Ml-icon-button, .Ml-fab {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+
+}

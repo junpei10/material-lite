@@ -4,21 +4,16 @@
 
 
 @if $mat-lite-module-theme {
-  @include set-mat-button-lite-theme($mat-lite-module-theme, $mat-lite-module-base, true);
-}
-
-@function opacity-transition-value() {
-  @return opacity map-get($mat-amt-duration, fast) map-get($mat-amt-function, deceleration);
+  @include mat-lite-button-theme($mat-lite-module-theme, $mat-lite-module-base, true);
 }
 
 @mixin active-elevation($off, $on) {
-  .Ml-ripple-nest {
+  .Ml-ripple-outlet {
     transition: mat-elevation-transition-property-value();
-
     @include mat-elevation($off);
   }
 
-  &:active .Ml-ripple-nest {
+  &:active .Ml-ripple-outlet {
     @include mat-elevation($on);
   }
 }
@@ -40,16 +35,44 @@ $overlay-opacity: 0.056;
   outline: none;
 
   box-sizing: border-box;
+
+  &:focus-visible .Ml-button-overlay {
+    opacity: $overlay-opacity;
+  }
+
+  &a, a {
+    text-decoration: none;
+  }
+
+  .Ml-ripple-outlet {
+    border-radius: inherit;
+  }
 }
 
-.Ml-square-button {
+.Ml-link-button {
+  padding: 0;
+
+  a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; width: 100%;
+    padding: 0 16px;
+  }
+}
+
+.Ml-basic-button,
+.Ml-raised-button,
+.Ml-stroked-button,
+.Ml-flat-button {
   min-width: 64px;
   min-height: 36px;
   padding: 0 16px;
   border-radius: 4px;
 }
 
-.Ml-circle-button {
+.Ml-icon-button,
+.Ml-fab {
   min-height: 32px;
   min-width: 32px;
   padding: 0;
@@ -65,6 +88,12 @@ $overlay-opacity: 0.056;
   border: 1px solid currentColor;
 }
 
+.Ml-icon-button {
+  height: 40px;
+  width: 40px;
+  font-size: 24px;
+}
+
 .Ml-fab {
   @include active-elevation($z-resting-fab, $z-pressed-fab);
 }
@@ -77,21 +106,21 @@ $overlay-opacity: 0.056;
 .Ml-button-hover-action {
   .Ml-button-overlay {
     display: inline;
-    opacity: 0;
     transition: opacity-transition-value();
   }
-  &:hover .Ml-button-overlay,
-  &:focus .Ml-button-overlay {
+  &:hover .Ml-button-overlay {
     opacity: $overlay-opacity;
   }
 }
 
 .Ml-button-overlay {
-  display: none;
-
   width: 100%;
   height: 100%;
   position: absolute;
   top: 0; left: 0;
   pointer-events: none;
+  opacity: 0;
+  border-radius: inherit;
+
+  transition: opacity map-get($mat-amt-duration, fast) cubic-bezier(0.35, 0, 0.25, 1);
 }

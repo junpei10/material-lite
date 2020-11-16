@@ -1,4 +1,4 @@
-@mixin set-mat-button-lite-theme($_theme, $base, $skip-init: false) { 
+@mixin mat-lite-button-theme($_theme, $base, $skip-init: false) { 
 
 $theme: init-mat-lite-theme($_theme, $base, $skip-init);
 
@@ -10,6 +10,11 @@ $divider: map-get($theme, divider);
 
 .Ml-button {
   color: $text; // デフォルト値
+
+  &a, a {
+    &:link { color: #3F51B5; }
+    &:visited { color: #673AB7; }
+  }
 }
 
 .Ml-simple-button {
@@ -51,7 +56,7 @@ $divider: map-get($theme, divider);
 .Ml-disabled-button {
   color: map-get($theme, disabled-text) !important;
 
-  .Ml-ripple-nest {
+  .Ml-ripple-outlet {
     box-shadow: 0 0 0 0 transparent !important;
   }
 }

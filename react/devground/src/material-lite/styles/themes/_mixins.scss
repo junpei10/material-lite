@@ -1,4 +1,5 @@
 @import '../../Button/theme';
+@import '../../Card/theme';
 
 
 $mat-lite-module-theme-has-used: false;
@@ -27,11 +28,11 @@ $mat-lite-theme-has-set: false;
 
 @mixin mat-lite-themes($_theme: (), $base: light) {
   $theme: init-mat-lite-theme($_theme, $base, false);
-
-  @include set-mat-ripple-lite-theme($theme, $base, true);
-  @include set-mat-button-lite-theme($theme, $base, true);
-
   @include mat-lite-theme-init($theme);
+
+  @include mat-lite-button-theme($theme, $base, true);
+  @include mat-lite-card-theme($theme, $base, true);
+
 }
 
 @mixin mat-lite-theme-init($_theme: null) {
