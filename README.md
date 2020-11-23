@@ -1,38 +1,20 @@
-# Material lite
+# Material Lite
 
 
 ## 詳細
 
-[`Angular material`](https://material.angular.io/)のデザインをパクったコンポーネントです。
-<br>
+[`Angular material`](https://material.angular.io/)のデザインをできるだけ似せ、軽量化したコンポーネントです。    
 
 | 相違点 | Material lite | Angular material |
 | :-: | :-: | :-: |
-| パフォーマンス | ◎ |   |
+| パフォーマンス | ◎  |   |
 | カスタマイズ性 |    | ◎ |
 
 きっかけは、[`Angular material`](https://material.angular.io/)を使用しているとき、
 `Change detection`発生量が多いコンポーネントがあることに気づき、`Change detection`を極力少なくし、もう少し軽量なライブラリが欲しくなったからです。<br>
-`One action`につき`One change detection`を目指して作成しています。
 
 また、`React`にも **ほとんど** 同じ動作をする`Components`を提供できるよう制作しています。<br>
-進行優先順位は基本、`Angular` => `React` としています。 
-
-（最終的な目標は `npm`に公開することです。`Vue`版の制作は検討中です。）
-
-
-
-## 依存関係
-
-依存関係は極力作らないように努めています。
-
-### Angular
-(`angular-cLI`を使用) <br>
-・なし
-
-### React
-(`react-create-app`を使用) <br>
-・ node-sass
+進行優先順位は、`Angular` => `React` です。 
 
 
 ## 機能一覧
@@ -40,16 +22,18 @@
 (一部、完成しているが未だにこっちのリポジトリにコードを移行していない)
 
 - (名前) - 実装しないかもしれないコンポーネント
-- ✓ - 完成
-- - - 完成しているがパッケージ化をしていない
-- Δ - 完成に近づいているが課題・問題あり
+- γ - Npmにリリース済み
+- β - 完成・リリース間近
+- α - 開発中
+
+### Components
 
 | 名前 | Angular | React |
 | --- | :-: | :-: |
 | Autocomplete     |   |   |
 | Badge            |   |   |
 | Bottom sheet     |   |   |
-| Button           | ✓ | - |
+| Button           | γ | β |
 | Button toggle    |   |   |
 | Card             |   |   |
 | (Datepicker)     |   |   |
@@ -61,19 +45,40 @@
 | Header           |   |   |
 | Icon             |   |   |
 | List             |   |   |
-| Nav              | - |   |
+| Nav              | α |   |
 | Menu             |   |   |
 | Paginator        |   |   |
 | Progress bar     |   |   |
 | Progress spinner |   |   |
 | Radio button     |   |   |
-| Ripple           | ✓ | - |
+| Ripple           | γ | β |
 | Select           |   |   |
 | Slider           |   |   |
 | Snackbar         |   |   |
 | Stepper          |   |   |
 | (Sort header)    |   |   |
 | Table            |   |   |
-| Tabs             | Δ |   |
+| Tabs             | α |   |
 | Toolbar          |   |   |
 | Tooltip          |   |   |
+
+
+### CDK
+
+| 名前 | Angular | React |
+| --- | :-: | :-: |
+| A11y             |   |   |
+| Bidi             |   |   |
+| Clipboard        |   |   |
+| Drag and Drop    |   |   |
+| (Layout)         |   |   |
+| Observers        |   |   |
+| (Overlay)        |   |   |
+| (Platform)       |   |   |
+| Portal           | γ |   |
+| Scrolling        |   |   |
+| Stepper          |   |   |
+| Table            |   |   |
+| Comp Harnesses   |   |   |
+| Text field       |   |   |
+| Tree             |   |   |
