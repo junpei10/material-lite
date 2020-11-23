@@ -2,16 +2,20 @@
 
 # dependencies
 /node_modules
-/shelter
-/style
 /.pnp
 .pnp.js
+
 
 # testing
 /coverage
 
 # production
 /build
+
+/shelter
+/style
+angular/packages
+react/packages
 
 # misc
 .DS_Store
