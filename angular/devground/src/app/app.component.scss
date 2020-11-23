@@ -1,13 +1,13 @@
-@import '../material-lite/theming';
-
-@include ml-theme(light, deepPurpleAmber);
-
 body {
   margin: 0;
 }
 
-
 ::ng-deep {
+  app-test {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
   .test-enter, .test-leave-to {
     opacity: 0;
   }

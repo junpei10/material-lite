@@ -1,13 +1,11 @@
-<ml-popup-outlet></ml-popup-outlet>
-
 <ng-template #test>
-  <div>test</div>
+  <button
+    [mlButton]='!button.mlButton'
+    [variant]='button.variant'
+    [theme]='button.theme'
+    [immediateRipple]='button.immediateRipple'
+  >BUTTON</button>
 </ng-template>
 
-<div mlRipple [mlRippleWrapped]=true style='width:300px;height:300px;background:pink;color:black;'>TEST</div>
-<button
-  mlButton
-  [theme]='"accent"'
-  [variant]='"raised"'
-  disableRipple=true
->BUTTON</button>
+
+<ng-template [mlPopupOutlet]='test' [mlPopupAttachConfig]='{ animation: { className: "test", enter: 500, leave: 500 }}' key='root'></ng-template>

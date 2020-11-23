@@ -3,9 +3,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
-import { ML_DEEPPURPLE_AMBER_PALETTE } from './material-lite/theme-constants/palette/deepPurple-amber';
-import { ML_LIGHT_THEME } from './material-lite/theme-constants/theme/light';
-import { MlTheming } from './material-lite/theming';
+import { MlTheming, ML_DEEPPURPLE_AMBER_PALETTE, ML_LIGHT_THEME } from '@material-lite/angular/core';
 
 MlTheming.init(ML_LIGHT_THEME, ML_DEEPPURPLE_AMBER_PALETTE);
 

@@ -41,6 +41,7 @@
 
 - (名前) - 実装しないかもしれないコンポーネント
 - ✓ - 完成
+- - - 完成しているがパッケージ化をしていない
 - Δ - 完成に近づいているが課題・問題あり
 
 | 名前 | Angular | React |
@@ -48,31 +49,31 @@
 | Autocomplete     |   |   |
 | Badge            |   |   |
 | Bottom sheet     |   |   |
-| Button           | ✓ | ✓ |
+| Button           | ✓ | - |
 | Button toggle    |   |   |
 | Card             |   |   |
 | (Datepicker)     |   |   |
-| Dialog           | △ |   |
+| Dialog           |   |   |
 | Divider          |   |   |
 | Expansion panel  |   |   |
 | Form field       |   |   |
 | (Grid list)      |   |   |
 | Header           |   |   |
-| Icon             | ✓ |   |
+| Icon             |   |   |
 | List             |   |   |
-| Nav              | ✓ |   |
+| Nav              | - |   |
 | Menu             |   |   |
 | Paginator        |   |   |
 | Progress bar     |   |   |
 | Progress spinner |   |   |
 | Radio button     |   |   |
-| Ripple           | ✓ | ✓ |
+| Ripple           | ✓ | - |
 | Select           |   |   |
 | Slider           |   |   |
 | Snackbar         |   |   |
 | Stepper          |   |   |
 | (Sort header)    |   |   |
 | Table            |   |   |
-| Tabs             | △ |   |
+| Tabs             | Δ |   |
 | Toolbar          |   |   |
 | Tooltip          |   |   |

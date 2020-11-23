@@ -2,9 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { MlPopupOutletModule } from '../material-lite/core/popup';
-import { MlRippleModule } from 'src/material-lite/core/ripple';
-import { MlButtonModule } from 'src/material-lite/button';
+// import { MlPopupOutletModule } from '../material-lite/core/popup';
+import { AppRoutingModule } from './app-routing.module';
+import { MlRippleModule } from '@material-lite/angular/core';
+import { MlButtonModule } from '@material-lite/angular/button';
+import { MlPortalModule } from '@material-lite/angular-cdk/portal';
+import { MlPopupModule } from 'src/material-lite/components/popup/outlet.module';
 
 
 @NgModule({
@@ -13,11 +16,13 @@ import { MlButtonModule } from 'src/material-lite/button';
   ],
   imports: [
     BrowserModule,
-    MlPopupOutletModule,
+    AppRoutingModule,
+    // MlPopupOutletModule,
     MlRippleModule,
-    MlButtonModule
+    MlButtonModule,
+    MlPortalModule,
+    MlPopupModule
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

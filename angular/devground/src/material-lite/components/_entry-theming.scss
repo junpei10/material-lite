@@ -1,0 +1,228 @@
+$ml-light-theme: (
+  base: white,
+  oppositeBase: black,
+
+  background: #f5f5f5,
+  primaryContainer: #fafafa,
+  secondaryContainer: white,
+  tertiaryContainer: #eeeeee,
+  disabledContainer: rgba(0,0,0,.12),
+
+  divider: rgba(0,0,0,.12),
+  elevation: black,
+  scrollbar: rgba(0,0,0,.12),
+
+  text: rgba(0,0,0,.87),
+  secondaryText: rgba(0,0,0,.54),
+  hintText: rgba(0,0,0,.38),
+  disabledText: rgba(0,0,0,.38),
+);
+
+$ml-dark-theme: (
+  base: black,
+  oppositeBase: white,
+
+  background: #212121,
+  primaryContainer: #303030,
+  secondaryContainer: #424242,
+  tertiaryContainer: #616161,
+  disabledContainer: hsla(0,0%,100%,.12),
+
+  divider: rgba(255,255,255,.12),
+  elevation: black,
+  scrollbar: rgba(255,255,255,.12),
+
+  text: #fff,
+  secondaryText: rgba(255,255,255,.7),
+  hintText: rgba(255,255,255,.5),
+  disabledText: hsla(0,0%,100%,.3),
+);
+
+$ml-css-variable-theme: (
+  base: var(--ml-base),
+  oppositeBase: var(--ml-opposite-base),
+
+  background: var(--ml-background),
+  primaryContainer: var(--ml-primary-container),
+  secondaryContainer: var(--ml-secondary-container),
+  tertiaryContainer: var(--ml-tertiary-container),
+  disabledContainer: var(--ml-disabled-container),
+
+  divider: var(--ml-divider),
+  elevation: var(--ml-elevation),
+  scrollbar: var(--ml-scrollbar),
+
+  text: var(--ml-text),
+  secondaryText: var(--ml-secondary-text),
+  hintText: var(--ml-hint-text),
+  disabledText: var(--ml-disabled-text),
+);
+
+$ml-deepPurple-amber-palette: (
+  primary: (
+    color: #673ab7,
+    contrast: #fff,
+  ),
+  accent: (
+    color: #ffd740,
+    contrast: rgba(0,0,0,.87),
+  ),
+  warn: (
+    color: #f44336,
+    contrast: #fff,
+  )
+);
+
+$ml-indigo-pink-palette: (
+  primary: (
+    color: #3f51b5,
+    contrast: #fff,
+  ),
+  accent: (
+    color: #ff4081,
+    contrast: #fff,
+  ),
+  warn: (
+    color: #f44336,
+    contrast: #fff,
+  )
+);
+
+$ml-pink-blueGrey-palette: (
+  primary: (
+    color: #e91e63,
+    contrast: #fff,
+  ),
+  accent: (
+    color: #607d8b,
+    contrast: #fff,
+  ),
+  warn: (
+    color: #f44336,
+    contrast: #fff,
+  )
+);
+$ml-pink-blueGray-palette: $ml-pink-blueGrey-palette;
+
+$ml-purple-green-palette: (
+  primary: (
+    color: #9c27b0,
+    contrast: #fff,
+  ),
+  accent: (
+    color: #69f0ae,
+    contrast: rgba(0,0,0,.87),
+  ),
+  warn: (
+    color: #f44336,
+    contrast: #fff,
+  )
+);
+
+$ml-css-variable-palette: (
+  primary: (
+    color: var(--ml-primary),
+    contrast: var(--ml-primary-contrast),
+  ),
+  accent: (
+    color: var(--ml-accent),
+    contrast: var(--ml-accent-contrast),
+  ),
+  warn: (
+    color: var(--ml-warn),
+    contrast: var(--ml-warn-contrast),
+  )
+);
+
+
+@mixin ml-button-theme($theme, $palette) {
+  $text: map-get($theme, text);
+  $secondaryContainer: map-get($theme, oppositeBase);
+  $disabledContainer: map-get($theme, disabledContainer);
+  $disabledText: map-get($theme, disabledText);
+  $divider: map-get($theme, divider);
+
+  .ml-button {
+    color: $text;
+  }
+
+  .ml-simple-button {
+    @each $name, $value in $palette {
+      $color: map-get($value, color);
+
+      .ml-button-#{$name} {
+        color: $color;
+      }
+    }
+  }
+  .ml-filled-button {
+    background-color: $secondaryContainer;
+    @each $name, $value in $palette {
+      $color: map-get($value, color);
+      $contrast: map-get($value, contrast);
+
+      .ml-button-#{$name} {
+        background-color: $color;
+        color: $contrast;
+      }
+    }
+
+    &.ml-disabled-button {
+      background-color: $disabledContainer;
+    }
+  }
+
+  .ml-stroked-button {
+    border-color: $divider !important;
+  }
+
+  .ml-disabled-button {
+    color: $disabledText;
+  }
+}
+
+
+
+
+// Libraryへのコンパイル時はimportを使えない
+@mixin ml-theme($theme, $palette) {
+  $theme: _initThemeArg($theme);
+  $palette: _initPaletteArg($palette);
+
+  @include ml-button-theme($theme, $palette);
+}
+
+@function _initThemeArg($theme) {
+  @if $theme == light {
+    @return $ml-light-theme;
+
+  } @else if $theme == dark {
+    @return $ml-dark-theme;
+
+  } @else if $theme == css-variable or $theme == cssVariable {
+    @return $ml-css-variable-theme;
+
+  } @else {
+    @return $theme;
+  }
+}
+@function _initPaletteArg($palette) {
+  @if $palette == css-variable or $palette == cssVariable {
+    @return $ml-css-variable-palette;
+
+  } @else if $palette == indigo-pink or $palette == indigoPink {
+    @return $ml-indigo-pink-palette;
+
+  } @else if $palette == purple-green or $palette == purpleGreen {
+    @return $ml-purple-green-palette;
+
+  } @else if $palette == deep-purple-amber or $palette == deepPurpleAmber or $palette == deepPurple-amber {
+    @return $ml-deepPurple-amber-palette;
+
+  } @else if $palette == pink-blue-grey or $palette == pink-blueGrey or $palette == pinkBlueGrey or $palette == pink-blue-gray or $palette == pink-blueGray or $palette == pinkBlueGray {
+    @return $ml-pink-blueGrey-palette;
+
+  }@else {
+    @return $palette;
+  }
+}

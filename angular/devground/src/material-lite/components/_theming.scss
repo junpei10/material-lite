@@ -1,0 +1,46 @@
+@import './core/theme/constants/';
+@import './button/theme';
+
+// Libraryへのコンパイル時はimportを使えない
+
+@mixin ml-theme($theme, $palette) {
+  $theme: _initThemeArg($theme);
+  $palette: _initPaletteArg($palette);
+
+  @include ml-button-theme($theme, $palette);
+}
+
+@function _initThemeArg($theme) {
+  @if $theme == light {
+    @return $ml-light-theme;
+
+  } @else if $theme == dark {
+    @return $ml-dark-theme;
+
+  } @else if $theme == css-variable or $theme == cssVariable {
+    @return $ml-css-variable-theme;
+
+  } @else {
+    @return $theme;
+  }
+}
+@function _initPaletteArg($palette) {
+  @if $palette == css-variable or $palette == cssVariable {
+    @return $ml-css-variable-palette;
+
+  } @else if $palette == indigo-pink or $palette == indigoPink {
+    @return $ml-indigo-pink-palette;
+
+  } @else if $palette == purple-green or $palette == purpleGreen {
+    @return $ml-purple-green-palette;
+
+  } @else if $palette == deep-purple-amber or $palette == deepPurpleAmber or $palette == deepPurple-amber {
+    @return $ml-deepPurple-amber-palette;
+
+  } @else if $palette == pink-blue-grey or $palette == pink-blueGrey or $palette == pinkBlueGrey or $palette == pink-blue-gray or $palette == pink-blueGray or $palette == pinkBlueGray {
+    @return $ml-pink-blueGrey-palette;
+
+  }@else {
+    @return $palette;
+  }
+}

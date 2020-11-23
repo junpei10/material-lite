@@ -1,32 +1,40 @@
-import { Component, DoCheck, TemplateRef, ViewChild } from '@angular/core';
-import { MlPopupOutlet } from 'src/material-lite/core/popup';
+import { Component, DoCheck, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { MlPortalAttachContent, MlPortalOutlet } from '@material-lite/angular-cdk/portal';
+import { MlButtonBinder } from '@material-lite/angular/button';
+import { MlPopupOutlet } from 'src/material-lite/components/popup/outlet.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements DoCheck {
-  @ViewChild('test') private _testRef: TemplateRef<any>;
+export class AppComponent implements OnInit, DoCheck {
+  @ViewChild('test', { static: true }) private _testTemplateRef: TemplateRef<any>;
   title = 'devground';
 
-  buttonVariant = 'icon';
-  buttonDisabled: boolean;
+  button: MlButtonBinder = {
+    mlButton: false,
+    variant: 'basic',
+    hoverAction: 'default',
+    theme: undefined,
+    disableRipple: false,
+    immediateRipple: false,
+    immediateRippleBreakpoint: undefined
+  };
+
+  outlet: MlPortalAttachContent;
 
   constructor(
-    private _mlPopupOutlet: MlPopupOutlet
-  ) { }
+    private renderer: Renderer2,
+    private popupOutlet: MlPopupOutlet,
+  ) {
+  }
+
+  ngOnInit(): void {
+  }
 
   ngDoCheck(): void {
     console.log('do');
-  }
-
-  buttonClick(): void {
-    const v = this.buttonVariant;
-    this.buttonVariant = v === 'icon' ? 'basic' : 'icon';
-
-    const dis = this.buttonDisabled;
-    this.buttonDisabled = !this.buttonDisabled;
   }
 }
 
