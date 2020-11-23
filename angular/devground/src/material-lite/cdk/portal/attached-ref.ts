@@ -1,5 +1,5 @@
 import { Observable, PartialObserver, Subject, Subscription } from 'rxjs';
-import { RunOutside } from '../utils/run-outside';
+import { RunOutside } from '@material-lite/angular-cdk/utils';
 import { MlPortalAttachConfig, MlPortalAttachedContent, MlPortalOutletData } from './outlet.service';
 
 /** @description `AttachedRef class`のconstructorを固定するための引数 */

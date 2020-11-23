@@ -3,19 +3,16 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
-import { MlButtonModule } from '@material-lite/angular/button';
-import { MlRippleModule } from '@material-lite/angular/core';
+import { ComponentsComponent } from './views/components/components.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ComponentsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    MlButtonModule,
-    MlRippleModule
   ],
   providers: [],
   bootstrap: [AppComponent]
