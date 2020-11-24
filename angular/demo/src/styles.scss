@@ -1,5 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import './assets/roboto-font-face';
+@import './assets/mat-icon';
+@import './assets/code-block';
 
 body, html {
   height: 100%;
@@ -23,85 +25,6 @@ pre {
 }
 code {
   font-size: 100%;
-}
-
-section.code-block {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 16px 0;
-  border: .5px solid rgba(0,0,0,.2);
-  border-radius: 4px;
-
-  div, pre {
-    margin: 0 !important;
-    border: 0 !important;
-  }
-}
-div.prod, pre.docs {
-  display: flex;
-  width: 100%;
-  border: .5px solid rgba(0,0,0,.2);
-  margin: 16px auto;
-  padding: 16px;
-  border-radius: 4px;
-}
-pre.docs {
-  line-height: 20px;
-  background-color: rgba(0,0,0,.01);
-  overflow-x: auto;
-  white-space: pre-wrap;
-}
-pre.docs code {
-  display: inline;
-  background-color: transparent;
-  padding: 0;
-  white-space: pre-wrap;
-}
-
-pre.html {
-  [tag] {
-    color: #f44336;
-  }
-  [val] {
-    color: #FFEB3B;
-  }
-  [attr] {
-    color: #8BC34A;
-  }
-}
-
-pre.css {
-  [tag] {
-    color: #f44336;
-  }
-  [class] {
-    color: #8BC34A;
-  }
-  [prop] {
-    color: #03A9F4;
-  }
-  [val] {
-    color: #3F51B5;
-  }
-}
-
-pre.js {
-  [meta], [return] {
-    color: #f44336;
-  }
-  [this], [arg] {
-    color: #FB8C00;
-  }
-  [str] {
-    color: #FFEB3B;
-  }
-  [type], [def] {
-    color: #03A9F4;
-  }
-  [fn] {
-    color: #8BC34A;
-  }
 }
 
 

@@ -1,10 +1,41 @@
 <h1>Button</h1>
-<p class='desc'></p>
+<p class='h1-desc'>&lt;button&gt;や、&lt;a&gt;に縛られず、全てのタグで利用可能です</p>
 
+
+<h2>Types</h2>
+<p class='h2-desc'>ボタンのタイプを変えたいときは`variant`を変更します</p>
 <section class='code-block'>
-  <div class='prod'>
-    <button mlButton>Button</button>
+  <div class='prod types-prod'>
+    <button mlButton>Default</button>
+    <button mlButton variant='basic'>Basic</button>
+    <button mlButton variant='raised'>Raised</button>
+    <button mlButton variant='stroked'>Stroked</button>
+    <button mlButton variant='flat'>Flat</button>
+    <button mlButton variant='icon'><span mlIcon>home</span></button>
+    <button mlButton variant='fab' style='width:40px;height:40px'><span mlIcon>home</span></button>
   </div>
-  <pre class='docs html'><code>&lt;<span tag>div</span>&gt;
+
+<pre class='code html'><code>&lt;<span tag>div</span>&gt;
+  &lt;<span tag>button</span> <span attr>mlButton</span>&gt;Default&lt;<span tag>/button</span>&gt;
+  &lt;<span tag>button</span> <span attr>mlButton</span> <span attr>variant</span>=<span val>&quot;basic&quot;</span>&gt;Basic&lt;<span tag>/button</span>&gt;
+  &lt;<span tag>button</span> <span attr>mlButton</span> <span attr>variant</span>=<span val>&quot;raised&quot;</span>&gt;Raised&lt;<span tag>/button</span>&gt;
+  &lt;<span tag>button</span> <span attr>mlButton</span> <span attr>variant</span>=<span val>&quot;stroked&quot;</span>&gt;Stroked&lt;<span tag>/button</span>&gt;
+  &lt;<span tag>button</span> <span attr>mlButton</span> <span attr>variant</span>=<span val>&quot;flat&quot;</span>&gt;Flat&lt;<span tag>/button</span>&gt;
+  &lt;<span tag>button</span> <span attr>mlButton</span> <span attr>variant</span>=<span val>&quot;icon&quot;</span>&gt;&lt;<span tag>span</span> <span attr>mlIcon</span>&gt;home&lt;/span&gt;&lt;<span tag>/button</span>&gt;
+  &lt;<span tag>button</span> <span attr>mlButton</span> <span attr>variant</span>=<span val>&quot;fab&quot;</span> <span attr>style</span>=<span val>&quot;width:40px;height:40px&quot;</span>&gt;&lt;<span tag>span</span> <span attr>mlIcon</span>&gt;home&lt;/span&gt;&lt;<span tag>/button</span>&gt;
 &lt;<span tag>/div</span>&gt;</code></pre>
+
 </section>
+
+
+<h2>Link button</h2>
+<p class='h2-desc'>リンクボタンは２パターン存在します</p>
+<section>
+  <div class='prod'>
+  </div>
+
+<pre class='code html'><code>&lt;<span tag>div</span>&gt;
+&lt;<span tag>/div</span>&gt;</code></pre>
+
+</section>
+
