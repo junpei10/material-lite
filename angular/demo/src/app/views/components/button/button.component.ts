@@ -1,10 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-button',
-  template: `
-    <button mlButton theme='primary'>BUTTON</button>
-  `
+  templateUrl: './button.component.html'
 })
 
 export class ButtonComponent {

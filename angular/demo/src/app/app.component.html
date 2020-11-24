@@ -1,1 +1,26 @@
-<router-outlet></router-outlet>
+<header class='root-header'>
+  <nav class='primary-bg primary-contrast'>
+    <div class='content'>
+      <button mlButton routerLink='home'>Home</button>
+      <button mlButton routerLink='components'>Components</button>
+      <button mlButton routerLink='cdk'>CDK</button>
+      <button mlButton routerLink='theme'>Theme</button>
+    </div>
+    <div class='content'>
+      <button mlButton>v0.0.5</button>
+      <a mlButton href='https://github.com/junpei10/material-lite' target='_blank' rel='noopener noreferrer'>
+        <img src='../assets/images/github-circle-white-transparent.svg' width='24' height='24'>
+        <span>Github</span>
+      </a>
+    </div>
+  </nav>
+</header>
+
+<main class='root-main'>
+  <router-outlet></router-outlet>
+</main>
+
+<footer class='root-footer primary-bg primary-contrast'>
+  <div><a href='#' target='_blank' rel='noopener noreferrer'>React版</a></div>
+  <div><a href='https://material.angular.io/' target='_blank' rel='noopener noreferrer'>Angular Material</a></div>
+</footer>

@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'demo';
+  title = 'Material lite';
+  x(): void {
+    // this.title;
+  }
 }
