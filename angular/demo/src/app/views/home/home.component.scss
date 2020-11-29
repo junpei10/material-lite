@@ -1,5 +1,8 @@
+:host {
+  display: block;
+}
 header {
-  padding: 96px 0 80px;
+  padding: 80px 0;
   text-align: center;
   h1 {
     font-size: 56px;
@@ -15,24 +18,26 @@ header {
     margin-bottom: 0;
   }
   .version {
-    font-size: 15px;
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 15.5px;
     font-weight: 500;
+    outline: none;
   }
 }
 
 .first-section {
-  padding-top: 32px;
+  padding-top: 40px;
 }
 
 section {
-  padding-bottom: 40px;
+  padding-bottom: 48px;
   text-align: center;
   h1 {
     font-size: 20px;
     margin-bottom: 8px;
   }
   p {
-    font-size: 14px;
     padding: 0 16px;
     margin: auto;
     max-width: 960px;
@@ -40,7 +45,7 @@ section {
   }
   pre {
     width: fit-content;
-    border-width: 1.5px;
+    padding: 16px 32px;
     margin-bottom: 0;
   }
   code {

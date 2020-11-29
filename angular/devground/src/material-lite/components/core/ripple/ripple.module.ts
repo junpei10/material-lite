@@ -18,7 +18,7 @@ const STYLE: MlThemeStyle = {
       border-radius: 50%;
       pointer-events: none;
     }
-    .ml-immediate-ripple {
+    .ml-ripple-overdrive {
       will-change: opacity;
       opacity: 0;
       transition-property: opacity;
@@ -28,14 +28,6 @@ const STYLE: MlThemeStyle = {
       width: 100%;
       height: 100%;
       border-radius: 0;
-      pointer-events: none;
-    }
-    ml-ripple-outlet {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0; left: 0;
-      overflow: hidden;
       pointer-events: none;
     }
   `

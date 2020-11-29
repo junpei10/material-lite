@@ -7,7 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { MlRippleModule } from '@material-lite/angular/core';
 import { MlButtonModule } from '@material-lite/angular/button';
 import { MlPortalModule } from '@material-lite/angular-cdk/portal';
-import { MlPopupModule } from 'src/material-lite/components/popup/outlet.module';
+import { MlPopupModule } from '@material-lite/angular-cdk/popup';
 
 
 @NgModule({

@@ -26,15 +26,15 @@
       "@material-lite/angular/button": [
         "./src/material-lite/components/button"
       ],
-      "@material-lite/angular/popup": [
-        "./src/material-lite/components/popup"
-      ],
       // CDK
       "@material-lite/angular-cdk": [
         "./src/material-lite/cdk"
       ],
       "@material-lite/angular-cdk/portal": [
         "./src/material-lite/cdk/portal"
+      ],
+      "@material-lite/angular-cdk/popup": [
+        "./src/material-lite/cdk/popup"
       ],
       "@material-lite/angular-cdk/utils": [
         "./src/material-lite/cdk/utils"

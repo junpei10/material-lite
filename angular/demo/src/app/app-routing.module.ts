@@ -16,12 +16,16 @@ const routes: Routes = [
   {
     path: 'cdk', component: CdkComponent, children: [
       { path: '', loadChildren: () => import('./views/cdk/root').then(m => m.RootModule) },
-      { path: 'portal', loadChildren: () => import('./views/cdk/portal').then(m => m.PortalModule) }
+      { path: 'portal', loadChildren: () => import('./views/cdk/portal').then(m => m.PortalModule) },
+      { path: 'popup', loadChildren: () => import('./views/cdk/popup').then(m => m.PopupModule) }
     ]
+  },
+  {
+    path: 'changelog', loadChildren: () => import('./views/changelog').then(m => m.ChangelogModule)
   },
   { path: 'theme', component: ThemeComponent },
   { path: 'home', component: HomeComponent },
-  { path: '', redirectTo: 'home', pathMatch: 'full' }
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
 ];
 
 @NgModule({

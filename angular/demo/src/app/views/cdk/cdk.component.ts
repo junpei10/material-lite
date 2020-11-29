@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-cdk',
-  template: '<router-outlet></router-outlet>'
+  templateUrl: './cdk.component.html'
 })
 export class CdkComponent implements OnInit {
   constructor() { }

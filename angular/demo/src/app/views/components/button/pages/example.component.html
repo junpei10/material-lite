@@ -1,0 +1,76 @@
+<section class='code-block'>
+  <nav>
+    <button mlButton [theme]='type === 0 ? "accent" : ""' (click)='type = 0'>HTML</button>
+    <button mlButton [theme]='type === 1 ? "accent" : ""' (click)='type = 1'>TS</button>
+    <button mlButton [theme]='type === 2 ? "accent" : ""' (click)='type = 2'>CSS</button>
+  </nav>
+  <div class='prod'>
+    <div class="form">
+      <span>[theme]</span>
+      <input placeholder="theme" [(ngModel)]="theme" />
+
+      <span>[variant]</span>
+      <select [(ngModel)]="variant">
+        <option value="basic">basic</option>
+        <option value="raised">raised</option>
+        <option value="stroked">stroked</option>
+        <option value="flat">flat</option>
+      </select>
+
+      <span>[hoverAction]</span>
+      <select [(ngModel)]="hoverAction">
+        <option value="default">auto</option>
+        <option value="enable">enable</option>
+        <option value="disable">disable</option>
+      </select>
+
+      <label for="disabled"><input type="checkbox" id="disabled" [(ngModel)]="disabled">Disabled</label>
+    </div>
+
+    <button
+      [mlButton]="!disabled"
+      [variant]="variant"
+      [theme]="theme"
+      [hoverAction]="hoverAction"
+    >BUTTON</button>
+  </div>
+  <pre class='code'>
+    <ng-template [ngIf]='type === 0'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"form"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>[theme]<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">placeholder</span>=<span class="hljs-string">"theme"</span> [(<span class="hljs-attr">ngModel</span>)]=<span class="hljs-string">"theme"</span> /&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>[variant]<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">select</span> [(<span class="hljs-attr">ngModel</span>)]=<span class="hljs-string">"variant"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"basic"</span>&gt;</span>basic<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"raised"</span>&gt;</span>raised<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"stroked"</span>&gt;</span>stroked<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"flat"</span>&gt;</span>flat<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>[hoverAction]<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">select</span> [(<span class="hljs-attr">ngModel</span>)]=<span class="hljs-string">"hoverAction"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"default"</span>&gt;</span>auto<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"enable"</span>&gt;</span>enable<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"disable"</span>&gt;</span>disable<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">for</span>=<span class="hljs-string">"disabled"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"checkbox"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"disabled"</span> [(<span class="hljs-attr">ngModel</span>)]=<span class="hljs-string">"disabled"</span> /&gt;</span>
+    Disabled
+  <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">button</span>
+  [<span class="hljs-attr">mlButton</span>]=<span class="hljs-string">"<span class="hljs-name">!</span>disabled"</span>
+  [<span class="hljs-attr">variant</span>]=<span class="hljs-string">"variant"</span>
+  [<span class="hljs-attr">theme</span>]=<span class="hljs-string">"theme"</span>
+  [<span class="hljs-attr">hoverAction</span>]=<span class="hljs-string">"hoverAction"</span>
+&gt;</span>BUTTON<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></code></ng-template>
+
+    <ng-template [ngIf]='type === 1'><code class='js'>
+    </code></ng-template>
+
+    <ng-template [ngIf]='type === 2'><code class='css'>
+    </code></ng-template>
+  </pre>
+</section>

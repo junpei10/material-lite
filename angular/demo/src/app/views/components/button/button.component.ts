@@ -2,14 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-button',
-  templateUrl: './button.component.html',
-  styles: [`
-    .types-prod button {
-      margin: 0 8px;
-    }
-  `]
+  templateUrl: './button.component.html'
 })
 
-export class ButtonComponent {
-  constructor() { }
-}
+export class ButtonComponent { }

@@ -45,15 +45,15 @@ const STYLE: MlThemeStyle = {
     .ml-stroked-button,
     .ml-flat-button {
       min-width: 64px;
-      min-height: 36px;
+      height: 36px;
       padding: 0 16px;
       border-radius: 4px;
     }
 
     .ml-icon-button,
     .ml-fab {
-      min-height: 32px;
-      min-width: 32px;
+      height: 32px;
+      width: 32px;
       padding: 0;
       border-radius: 50%;
     }
@@ -126,9 +126,9 @@ const STYLE: MlThemeStyle = {
       opacity: 0.056;
     }
   `,
-  themeFactory: (theme, forEachPalette) => {
+  theme: (theme) => {
     const { text, secondaryContainer, disabledContainer, disabledText, divider } = theme;
-    return `
+    return (`
       .ml-button {
         color: ${text};
       }
@@ -138,24 +138,23 @@ const STYLE: MlThemeStyle = {
       .ml-filled-button.ml-disabled-button {
         background-color: ${disabledContainer} !important;
       }
-
       .ml-stroked-button {
         border-color: ${divider} !important;
       }
-
       .ml-disabled-button {
         color: ${disabledText} !important;
       }
-    ` + forEachPalette((name, color, contrast) => (`
-      .ml-simple-button.ml-button-${name} {
-        color: ${color};
-      }
-      .ml-filled-button.ml-button-${name} {
-        background-color: ${color};
-        color: ${contrast};
-      }
-    `));
-  }
+    `);
+  },
+  palette: (name, color, contrast) => (`
+    .ml-simple-button.ml-button-${name} {
+      color: ${color};
+    }
+    .ml-filled-button.ml-button-${name} {
+      background-color: ${color};
+      color: ${contrast};
+    }
+  `)
 };
 
 

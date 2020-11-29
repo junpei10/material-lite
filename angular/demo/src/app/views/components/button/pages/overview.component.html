@@ -1,0 +1,123 @@
+<h2 class='h2-title'>Types</h2>
+<p class='h2-desc'>ボタンのタイプを変えたいときは<span class='selector'>[variant]</span>を変更します。</p>
+<section class='code-block'>
+  <div class='prod'>
+    <button mlButton>Default</button>
+    <button mlButton variant='basic'>Basic</button>
+    <button mlButton variant='raised'>Raised</button>
+    <button mlButton variant='stroked'>Stroked</button>
+    <button mlButton variant='flat'>Flat</button>
+    <button mlButton variant='icon'><span mlIcon>home</span></button>
+    <button mlButton variant='fab'><span mlIcon>home</span></button>
+  </div>
+
+<pre class='code'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span>&gt;</span>Default<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"basic"</span>&gt;</span>Basic<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"raised"</span>&gt;</span>Raised<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"stroked"</span>&gt;</span>Stroked<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"flat"</span>&gt;</span>Flat<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"icon"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">mlIcon</span>&gt;</span>home<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"fab"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">mlIcon</span>&gt;</span>home<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+</section>
+
+
+<h2 class='h2-title'>Theming</h2>
+<p class='h2-desc'><span class='selector'>[theme]</span>を変更することで、色を変えることができます</p>
+<section class='code-block'>
+  <div class='prod'>
+    <button mlButton variant='basic' theme='primary'>Basic</button>
+    <button mlButton variant='raised' theme='accent'>Raised</button>
+    <button mlButton variant='stroked' theme='warn'>Stroked</button>
+    <button mlButton variant='flat' theme='primary'>Flat</button>
+    <button mlButton variant='icon' theme='accent'><span mlIcon>home</span></button>
+    <button mlButton variant='fab' theme='warn'><span mlIcon>home</span></button>
+  </div>
+
+<pre class='code'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">'basic'</span> <span class="hljs-attr">theme</span>=<span class="hljs-string">'primary'</span>&gt;</span>Basic<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">'raised'</span> <span class="hljs-attr">theme</span>=<span class="hljs-string">'accent'</span>&gt;</span>Raised<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">'stroked'</span> <span class="hljs-attr">theme</span>=<span class="hljs-string">'warn'</span>&gt;</span>Stroked<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">'flat'</span> <span class="hljs-attr">theme</span>=<span class="hljs-string">'primary'</span>&gt;</span>Flat<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">'icon'</span> <span class="hljs-attr">theme</span>=<span class="hljs-string">'accent'</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">mlIcon</span>&gt;</span>home<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">'fab'</span> <span class="hljs-attr">theme</span>=<span class="hljs-string">'warn'</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">mlIcon</span>&gt;</span>home<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+</section>
+
+
+<h2 class='h2-title'>Link button</h2>
+<p class='h2-desc'>リンクボタンは２パターン存在し、"Hover時の背景色"と"Rippleの色"が異なっています。</p>
+<section class='code-block'>
+  <div class='prod'>
+    <a mlButton href='https://www.google.com/' target='_blank' rel='noopener noreferrer'>a-tag Button</a>
+    <button mlButton [inlineLink]='true'>
+      <a href='https://www.google.com' target='_blank' rel='noopener noreferrer'>Inline Link Button</a>
+    </button>
+  </div>
+
+<pre class='code'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">mlButton</span>&gt;</span>a-tag Button<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> [<span class="hljs-attr">inlineLink</span>]=<span class="hljs-string">"true"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span>&gt;</span>Inline Link Button<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+</section>
+
+
+<h2 class='h2-title'>Disable button</h2>
+<p class='h2-desc'>入力プロパティの数をできるだけ少なくしたいという考えから、<span class='selector'>[mlButton]</span>に値を代入することで変更できるようにしています。</p>
+<section class='code-block'>
+  <div class='prod'>
+    <button [mlButton]="false" variant="basic">Disabled</button>
+    <button [mlButton]="!true" variant="raised">Disabled</button>
+    <button [mlButton]='undefined' variant='stroked'>Disabled</button>
+    <button [mlButton]="null" variant="icon"><span mlIcon>home</span></button>
+    <button [mlButton]="0" variant="fab"><span mlIcon>home</span></button>
+  </div>
+
+<pre class='code'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> [<span class="hljs-attr">mlButton</span>]=<span class="hljs-string">"false"</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"basic"</span>&gt;</span>Disabled<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> [<span class="hljs-attr">mlButton</span>]=<span class="hljs-string">"!true"</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"raised"</span>&gt;</span>Disabled<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> [<span class="hljs-attr">mlButton</span>]=<span class="hljs-string">"undefined"</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"stroked"</span>&gt;</span>Disabled<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> [<span class="hljs-attr">mlButton</span>]=<span class="hljs-string">"null"</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"icon"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">mlIcon</span>&gt;</span>home<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> [<span class="hljs-attr">mlButton</span>]=<span class="hljs-string">"0"</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"fab"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">mlIcon</span>&gt;</span>home<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+</section>
+
+
+<h2 class='h2-title'>Hover action</h2>
+<p class='h2-desc'>
+  Hover時の背景色の設定を変えることができます。<br>
+  <span class='selector'>variant="raised"</span>を入力したボタンの場合、Hoverしても背景色は変わりませんが、
+  <span class='selector'>hoverAction="enable"</span>を入力すると、Hoverしたときに背景色が変わるようになります。
+</p>
+<section class='code-block'>
+  <div class='prod'>
+    <button mlButton variant="basic" hoverAction="disable">Disable Hover Action</button>
+    <button mlButton variant="raised" hoverAction="enable">Enable Hover Action</button>
+  </div>
+
+<pre class='code'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"basic"</span> <span class="hljs-attr">hoverAction</span>=<span class="hljs-string">"disable"</span>&gt;</span>Disable Hover Action<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">"raised"</span> <span class="hljs-attr">hoverAction</span>=<span class="hljs-string">"enable"</span>&gt;</span>Enable Hover Action<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+</section>
+
+
+<h2 class='h2-title'>Ripple config</h2>
+<p class='h2-desc'>
+  ３つのRippleの設定(<span class='selector'>[disableRipple], [immediateRipple], [immediateRippleBreakpoint]</span>)を変更可能です。<br>
+  詳しくは<a routerLink='/components/ripple'>Ripple</a>を参照してください！
+</p>
+<section class='code-block'>
+  <div class='prod'>
+    <button mlButton [disableRipple]=true>Disable Ripple</button>
+    <button mlButton [immediateRipple]=true>Immediate Ripple</button>
+  </div>
+
+<pre class='code'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> [<span class="hljs-attr">disableRipple</span>]=<span class="hljs-string">true</span>&gt;</span>Disable Ripple<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> [<span class="hljs-attr">immediateRipple</span>]=<span class="hljs-string">true</span>&gt;</span>Immediate Ripple<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+</section>

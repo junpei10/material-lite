@@ -1,11 +1,1 @@
-<ng-template #test>
-  <button
-    [mlButton]='!button.mlButton'
-    [variant]='button.variant'
-    [theme]='button.theme'
-    [immediateRipple]='button.immediateRipple'
-  >BUTTON</button>
-</ng-template>
-
-
-<ng-template [mlPopupOutlet]='test' [mlPopupAttachConfig]='{ animation: { className: "test", enter: 500, leave: 500 }}' key='root'></ng-template>
+<div mlRipple [mlRippleOverdrive]='true' mlRippleTheme='accent' style='width:300px;height:300px'>DIV BUTTON</div>

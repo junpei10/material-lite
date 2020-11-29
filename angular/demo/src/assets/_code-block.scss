@@ -3,21 +3,48 @@ section.code-block {
   flex-direction: column;
   justify-content: center;
   margin: 16px 0;
-  border: .5px solid rgba(0,0,0,.2);
+  border: .5px solid #9E9E9E;
   border-radius: 4px;
   overflow: hidden;
+
+  nav {
+    display: flex;
+    .ml-button {
+      width: 100%;
+      border-radius: 0;
+    }
+  }
 
   .prod, .code {
     margin: 0 !important;
     border: 0 !important;
     border-radius: 0 !important;
   }
+
 }
 
-div.prod, pre.code {
+.form {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   width: 100%;
-  border: .5px solid rgba(0,0,0,.2);
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: .5px solid #9E9E9E;
+  > * {
+    margin: 0 16px;
+  }
+  span {
+    font-family: Roboto Mono;
+    font-size: 14px;
+    margin-right: 0;
+  }
+}
+.prod, pre.code {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  border: .5px solid #9E9E9E;
   margin: 16px auto;
   padding: 16px;
   box-sizing: border-box;
@@ -38,24 +65,24 @@ pre.code code {
 }
 
 
-pre.html {
-  [tag] {
+code.html .hljs- {
+  &name {
     color: #f44336;
   }
-  [val] {
+  &string {
     color: #FFEB3B;
   }
-  [attr] {
-    color: #8BC34A;
+  &attr {
+    color: #9EE34F;
   }
 }
 
-pre.css {
+code.css {
   [tag] {
     color: #f44336;
   }
   [class] {
-    color: #8BC34A;
+    color: #9EE34F;
   }
   [prop] {
     color: #03A9F4;
@@ -65,7 +92,7 @@ pre.css {
   }
 }
 
-pre.js {
+code.js {
   [meta], [return] {
     color: #f44336;
   }
@@ -79,6 +106,6 @@ pre.js {
     color: #03A9F4;
   }
   [fn] {
-    color: #8BC34A;
+    color: #9EE34F;
   }
 }

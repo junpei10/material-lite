@@ -4,46 +4,50 @@ import { listen, ListenTarget, noop, RunOutside, RUN_OUTSIDE } from '@material-l
 
 export interface MlRippleBinder {
   mlRipple: boolean | '';
-  mlImmediateRipple: boolean;
-  mlImmediateRippleBreakpoint: { width?: number, height?: number } | undefined;
+  mlRippleOverdrive: boolean;
+  mlRippleTypeBreakpoint: { width?: number, height?: number } | undefined;
+
   mlRippleColor: string;
   mlRippleTheme: string;
   mlRippleOpacity: number;
+  mlRippleRadius: number;
   mlRippleAnimationDuration: { enter?: number, leave?: number } | number;
+
   mlRippleTarget: ListenTarget | ElementRef<ListenTarget>;
   mlRippleTargetIsLargerThanOutlet: boolean;
-  mlRippleWrapped: boolean;
+
   mlRippleCentered: boolean;
-  mlRippleRadius: number;
   mlRippleFixedSize: boolean;
 }
+
+type Binder = MlRippleBinder;
 
 @Directive({
   selector: '[mlRipple]'
 })
 export class MlRippleDirective implements OnChanges {
-  @Input() set mlRipple(_enable: MlRippleBinder['mlRipple']) {
+  @Input('mlRipple') set mlRipple(_enable: Binder['mlRipple']) {
     const enable = _enable === '' || _enable;
     (enable)
-      ? this._removePointerdownListener()
-      : this._needSetPointerdownListener = true;
+      ? this._needSetPointerdownListener = true
+      : this._removePointerdownListener();
   }
 
-  @Input() mlImmediateRipple: boolean;
-  @Input() mlImmediateRippleBreakpoint: MlRippleBinder['mlImmediateRippleBreakpoint'];
+  @Input() mlRippleOverdrive: Binder['mlRippleOverdrive'];
+  @Input() mlRippleTypeBreakpoint: Binder['mlRippleTypeBreakpoint'];
 
   private _hostElement: HTMLElement;
   private _needSetPointerdownListener: boolean;
 
   private _removePointerdownListener: () => void = noop;
 
-  @Input() mlRippleColor: string;
+  @Input() mlRippleColor: Binder['mlRippleColor'];
 
-  @Input() mlRippleTheme: string;
+  @Input() mlRippleTheme: Binder['mlRippleTheme'];
 
-  @Input() mlRippleOpacity: number;
+  @Input() mlRippleOpacity: Binder['mlRippleOpacity'];
 
-  @Input() set mlRippleAnimationDuration(duration: MlRippleBinder['mlRippleAnimationDuration']) {
+  @Input() set mlRippleAnimationDuration(duration: Binder['mlRippleAnimationDuration']) {
     if (typeof duration === 'number') {
       const _entryDuration = duration * 0.5;
       this._currAmtDuration = {
@@ -61,7 +65,7 @@ export class MlRippleDirective implements OnChanges {
     leave: 400
   };
 
-  @Input() set mlRippleTarget(target: MlRippleBinder['mlRippleTarget']) {
+  @Input() set mlRippleTarget(target: Binder['mlRippleTarget']) {
     this._currListenTarget = (target instanceof ElementRef)
       ? target.nativeElement
       : target;
@@ -69,32 +73,13 @@ export class MlRippleDirective implements OnChanges {
   }
   private _currListenTarget: ListenTarget;
 
-  @Input() mlRippleTargetIsLargerThanOutlet: boolean;
+  @Input() mlRippleTargetIsLargerThanOutlet: Binder['mlRippleTargetIsLargerThanOutlet'];
 
-  @Input() set mlRippleWrapped(enable: boolean) {
-    let rippleOutletElement = this._rippleOutletElement;
-    if (!rippleOutletElement) {
-      rippleOutletElement = this._rippleOutletElement =
-        this._document.createElement('ml-ripple-outlet');
-    }
+  @Input() mlRippleCentered: Binder['mlRippleCentered'];
 
-    if (enable) {
-      this._hostElement.appendChild(rippleOutletElement);
-    } else if (this._currWrapped) {
-      this._hostElement.removeChild(rippleOutletElement);
-    }
+  @Input() mlRippleRadius: Binder['mlRippleRadius'];
 
-    this._currWrapped = enable;
-    this._needSetPointerdownListener = true;
-  }
-  private _currWrapped: boolean;
-  private _rippleOutletElement: HTMLElement;
-
-  @Input() mlRippleCentered: boolean;
-
-  @Input() mlRippleRadius: number;
-
-  @Input() mlRippleFixedSize: boolean;
+  @Input() mlRippleFixedSize: Binder['mlRippleFixedSize'];
 
   private _containerRect: ClientRect | null;
 
@@ -112,15 +97,13 @@ export class MlRippleDirective implements OnChanges {
   ngOnChanges(): void {
     if (this._needSetPointerdownListener) {
       this._removePointerdownListener();
-      const containerElement =
-        (this._currWrapped) ? this._rippleOutletElement : this._hostElement;
 
       const listenTarget = this._currListenTarget || this._hostElement;
 
       this._runOutside(() => {
         this._removePointerdownListener =
           listen(listenTarget, 'pointerdown',
-            (event: PointerEvent) => this._fadeInRipple(listenTarget, containerElement, event.clientX, event.clientY)
+            (event: PointerEvent) => this._fadeInRipple(listenTarget, this._hostElement, event.clientX, event.clientY)
           );
       });
 
@@ -129,37 +112,36 @@ export class MlRippleDirective implements OnChanges {
   }
 
   private _fadeInRipple(listenTarget: ListenTarget, containerElement: HTMLElement, x: number, y: number): void {
-    let enableImmediateRipple: true | undefined;
+    let enableOverdrive: true | undefined;
 
-    /* 通常の`Ripple`か`ImmediateRipple`かを判断する */
-    if (this.mlImmediateRipple) {
-      const breakpoint = this.mlImmediateRippleBreakpoint;
+    const containerRect = this._containerRect =
+      this._containerRect || containerElement.getBoundingClientRect();
 
+    /* 通常の`Ripple`か`overdrive`かを判断する */
+    if (this.mlRippleOverdrive) {
       /**
-       * `Breakpoint`が設定されている場合、コンテンツの大きさを比較し`Breakpoint`より大きかった場合`ImmediateRipple`の処理へ
-       * `Breakpoint`が設定されていない場合は`ImmediateRipple`の処理へ
+       * `Breakpoint`が設定されている場合、コンテンツの大きさを比較し`Breakpoint`より大きかった場合`overdrive`の処理へ
+       * `Breakpoint`が設定されていない場合は`overdrive`の処理へ
        */
+      const breakpoint = this.mlRippleTypeBreakpoint;
       if (breakpoint) {
         const height = breakpoint.height;
         const width = breakpoint.width;
-        if ((height && height > containerElement.offsetHeight) || (width && width > containerElement.offsetWidth)) {
-          enableImmediateRipple = true;
+        if ((height && height > containerRect.height) || (width && width > containerRect.width)) {
+          enableOverdrive = true;
         }
       } else {
-        enableImmediateRipple = true;
+        enableOverdrive = true;
       }
     }
 
     const ripple: HTMLElement = this._document.createElement('div');
 
-    /**
-     * ここから、通常の`Ripple`と`immediateRipple`の２種類の処理に分岐する。
-     * 共通の処理は存在するが、スコープ汚染やコードの可読性を考えて、処理をまとめていない。
-     */
-    if (enableImmediateRipple) {
-      ripple.classList.add('ml-immediate-ripple');
+    if (enableOverdrive) {
+      /** Overdrive の処理 */
+      ripple.classList.add('ml-ripple-overdrive');
 
-      let rippleStyle = `transition-duration:${this._currAmtDuration.enter * 0.5}ms;`;
+      let rippleStyle = `transition-duration:${this._currAmtDuration.enter * 0.4}ms;`;
       (this.mlRippleTheme)
         ? ripple.classList.add(`ml-${this.mlRippleTheme}-bg`)
         : rippleStyle += `background-color: ${this.mlRippleColor || 'currentColor'};`;
@@ -181,9 +163,12 @@ export class MlRippleDirective implements OnChanges {
       removePointerupListener = listen(listenTarget, 'pointerup', handlerEvent);
       removePointerleaveListener = listen(listenTarget, 'pointerleave', handlerEvent);
 
+
     } else {
-      const containerRect = this._containerRect =
-        this._containerRect || containerElement.getBoundingClientRect();
+      /** 通常のRippleの処理 */
+      ripple.classList.add('ml-ripple-element');
+
+      const enterDuration = this._currAmtDuration.enter;
 
       if (this.mlRippleCentered) {
         x = containerRect.left + containerRect.width * 0.5;
@@ -218,15 +203,13 @@ export class MlRippleDirective implements OnChanges {
       }
 
       const size = distance * 2;
-
-      const enterDuration = this._currAmtDuration.enter;
-
-      ripple.classList.add('ml-ripple-element');
-      let rippleStyle = `top: ${y - containerRect.top - distance}px;left:${x - containerRect.left - distance}px;width:${size}px;height:${size}px;transition-duration:${enterDuration}ms;opacity:${this.mlRippleOpacity || 0.12};`;
+      let rippleStyle: string = `top:${y - containerRect.top - distance}px;left:${x - containerRect.left - distance}px;width:${size}px;height:${size}px;transition-duration:${this._currAmtDuration.enter}ms;opacity:${this.mlRippleOpacity || 0.12};`;
 
       (this.mlRippleTheme)
         ? ripple.classList.add(`ml-${this.mlRippleTheme}-bg`)
         : rippleStyle += `background-color: ${this.mlRippleColor || 'currentColor'};`;
+
+      console.log(`ml-${this.mlRippleTheme}-bg`);
 
       ripple.setAttribute('style', rippleStyle);
       containerElement.appendChild(ripple);
