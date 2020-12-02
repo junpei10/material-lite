@@ -6,17 +6,15 @@ import { Component } from '@angular/core';
   styles: [`
     .ml-button {
       height: 36px;
+      margin: 8px;
     }
     .ml-fab {
       width: 36px;
     }
-    .prod {
+    .docs-codeblock-prod {
       width: 100%;
       padding-top: 8px;
       padding-bottom: 8px;
-    }
-    .prod .ml-button {
-      margin: 8px;
     }
   `]
 })

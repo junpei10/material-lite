@@ -1,5 +1,7 @@
 @import '../assets/ml-elevation';
-@import './views/views-common';
+@import './views/docs';
+@import './views/docs-codeblock';
+// @import './views/views-common';
 
 .ml-button {
   vertical-align: middle;
@@ -73,3 +75,9 @@
 }
 
 } // End
+
+::ng-deep {
+  .root-main > * {
+    display: flex;
+  }
+}

@@ -1,0 +1,92 @@
+::ng-deep {
+  app-example, app-reference {
+    display: block;
+    margin-top: 32px;
+  }
+}
+
+
+::ng-deep .docs- {
+
+&viewer {
+  width: 100%; height: 100%;
+  padding: 16px;
+}
+
+&route-nav {
+  display: flex;
+  position: sticky;
+  top: 40px; left: 0;
+  height: fit-content;
+  justify-content: stretch;
+  flex-direction: column;
+  padding-top: 16px;
+
+  .ml-button {
+    padding: 0 32px;
+    border-radius: 0;
+  }
+}
+
+&route-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+&route-card {
+  width: 280px;
+  @include mat-elevation(2);
+  padding: 24px;
+  margin: 32px;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+}
+
+&page-tab {
+  display: flex;
+  width: 100%;
+  margin-bottom: 16px;
+  .ml-button {
+    width: 100%;
+    border-radius: 0;
+  }
+}
+
+&h1 {
+  display: flex;
+  align-items: center;
+  font-size: 32px;
+  font-weight: 500;
+
+  code, span {
+    font-size: 0.56em;
+    opacity: 0.8;
+    font-weight: 500;
+    margin-left: 12px;
+  }
+}
+
+&h1-desc {
+  font-size: 20px;
+  margin: 8px 0 16px;
+  line-height: 1.5;
+}
+
+&h2 {
+  font-size: 24px;
+  margin-top: 32px;
+  font-weight: 500;
+}
+
+&h2-desc {
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 8px 0 8px;
+}
+
+&code {
+  margin: 0 4px;
+}
+
+}

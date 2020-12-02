@@ -1,0 +1,93 @@
+@mixin _docs-codeblock-container() {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+::ng-deep .docs- {
+  &codeblock {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 16px 0;
+    border: 1px solid #9E9E9E;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  &codeblock-tab {
+    display: flex;
+    margin-bottom: 8px;
+    .ml-button {
+      width: 100%;
+      border-radius: 0;
+    }
+  }
+
+  &codeblock-form {
+    @include _docs-codeblock-container();
+    justify-content: space-evenly;
+    align-items: center;
+    border-bottom: 1px solid #9E9E9E;
+    span {
+      margin-right: 8px;
+    }
+  }
+
+  &codeblock-prod {
+    @include _docs-codeblock-container();
+    justify-content: center;
+    align-items: center;
+  }
+
+  &codeblock-pre {
+    @include _docs-codeblock-container();
+    line-height: 20px;
+    color: white;
+    background-color: #424242;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    margin: 0;
+
+    code {
+      display: inline;
+      background-color: transparent;
+      white-space: pre-wrap;
+      padding: 0;
+    }
+  }
+}
+
+::ng-deep {
+  code.html .hljs- {
+    &name {
+      color: #f44336;
+    }
+    &string {
+      color: #FFEB3B;
+    }
+    &attr {
+      color: #9EE34F;
+    }
+  }
+
+  code.js .hljs- {
+    &dec {
+      color: #9EE34F;
+    }
+    &string {
+      color: #FFEB3B;
+    }
+    &type, &name {
+      color: #81D4FA;
+    }
+    &keyword {
+      color: #f44336;
+    }
+    &literal {
+      color: #F48FB1;
+    }
+  }
+}

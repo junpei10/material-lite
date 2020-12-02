@@ -6,17 +6,17 @@ import { AppComponent } from './app.component';
 import { ComponentsComponent } from './views/components/components.component';
 import { CdkComponent } from './views/cdk/cdk.component';
 import { HomeComponent } from './views/home/home.component';
-import { ThemeComponent } from './views/theme/theme.component';
 import { MlButtonModule } from '@material-lite/angular/button';
 import { CommonModule } from '@angular/common';
+import { NotFoundComponent } from './views/not-found/not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
+    NotFoundComponent,
     CdkComponent,
     ComponentsComponent,
-    ThemeComponent
   ],
   imports: [
     BrowserModule,

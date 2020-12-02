@@ -1,15 +1,17 @@
-<section class='code-block'>
-  <nav>
+<section class='docs-codeblock'>
+  <nav class='docs-codeblock-tab'>
     <button mlButton [theme]='type === 0 ? "accent" : ""' (click)='type = 0'>HTML</button>
     <button mlButton [theme]='type === 1 ? "accent" : ""' (click)='type = 1'>TS</button>
     <button mlButton [theme]='type === 2 ? "accent" : ""' (click)='type = 2'>CSS</button>
   </nav>
-  <div class='prod'>
-    <div class="form">
-    </div>
+
+  <div class="docs-codeblock-form">
   </div>
 
-  <pre class='code'>
+  <div class="docs-codeblock-prod">
+  </div>
+
+  <pre class='docs-codeblock-pre'>
     <ng-template [ngIf]='type === 0'><code class='html'>
     </code></ng-template>
 

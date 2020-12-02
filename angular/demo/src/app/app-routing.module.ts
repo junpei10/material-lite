@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { CdkComponent } from './views/cdk/cdk.component';
 import { ComponentsComponent } from './views/components/components.component';
 import { HomeComponent } from './views/home/home.component';
-import { ThemeComponent } from './views/theme/theme.component';
+import { NotFoundComponent } from './views/not-found/not-found.component';
 
 const routes: Routes = [
   {
@@ -21,15 +21,21 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'changelog', loadChildren: () => import('./views/changelog').then(m => m.ChangelogModule)
+    path: 'guide/changelog', loadChildren: () => import('./views/guide/changelog').then(m => m.ChangelogModule)
   },
-  { path: 'theme', component: ThemeComponent },
+  {
+    path: 'guide/theming', loadChildren: () => import('./views/guide/theming').then(m => m.ThemingModule)
+  },
   { path: 'home', component: HomeComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    scrollOffset: [0, 32],
+    anchorScrolling: 'enabled'
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

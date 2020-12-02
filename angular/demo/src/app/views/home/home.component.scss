@@ -43,10 +43,12 @@ section {
     max-width: 960px;
     line-height: 1.8;
   }
-  pre {
+  .docs-codeblock {
     width: fit-content;
+    margin: 0 auto;
+  }
+  pre {
     padding: 16px 32px;
-    margin-bottom: 0;
   }
   code {
     margin: 0 auto;
