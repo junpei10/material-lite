@@ -1,0 +1,155 @@
+<h2 class='docs-h2'>Directives</h2>
+<h3 class='docs-h3'><code>@Attribute</code></h3>
+<table class='docs-ref-table'>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th class='grow'>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>key</code></td>
+      <td>string</td>
+      <td>設定すると、"<code>PopupOutlet</code>"Serviceを用いてアクセスすることが可能となり、どこからでも出力できる。</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h3 class='docs-h3'><code>@Input</code></h3>
+<!-- <p class='docs-desc'>１つ</p> -->
+<table class='docs-ref-table'>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th class='grow'>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>mlPopupOutlet</code></td>
+      <td><a fragment='types'>MlPopupAttachContent</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>mlPopupOutletConfig</code></td>
+      <td><a fragment='types'>MlPopupAttachConfig</a></td>
+      <td><code>[mlPopupOutlet]</code>に値が代入され、Popupから出力した際に参照される設定。Popupから値が出力される際にしか参照されないため、Popupが出力されたあとに変更しても再出力されない限り設定は変わらない。</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class='docs-h3'><code>@Output</code></h3>
+<table class='docs-ref-table'>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th class='grow'>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>mlPopupAttachedRef</code></td>
+      <td><a fragment='types'>MlPopupAttachedRef</a></td>
+      <td>出力されるタイミングは、<code>[mlPopupOutlet]</code>に値が代入され、Popupから出力したとき。</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h2 class='docs-h2'>Services</h2>
+<h3 class='docs-h3'><code>MlPopupOutlet</code></h3>
+<table class='docs-ref-table'>
+  <thead>
+    <tr>
+      <th>Method name</th>
+      <th class='grow'>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>attach</code></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>attachContents</code></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>detachAll</code></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+<pre class='docs-codeblock-pre'><code class='js'></code></pre>
+
+
+<h2 class='docs-h2'>Classes</h2>
+<h3 class='docs-h3'><code>MlPopupAttachedRef</code></h3>
+<table class='docs-ref-table'>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Type</th>
+      <th class='grow'>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>detach</code></td>
+      <td>function</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>afterAttached</code></td>
+      <td>function</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>beforeDetached</code></td>
+      <td>function</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>afterDetached</code></td>
+      <td>function</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+<pre class='docs-codeblock-pre'><code class='js'></code></pre>
+
+
+<h2 class='docs-h2' id='types'>Misc</h2>
+<h3 class='docs-h3'><code>MlPopupAttachConfig</code></h3>
+<table class='docs-ref-table'>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Type</th>
+      <th class='grow'>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>animation</code></td>
+      <td>object</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>component</code></td>
+      <td>object</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>template</code></td>
+      <td>object</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+<pre class='docs-codeblock-pre'><code class='js'></code></pre>

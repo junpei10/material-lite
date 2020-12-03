@@ -1,4 +1,7 @@
 ::ng-deep {
+  .bold {
+    font-weight: 500;
+  }
   app-example, app-reference {
     display: block;
     margin-top: 32px;
@@ -61,7 +64,7 @@
 
   code, span {
     font-size: 0.56em;
-    opacity: 0.8;
+    opacity: 0.88;
     font-weight: 500;
     margin-left: 12px;
   }
@@ -74,6 +77,8 @@
 }
 
 &h2 {
+  display: flex;
+  align-items: center;
   font-size: 24px;
   margin-top: 32px;
   font-weight: 500;
@@ -82,11 +87,46 @@
 &h2-desc {
   font-size: 16px;
   line-height: 1.5;
-  margin: 8px 0 8px;
+  margin: 8px 0;
 }
 
-&code {
-  margin: 0 4px;
+&h3 {
+  font-size: 18px;
+  margin-top: 16px;
+  font-weight: 500;
+}
+
+&h3-desc {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 4px 0;
+}
+
+&ref-table {
+  width: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 8px 0 0;
+  font-size: 90%;
+  box-sizing: border-box;
+
+  th, td {
+    text-align: left;
+    min-width: 80px;
+    padding: 8px 16px;
+    border: 1px solid #E0E0E0;
+    box-sizing: border-box;
+  }
+
+  .grow {
+    width: 100%;
+  }
+
+  tbody {
+    tr:nth-child(odd) {
+      background-color: #F5F5F5;
+    }
+  }
 }
 
 }

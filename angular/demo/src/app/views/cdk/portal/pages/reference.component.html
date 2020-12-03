@@ -1,0 +1,167 @@
+<h2 class='docs-h2'>Directives</h2>
+<h3 class='docs-h3'><code>@Attribute</code></h3>
+<table class='docs-ref-table'>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th class='grow'>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>key</code></td>
+      <td>string</td>
+      <td>設定すると、"<code>PortalOutlet</code>"Serviceを用いてアクセスすることが可能となり、どこからでも出力できる。</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h3 class='docs-h3'><code>@Input</code></h3>
+<!-- <p class='docs-desc'>１つ</p> -->
+<table class='docs-ref-table'>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th class='grow'>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>mlPortalOutlet</code></td>
+      <td><a fragment='types'>MlPortalAttachContent</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>mlPortalOutletConfig</code></td>
+      <td><a fragment='types'>MlPortalAttachConfig</a></td>
+      <td><code>[mlPortalOutlet]</code>に値が代入され、Portalから出力した際に参照される設定。Portalから値が出力される際にしか参照されないため、Portalが出力されたあとに変更しても再出力されない限り設定は変わらない。</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class='docs-h3'><code>@Output</code></h3>
+<table class='docs-ref-table'>
+  <thead>
+    <tr>
+      <th>Selector</th>
+      <th>Type</th>
+      <th class='grow'>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>mlPortalAttachedRef</code></td>
+      <td><a fragment='types'>MlPortalAttachedRef</a></td>
+      <td>出力されるタイミングは、<code>[mlPortalOutlet]</code>に値が代入され、Portalから出力したとき。</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h2 class='docs-h2'>Services</h2>
+<h3 class='docs-h3'><code>MlPortalOutlet</code></h3>
+<table class='docs-ref-table'>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Type</th>
+      <th class='grow'>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>attach</code></td>
+      <td>function</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>attachContents</code></td>
+      <td>function</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>detachAll</code></td>
+      <td>function</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+<pre class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>interface</span> MlPortalOutlet {{ "{" }}
+{{ "}" }}</code></pre>
+
+
+<h2 class='docs-h2'>Classes</h2>
+<h3 class='docs-h3'><code>MlPortalAttachedRef</code></h3>
+<table class='docs-ref-table'>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Type</th>
+      <th class='grow'>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>detach</code></td>
+      <td>function</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>afterAttached</code></td>
+      <td>function</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>beforeDetached</code></td>
+      <td>function</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>afterDetached</code></td>
+      <td>function</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+<pre class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>interface</span> MlPortalAttachedRef {{ "{" }}
+{{ "}" }}</code></pre>
+
+
+
+<h2 class='docs-h2' id='types'>Misc</h2>
+<h3 class='docs-h3'><code>MlPortalAttachContent</code></h3>
+<pre style='margin-top: 8px' class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>type</span> MlPortalAttachContent = Class<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> | TemplateRef<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> | HTMLElement | ElementRef<span class="hljs-tag">&lt;<span class="hljs-name">HTMLElement</span>&gt;</span>;</code></pre>
+
+
+<h3 class='docs-h3'><code>MlPortalAttachConfig</code></h3>
+<table class='docs-ref-table'>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Type</th>
+      <th class='grow'>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>animation</code></td>
+      <td>object</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>component</code></td>
+      <td>object</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>template</code></td>
+      <td>object</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+<pre class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>interface</span> MlPortalAttachConfig {{ "{" }}
+{{ "}" }}</code></pre>

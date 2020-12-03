@@ -1,5 +1,5 @@
 <h2 class='docs-h2'>Types</h2>
-<p class='docs-h2-desc'>ボタンのタイプを変えたいときは<span class='selector'>[variant]</span>を変更します。</p>
+<p class='docs-h2-desc'>ボタンのタイプを変えたいときは<code>[variant]</code>を変更します。</p>
 <section class='docs-codeblock'>
   <div class='docs-codeblock-prod'>
     <button mlButton>Default</button>
@@ -24,7 +24,7 @@
 
 
 <h2 class='docs-h2'>Theming</h2>
-<p class='docs-h2-desc'><span class='selector'>[theme]</span>を変更することで、色を変えることができます</p>
+<p class='docs-h2-desc'><code>[theme]</code>を変更することで、色を変えることができます</p>
 <section class='docs-codeblock'>
   <div class='docs-codeblock-prod'>
     <button mlButton variant='basic' theme='primary'>Basic</button>
@@ -47,12 +47,12 @@
 
 
 <h2 class='docs-h2'>Link button</h2>
-<p class='docs-h2-desc'>リンクボタンは２パターン存在し、"Hover時の背景色"と"Rippleの色"が異なっています。</p>
+<p class='docs-h2-desc'>リンクボタンは２パターン存在し、<span class='bold'>Hover時の背景色</span>と<span class='bold'>Rippleの色</span>が異なっています。</p>
 <section class='docs-codeblock'>
   <div class='docs-codeblock-prod'>
-    <a mlButton href='https://www.google.com/' target='_blank' rel='noopener noreferrer'>a-tag Button</a>
+    <a mlButton href='https://www.google.com/' target='_blank' rel='noopener noreferrer'>Anchor</a>
     <button mlButton [inlineLink]='true'>
-      <a href='https://www.google.com' target='_blank' rel='noopener noreferrer'>Inline Link Button</a>
+      <a href='https://www.google.com' target='_blank' rel='noopener noreferrer'>Wrapping Anchor</a>
     </button>
   </div>
 
@@ -66,7 +66,7 @@
 
 
 <h2 class='docs-h2'>Disable button</h2>
-<p class='docs-h2-desc'>入力プロパティの数をできるだけ少なくしたいという考えから、<span class='selector'>[mlButton]</span>に値を代入することで変更できるようにしています。</p>
+<p class='docs-h2-desc'>入力プロパティの数をできるだけ少なくしたいという考えから、<code>[mlButton]</code>に値を代入することで変更できるようにしています。</p>
 <section class='docs-codeblock'>
   <div class='docs-codeblock-prod'>
     <button [mlButton]="false" variant="basic">Disabled</button>
@@ -107,7 +107,7 @@
 
 <h2 class='docs-h2'>Ripple config</h2>
 <p class='docs-h2-desc'>
-  ３つのRippleの設定(<code class='selector'>[rippleDisabled], [rippleOverdrive], [rippleTypeBreakpoint]</code>)を変更可能です。<br>
+  ３つのRippleの設定(<code>[rippleDisabled], [rippleOverdrive], [rippleTypeBreakpoint]</code>)を変更可能です。<br>
   詳しくは<a routerLink='/components/ripple'>Ripple</a>を参照してください！
 </p>
 <section class='docs-codeblock'>

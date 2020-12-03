@@ -5,7 +5,7 @@ export interface MlButtonBinder {
   mlButton: boolean | '';
   theme?: string;
   variant?: 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
-  hoverAction?: 'enable' | 'disable' | 'default';
+  hoverAction?: 'enable' | 'disable' | 'auto';
   wrapAnchor?: boolean;
   rippleDisabled?: boolean;
   rippleOverdrive?: boolean;
