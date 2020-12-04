@@ -19,7 +19,6 @@
 
 
 <h3 class='docs-h3'><code>@Input</code></h3>
-<!-- <p class='docs-desc'>１つ</p> -->
 <table class='docs-ref-table'>
   <thead>
     <tr>
@@ -90,6 +89,9 @@
   </tbody>
 </table>
 <pre class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>interface</span> MlPortalOutlet {{ "{" }}
+  <span class='hljs-method'>attach</span>(<span class='hljs-arg'>content</span><span class='hljs-keyword'>:</span> MlPortalAttachContent, <span class='hljs-arg'>keyOrData</span><span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span> <span class='hljs-keyword'>|</span> MlPortalOutletData, <span class='hljs-arg'>config</span><span class='hljs-keyword'>?:</span> MlPortalAttachConfig)<span class='hljs-keyword'>:</span> MlPortalAttachedRef;
+  <span class='hljs-method'>attachContents</span>(<span class='hljs-arg'>contents</span><span class='hljs-keyword'>:</span> MlPortalAttachContent<span class='hljs-array'>[]</span>, <span class='hljs-arg'>keyOrData</span><span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span> <span class='hljs-keyword'>|</span> MlPortalOutletData, <span class='hljs-arg'>config</span><span class='hljs-keyword'>?:</span> MlPortalAttachConfig)<span class='hljs-keyword'>:</span> MlPortalAttachedRef<span class='hljs-type'>[]</span>;
+  <span class='hljs-method'>detachAll</span>(<span class='hljs-arg'>keyOrData</span><span class='hljs-keyword'>:</span> <span class='hljs-string'>'all'</span> <span class='hljs-keyword'>|</span> <span class='hljs-type'>string</span> <span class='hljs-keyword'>|</span> MlPortalOutletData)<span class='hljs-keyword'>:</span> <span class='hljs-type'>void</span>;
 {{ "}" }}</code></pre>
 
 
@@ -104,6 +106,21 @@
     </tr>
   </thead>
   <tbody>
+    <tr>
+      <td><code>outletKey</code></td>
+      <td>string</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>attachedOrder</code></td>
+      <td>number</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>attachedContent</code></td>
+      <td>MlPortalAttachedContent</td>
+      <td></td>
+    </tr>
     <tr>
       <td><code>detach</code></td>
       <td>function</td>
@@ -127,13 +144,28 @@
   </tbody>
 </table>
 <pre class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>interface</span> MlPortalAttachedRef {{ "{" }}
+  outletKey<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;
+  attachedOrder<span class='hljs-keyword'>:</span> <span class='hljs-type'>number</span>;
+  attachedContent<span class='hljs-keyword'>:</span> MlPortalAttachedContent,
+  <span class='hljs-method'>detach</span>()<span class='hljs-keyword'>:</span> <span class='hljs-type'>void</span>
+  <span class='hljs-method'>afterAttached</span>()<span class='hljs-keyword'>:</span> NoCompleteObservable&lt;<span class='hljs-type'>void</span>&gt;;
+  <span class='hljs-method'>beforeDetached</span>()<span class='hljs-keyword'>:</span> NoCompleteObservable&lt;<span class='hljs-type'>void</span>&gt;;
+  <span class='hljs-method'>afterDetached</span>()<span class='hljs-keyword'>:</span> NoCompleteObservable&lt;<span class='hljs-type'>void</span>&gt;;
+{{ "}" }}
+
+<span class='hljs-type'>interface</span> NoCompleteObservable&lt;T&gt; <span class='hljs-keyword'>extends</span> Subject&lt;T&gt; {{ "{" }}
+  <span class='hljs-method'>subscribe</span>(<span class='hljs-arg'>observer</span><span class='hljs-keyword'>?:</span> PartialObserver&lt;<span class='hljs-type'>void</span>&gt;): Subscription;
+  <span class='hljs-method'>subscribe</span>(<span class='hljs-arg'>next</span><span class='hljs-keyword'>:</span> <span class='hljs-type'>null</span> <span class='hljs-keyword'>|</span> <span class='hljs-type'>undefined</span>, <span class='hljs-arg'>error</span><span class='hljs-keyword'>: </span><span class='hljs-type'>null</span> <span class='hljs-keyword'>|</span> <span class='hljs-type'>undefined</span>): Subscription;
+  <span class='hljs-method'>subscribe</span>(<span class='hljs-arg'>next</span><span class='hljs-keyword'>:</span> <span class='hljs-type'>null</span> <span class='hljs-keyword'>|</span> <span class='hljs-type'>undefined</span>, <span class='hljs-arg'>error</span><span class='hljs-keyword'>: (</span><span class='hljs-arg'>error</span><span class='hljs-keyword'>:</span> <span class='hljs-type'>any</span><span class='hljs-keyword'>)</span> => <span class='hljs-type'>void</span>): Subscription;
+  <span class='hljs-method'>subscribe</span>(<span class='hljs-arg'>next</span><span class='hljs-keyword'>: (</span><span class='hljs-arg'>value</span><span class='hljs-keyword'>:</span> T<span class='hljs-keyword'>)</span> => <span class='hljs-type'>void</span>, <span class='hljs-arg'>error</span><span class='hljs-keyword'>: </span><span class='hljs-type'>null</span> <span class='hljs-keyword'>|</span> <span class='hljs-type'>undefined</span>): Subscription;
+  <span class='hljs-method'>subscribe</span>(<span class='hljs-arg'>next</span><span class='hljs-keyword'>?: (</span><span class='hljs-arg'>value</span><span class='hljs-keyword'>:</span> T<span class='hljs-keyword'>)</span> => <span class='hljs-type'>void</span>, <span class='hljs-arg'>error</span><span class='hljs-keyword'>?: (</span><span class='hljs-arg'>error</span><span class='hljs-keyword'>:</span> <span class='hljs-type'>any</span><span class='hljs-keyword'>)</span> => <span class='hljs-type'>void</span>): Subscription;
 {{ "}" }}</code></pre>
 
 
 
 <h2 class='docs-h2' id='types'>Misc</h2>
 <h3 class='docs-h3'><code>MlPortalAttachContent</code></h3>
-<pre style='margin-top: 8px' class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>type</span> MlPortalAttachContent = Class<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> | TemplateRef<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> | HTMLElement | ElementRef<span class="hljs-tag">&lt;<span class="hljs-name">HTMLElement</span>&gt;</span>;</code></pre>
+<pre style='margin-top: 8px' class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>type</span> MlPortalAttachContent = Class<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> <span class='hljs-keyword'>|</span> TemplateRef<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> <span class='hljs-keyword'>|</span> HTMLElement <span class='hljs-keyword'>|</span> ElementRef<span class="hljs-tag">&lt;HTMLElement&gt;</span>;</code></pre>
 
 
 <h3 class='docs-h3'><code>MlPortalAttachConfig</code></h3>
@@ -164,4 +196,56 @@
   </tbody>
 </table>
 <pre class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>interface</span> MlPortalAttachConfig {{ "{" }}
+  animation<span class='hljs-keyword'>?:</span> {{ "{" }}
+    className<span class='hljs-keyword'>?:</span> <span class='hljs-type'>string</span>;
+    enter<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>;
+    leave<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>;
+    _timeout<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>;
+  {{ "}" }};
+  component<span class='hljs-keyword'>?:</span> {{ "{" }}
+    injector<span class='hljs-keyword'>?:</span> Injector;
+    index<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>;
+    ngContent<span class='hljs-keyword'>?:</span> <span class='hljs-type'>any[][]</span>;
+  {{ "}" }};
+  template<span class='hljs-keyword'>?:</span> {{ "{" }}
+    context<span class='hljs-keyword'>?:</span> {{ "{" }}
+      <span class='hljs-array'>[</span>key<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span><span class='hljs-array'>]</span>;
+    {{ "}" }};
+    index<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>;
+  {{ "}" }};
 {{ "}" }}</code></pre>
+
+
+<h3 class='docs-h3'><code>MlPortalAttachedContent</code></h3>
+<table class='docs-ref-table'>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Type</th>
+      <th class='grow'>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>type</code></td>
+      <td>string</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>ref</code></td>
+      <td>object</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>rootElement</code></td>
+      <td>HTMLElement</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+<pre class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>interface</span> MlPortalAttachConfig {{ "{" }}
+  type<span class='hljs-keyword'>:</span> <span class='hljs-string'>'component'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'template'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'DOM'</span>;
+  ref<span class='hljs-keyword'>:</span> ComponentRef&lt;<span class='hljs-type'>any</span>&gt; <span class='hljs-keyword'>|</span> EmbeddedViewRef&lt;<span class='hljs-type'>any</span>&gt; <span class='hljs-keyword'>|</span> {{ "{" }} <span class='hljs-method'>destroy</span><span class='hljs-keyword'>:</span> () => <span class='hljs-type'>void</span> {{ "}" }};
+  rootElement: HTMLElement;
+{{ "}" }}</code></pre>
+

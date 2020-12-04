@@ -60,26 +60,17 @@
 }
 
 ::ng-deep {
-  code.html .hljs- {
-    &name {
-      color: #f44336;
-    }
-    &string {
-      color: #FFEB3B;
-    }
-    &attr {
-      color: #9EE34F;
-    }
-  }
-
   code.js .hljs- {
-    &dec {
+    &decorator, &method {
       color: #9EE34F;
+    }
+    &prop, &arg {
+      color: #FFC107;
     }
     &string {
       color: #FFEB3B;
     }
-    &type, &name {
+    &type, &name, &array {
       color: #81D4FA;
     }
     &keyword {
@@ -88,5 +79,42 @@
     &literal {
       color: #F48FB1;
     }
+    &comment {
+      color: #9E9E9E;
+    }
   }
+
+  code.html .hljs- {
+    &name, &keyword {
+      color: #f44336;
+    }
+    &string {
+      color: #FFEB3B;
+    }
+    &attr, &method {
+      color: #9EE34F;
+    }
+    &comment {
+      color: #9E9E9E;
+    }
+    &literal {
+      color: #F48FB1;
+    }
+  }
+
+  code.css .hljs- {
+    &attribute {
+      color: #81D4FA;
+    }
+    &selector-class {
+      color: #9EE34F;
+    }
+    &selector-pseudo, &selector-tag {
+      color: #f44336;
+    }
+    &number {
+      color: #F48FB1;
+    }
+  }
+
 }

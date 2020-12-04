@@ -209,8 +209,6 @@ export class MlRippleDirective implements OnChanges {
         ? ripple.classList.add(`ml-${this.mlRippleTheme}-bg`)
         : rippleStyle += `background-color: ${this.mlRippleColor || 'currentColor'};`;
 
-      console.log(`ml-${this.mlRippleTheme}-bg`);
-
       ripple.setAttribute('style', rippleStyle);
       containerElement.appendChild(ripple);
 

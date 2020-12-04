@@ -5,20 +5,82 @@
     <button mlButton [theme]='type === 2 ? "accent" : ""' (click)='type = 2'>CSS</button>
   </nav>
 
+  <!-- <button mlButton (click)='portalContent = domPortalContent'>Attach DOM</button> -->
   <div class="docs-codeblock-form">
+    <button mlButton (click)='portalContent = componentPortalContent'>Attach component</button>
+    <button mlButton (click)='portalContent = templatePortalContent'>Attach template</button>
+    <!-- <button mlButton (click)='portalContent = domPortalContent; portalAttachConfig.cloneDOM = false'>Attach DOM</button>
+    <button mlButton (click)='portalContent = clonedDomPortalContent; portalAttachConfig.cloneDOM = true'>Attach Clone DOM</button> -->
   </div>
 
   <div class="docs-codeblock-prod">
+    <div class="portal-outlet">
+      <ng-template [mlPortalOutlet]='portalContent' [mlPortalAttachConfig]='portalAttachConfig'></ng-template>
+    </div>
+
+    <ng-template #templatePortalContent><h1>Template</h1></ng-template>
+    <div #domPortalContent><h1>DOM</h1></div>
+    <div #clonedDomPortalContent><h1>Cloned DOM</h1></div>
   </div>
 
   <pre class='docs-codeblock-pre'>
-    <ng-template [ngIf]='type === 0'><code class='html'>
-    </code></ng-template>
+    <!-- HTML -->
+    <ng-template [ngIf]='type === 0'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"docs-codeblock-form"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> (<span class="hljs-attr">click</span>)=<span class="hljs-string">"portalContent <span class='hljs-keyword'>=</span> componentPortalContent"</span>&gt;</span>Attach component<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> (<span class="hljs-attr">click</span>)=<span class="hljs-string">"portalContent <span class='hljs-keyword'>=</span> templatePortalContent"</span>&gt;</span>Attach template<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> (<span class="hljs-attr">click</span>)=<span class="hljs-string">"portalContent <span class='hljs-keyword'>=</span> domPortalContent; portalAttachConfig.cloneDOM <span class='hljs-keyword'>=</span> <span class='hljs-literal'>false</span>"</span>&gt;</span>Attach DOM<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> (<span class="hljs-attr">click</span>)=<span class="hljs-string">"portalContent <span class='hljs-keyword'>=</span> clonedDomPortalContent; portalAttachConfig.cloneDOM <span class='hljs-keyword'>=</span> <span class='hljs-literal'>true</span>"</span>&gt;</span>Attach Clone DOM<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
-    <ng-template [ngIf]='type === 1'><code class='js'>
-    </code></ng-template>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"docs-codeblock-prod"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"portal-outlet"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">ng-template</span> [<span class="hljs-attr">mlPortalOutlet</span>]=<span class="hljs-string">"portalContent"</span> [<span class="hljs-attr">mlPortalAttachConfig</span>]=<span class="hljs-string">"portalConfig"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ng-template</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
-    <ng-template [ngIf]='type === 2'><code class='css'>
+  <span class="hljs-tag">&lt;<span class="hljs-name">ng-template</span> #<span class="hljs-attr">templatePortalContent</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Template<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ng-template</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> #<span class="hljs-attr">domPortalContent</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>DOM<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> #<span class="hljs-attr">clonedDomPortalContent</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Cloned DOM<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></ng-template>
+
+    <!-- JS -->
+    <ng-template [ngIf]='type === 1'><code class='js'><span class="hljs-keyword">import</span> {{ "{ Component }" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@angular/core'</span>;
+<span class="hljs-keyword">import</span> {{ "{ MlPortalAttachContent, MlPortalAttachConfig, MlPortalAttachedRef }" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@material-lite/angular/button'</span>;
+<span class="hljs-keyword">import</span> {{ "{ Class }" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@material-lite/angular-cdk/utils'</span>;
+
+@<span class="hljs-decorator">Component</span>({{ "{" }}
+  selector: <span class="hljs-string">'app-example'</span>,
+  templateUrl: <span class="hljs-string">'./example.component.html'</span>,
+  styleUrls: <span class='hljs-array'>[</span><span class='hljs-string'>'./example.component.css'</span><span class='hljs-array'>]</span>
+{{ "}" }})
+<span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-name">class</span> <span class="hljs-title">ExampleComponent</span> {{ "{" }}</span>
+  portalContent<span class='hljs-keyword'>:</span> MlPortalAttachContent;
+  portalConfig<span class='hljs-keyword'>:</span> MlPortalAttachConfig <span class='hljs-keyword'>=</span> {{ "{" }}{{ "}" }};
+
+  componentPortalContent<span class='hljs-keyword'>:</span> Class&lt;<span class="hljs-name">any</span>&gt; <span class='hljs-keyword'>=</span> ComponentPortalContent;
+{{ "}" }}
+
+@<span class="hljs-decorator">Component</span>({{ "{" }}
+  selector: <span class="hljs-string">'app-component-portal-content'</span>,
+  template: <code class='html'><span class="hljs-tag">'&lt;<span class="hljs-name">h1</span>&gt;</span>Component<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;'</span></code>
+{{ "}" }})
+<span class='hljs-comment'>// tslint:disable-next-line:component-class-suffix</span>
+<span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-name">class</span> <span class="hljs-title">ComponentPortalContent</span> {{ "{" }}</span>{{ "}" }}</code></ng-template>
+
+    <!-- CSS -->
+    <ng-template [ngIf]='type === 2'><code class='css'><span class="hljs-selector-class">.portal-outlet</span> {{ "{" }}
+  <span class="hljs-attribute">display</span>: flex;
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">300px</span>;
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">300px</span>;
+  <span class="hljs-attribute">margin-bottom</span>: <span class="hljs-number">8px</span>;
+  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid black;
+  <span class="hljs-attribute">align-items</span>: center;
+  <span class="hljs-attribute">justify-content</span>: center;
+  <span class="hljs-attribute">text-align</span>: center;
+{{ "}" }}
+
+<span class="hljs-selector-tag">h1</span> {{ "{" }}
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">8px</span> <span class="hljs-number">0</span>;
+{{ "}" }}
     </code></ng-template>
   </pre>
 </section>

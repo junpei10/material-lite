@@ -1,1 +1,7 @@
-<div mlRipple [mlRippleOverdrive]='true' mlRippleTheme='accent' style='width:300px;height:300px'>DIV BUTTON</div>
+<button mlButton (click)='attachPortal()'>Attach</button>
+
+<div [@animation]='ngIf'>
+  <div class='portal-outlet' *ngIf='ngIf'>
+    <ng-template mlPortalOutlet key='test'></ng-template>
+  </div>
+</div>

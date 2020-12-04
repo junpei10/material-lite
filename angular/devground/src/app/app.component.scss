@@ -13,7 +13,14 @@ body {
   }
 
   .test-enter-action, .test-leave-action {
-    transition: opacity .5s;
+    transition: opacity 1s;
+  }
+
+  .portal-outlet {
+    min-width: 300px; min-height: 42px;
+    padding: 8px; margin-top: 16px;
+    border: 1px solid black;
+    text-align: center;
   }
 }
 

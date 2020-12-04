@@ -42,6 +42,7 @@ export class MlPortalAttachedRef<D extends MlPortalOutletData = MlPortalOutletDa
   private _afterDetachedHandler: LifecycleHandler | null;
 
   protected _attachAnimation: NonNullable<MlPortalAttachConfig['animation']>;
+  private _animationTimeout: number;
 
   constructor(
     public outletKey: string | undefined,
@@ -51,14 +52,13 @@ export class MlPortalAttachedRef<D extends MlPortalOutletData = MlPortalOutletDa
     protected _outletData: D,
     protected _runOutside: RunOutside,
   ) {
-    /* Attach events */
     const { enter } = this._attachAnimation = attachConfig.animation || {};
 
     (enter)
       ? this._animate('enter', this._afterAttach.bind(this))
       : _runOutside(() => setTimeout(this._afterAttach.bind(this)));
 
-    _outletData.detachEvents.push(this.detach.bind(this));
+    _outletData.detachEvents.push(this._detach.bind(this));
   }
   private _afterAttach(): void {
     const handler = this._afterAttachedHandler;
@@ -70,23 +70,32 @@ export class MlPortalAttachedRef<D extends MlPortalOutletData = MlPortalOutletDa
     if (this.afterAttachInit) { this.afterAttachInit(); }
   }
 
-
   detach(): void {
+    this._detach();
+  }
+
+  /** @param destroy DirectiveのngOnDestroy時、処理を変更しないといけない */
+  private _detach(destroyOutlet?: boolean): void {
     const beforeDetachedHandler = this._beforeDetachedHandler;
     if (beforeDetachedHandler) {
       this._fireLifecycleSubjectNext(beforeDetachedHandler.subject!);
     }
 
-    this._animate('leave', this._afterDetach.bind(this));
-
     // @ts-ignore
     if (this.onDetachInit) { this.onDetachInit(); }
 
-    this._outletData.detachEvents.splice(this.attachedOrder, 1);
+    if (destroyOutlet) {
+      this._afterDetach();
+
+    } else {
+      this._animate('leave', () => {
+        this.attachedContent.ref.destroy();
+        this._afterDetach();
+      });
+      this._outletData.detachEvents.splice(this.attachedOrder, 1);
+    }
   }
   private _afterDetach(): void {
-    this.attachedContent.ref.destroy();
-
     const afterDetachedHandler = this._afterDetachedHandler;
     if (afterDetachedHandler) {
       this._fireLifecycleSubjectNext(afterDetachedHandler.subject!);
@@ -103,14 +112,14 @@ export class MlPortalAttachedRef<D extends MlPortalOutletData = MlPortalOutletDa
 
 
   private _animate(eventType: 'enter' | 'leave', finish: () => any): void {
-    const animationConfig = this._attachAnimation;
-    const duration: number | undefined = animationConfig[eventType];
+    const amtConf = this._attachAnimation;
+    const duration: number | undefined = amtConf[eventType];
 
     if (!duration) {
       return finish();
     }
 
-    const name = animationConfig.className;
+    const name = amtConf.className;
 
     // Nameがない場合、Classを付与する処理をスキップする
     if (name) {
@@ -123,17 +132,18 @@ export class MlPortalAttachedRef<D extends MlPortalOutletData = MlPortalOutletDa
 
       this._runOutside(() => {
         setTimeout(() => {
-          if (animationConfig.timeout) {
-            clearTimeout(animationConfig.timeout);
+          const timeout = this._animationTimeout;
+          if (timeout) {
+            clearTimeout(timeout);
             classList.remove(name + '-enter-action', name + '-enter-to');
           }
 
           classList.remove(eventClass);
           classList.add(eventToClass);
 
-          animationConfig.timeout = setTimeout(() => {
+          this._animationTimeout = setTimeout(() => {
             classList.remove(eventToClass, eventActionClass);
-            animationConfig.timeout = 0;
+            this._animationTimeout = 0;
             finish();
           }, duration) as any;
         });
