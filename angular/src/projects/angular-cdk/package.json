@@ -1,0 +1,31 @@
+{
+  "name": "@material-lite/angular-cdk",
+  "version": "0.0.5",
+  "license": "MIT",
+  "description": "Material Lite CDK for Angular",
+  "keywords": [
+    "angular",
+    "material",
+    "material design",
+    "components",
+    "material lite"
+  ],
+  "peerDependencies": {
+    "@angular/common": "^10.1.6",
+    "@angular/core": "^10.1.6"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/junpei10/material-lite.git"
+  },
+  "bugs": {
+    "url": "https://github.com/junpei10/material-lite/issues"
+  },
+  "homepage": "https://github.com/junpei10/material-lite#readme",
+  "publishConfig": {
+    "access": "public"
+  }
+}

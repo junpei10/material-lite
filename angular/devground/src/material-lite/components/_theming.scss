@@ -333,8 +333,8 @@ $ml-theme-component-list: (
 );
 
 @mixin ml-theme($theme, $palette, $use: $ml-theme-component-list) {
-  $theme: _createTemplateTheme($theme);
-  $palette: _createTemplatePalette($palette);
+  $theme: ml-create-theme($theme);
+  $palette: ml-create-palette($palette);
 
   @if (contains($use, button)) {
     @include ml-button-theme($theme, $palette);
