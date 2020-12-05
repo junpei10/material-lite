@@ -1,0 +1,132 @@
+<h2 class='docs-h2' id='overview'>Overview</h2>
+<p class='docs-h2-desc'>
+  テーマをセットする方法は、 <code>main.ts</code> 等の初期のタイミングで読み込まれるファイルを使います。<br>
+  任意のファイルで <code>MlTheming.init([...])</code> 関数を呼び出します。<br>
+</p>
+<p style='margin: 8px 0 -8px'>以下は、用意されているテンプレートを用いたテーマの設定の一例です。</p>
+<section class='docs-codeblock'>
+  <pre class='docs-codeblock-pre'><code class='js'><span class="hljs-keyword">import</span> {{ "{" }} MlTheming, ML_LIGHT_THEME, ML_DARK_THEME, ML_INDIGO_PINK_PALETTE, ML_DEEPPURPLE_AMBER_PALETTE {{ "}" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@material-lite/angular/core'</span>;
+
+MlTheming.<span class='hljs-method'>init</span>(<span class='hljs-array'>[</span>
+  {{ "{" }} theme: ML_LIGHT_THEME, palette: ML_INDIGO_PINK_PALETTE {{ "}" }},
+  {{ "{" }} theme: ML_DARK_THEME, palette: ML_DEEPPURPLE_AMBER_PALETTE, wrapperClass: <span class='hljs-string'>'dark-theme'</span> {{ "}" }},
+<span class='hljs-array'>]</span>);</code></pre>
+</section>
+<h3 class='docs-h3'>MlTheming.init type</h3>
+<section class='docs-codeblock h3'>
+  <pre class='docs-codeblock-pre'><code class='js'><span class='hljs-name'>interface</span> InitArg {{ "{" }}
+  theme<span class='hljs-keyword'>:</span> MlTheme;
+  palette<span class='hljs-keyword'>:</span> MlPalette;
+  wrapperClass<span class='hljs-keyword'>?:</span> <span class='hljs-type'>string</span>;
+{{ "}" }}
+
+<span class='hljs-keyword'>abstract</span> <span class='hljs-method'>init</span>(<span class='hljs-prop'>themes</span><span class='hljs-keyword'>:</span> InitArg<span class='hljs-array'>[]</span>);</code></pre>
+</section>
+
+
+<h2 class='docs-h2' id='theme-color'>Theme color</h2>
+<h3 class='docs-h3'>Example</h3>
+<section class='docs-codeblock h3'>
+  <pre class='docs-codeblock-pre'><code class='js'><span class="hljs-keyword">import</span> {{ "{" }} MlTheming, MlTheme, ML_LIGHT_THEME, ML_INDIGO_PINK_PALETTE {{ "}" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@material-lite/angular/core'</span>;
+
+<span class='hljs-name'>const</span> myTheme<span class='hljs-keyword'>:</span> MlTheme <span class='hljs-keyword'>=</span> {{ "{" }}
+  <span class='hljs-keyword'>...</span>ML_LIGHT_THEME,
+  primaryContainer: <span class='hljs-string'>'<span style='background: white; color: black'>white</span>'</span>,
+  divider: <span class='hljs-string'>'<span style='background: #BDBDBD; color: black'>#BDBDBD</span>'</span>,
+  text: <span class='hljs-string'>'<span style='background: rgba(0,0,0,.87); color: white'>rgba(0,0,0,.87)</span>'</span>
+{{ "}" }}
+
+MlTheming.<span class='hljs-method'>init</span>(<span class='hljs-array'>[</span>
+  {{ "{" }} theme: myTheme, palette: ML_INDIGO_PINK_PALETTE {{ "}" }}
+<span class='hljs-array'>]</span>);</code></pre>
+</section>
+
+
+<h3 class='docs-h3'>Type</h3>
+<section class='docs-codeblock h3'>
+  <pre class='docs-codeblock-pre'><code class='js'><span class='hljs-name'>interface</span> MlTheme {{ "{" }}
+  base<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;
+  oppositeBase<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;
+  background<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;
+  primaryContainer<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;
+  secondaryContainer<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;
+  tertiaryContainer<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;
+  disabledContainer<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;
+  divider<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;
+  elevation<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;
+  scrollbar<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;
+  text<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;
+  secondaryText<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;
+  hintText<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;
+  disabledText<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;
+{{ "}" }}</code></pre>
+</section>
+
+<!-- <h3 class='docs-h3'>Templates</h3> -->
+
+<h2 class='docs-h2' id='palette-color'>Palette color</h2>
+<p class='docs-h2-desc'>Javascriptを用いてテーマを設定するため、テーマのパレット(primary, accent, warn など)を増やす事ができます。</p>
+<h3 class='docs-h3'>Example</h3>
+<section class='docs-codeblock h3'>
+  <pre class='docs-codeblock-pre'><code class='js'><span class="hljs-keyword">import</span> {{ "{" }} MlTheming, MlPalette, ML_LIGHT_THEME, ML_INDIGO_PINK_PALETTE {{ "}" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@material-lite/angular/core'</span>;
+
+<span class='hljs-name'>const</span> myPalette<span class='hljs-keyword'>:</span> MlPalette <span class='hljs-keyword'>=</span> {{ "{" }}
+  <span class='hljs-keyword'>...</span>ML_INDIGO_PINK_PALETTE,
+  secondary: {{ "{" }}
+    color: <span class='hljs-string'>'<span style='background: #8BC34A;color: black;'>#8BC34A</span>'</span>;
+    contrast: <span class='hljs-string'>'<span style='background: rgba(0,0,0,.87); color: white'>rgba(0,0,0,.87)</span>'</span>;
+  {{ "}" }}
+{{ "}" }}
+
+MlTheming.<span class='hljs-method'>init</span>(<span class='hljs-array'>[</span>
+  {{ "{" }} theme: ML_LIGHT_THEME, palette: myPalette {{ "}" }}
+<span class='hljs-array'>]</span>);</code></pre>
+</section>
+
+
+<h3 class='docs-h3'>Type</h3>
+<section class='docs-codeblock h3'>
+  <pre class='docs-codeblock-pre'><code class='js'><span class='hljs-name'>interface</span> MlPalette {{ "{" }}
+  <span class='hljs-array'>[</span><span class='hljs-'></span><span class='hljs-prop'>palette</span><span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span><span class='hljs-array'>]</span> {{ "{" }}
+    color<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;
+    contrast<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;
+  {{ "}" }}
+{{ "}" }}</code></pre>
+</section>
+
+<!-- <h3 class='docs-h3'>Templates</h3> -->
+
+<h2 class='docs-h2' id='palette-class'>Palette color class</h2>
+<p class='docs-h2-desc'>
+  <code>MlTheming.init</code>関数を呼び出すと、paletteの色に対応したclassが追加されます。<br>
+</p>
+<p style='margin: 8px 0 -8px'><code>primary(color: '<span style='background: #673AB7;color:white'>#673AB7</span>', contrast: '<span style='background: black; color:white;'>black</span>')</code> が設定されているときの例： </p>
+<section class='docs-codeblock'>
+  <pre class='docs-codeblock-pre'><code class='css'><span class="hljs-selector-class">.ml-primary</span> {{ "{" }}
+  <span class="hljs-attribute">background</span>: <span style='background: #673AB7;color:white'>#673AB7</span>;
+  <span class="hljs-attribute">color</span>: <span style='background: black; color:white;'>black</span>;
+{{ "}" }}
+
+<span class="hljs-selector-class">.ml-primary-bg</span> {{ "{" }}
+  <span class="hljs-attribute">background</span>: <span style='background: #673AB7;color:white'>#673AB7</span>;
+{{ "}" }}
+
+<span class="hljs-selector-class">.ml-primary-text</span> {{ "{" }}
+  <span class="hljs-attribute">color</span>: <span style='background: #673AB7;color:white'>#673AB7</span>;
+{{ "}" }}
+
+<span class="hljs-selector-class">.ml-primary-contrast</span> {{ "{" }}
+  <span class="hljs-attribute">color</span>: <span style='background: black; color:white;'>black</span>;
+{{ "}" }}</code></pre>
+</section>
+
+
+<h2 class='docs-h2' id='wrapper-class'>Wrapper class</h2>
+<p class='docs-h2-desc'>&lt;<code class='html'><span class='hljs-name'>body</span></code>&gt;などのタブに、指定したクラスを付与することでスタイルが反映されます。重複させることはできません。</p>
+<section class='docs-codeblock'>
+  <pre class='docs-codeblock-pre'><code class='js'><span class="hljs-keyword">import</span> {{ "{" }} MlTheming, ML_DARK_THEME, ML_DEEPPURPLE_AMBER_PALETTE {{ "}" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@material-lite/angular/core'</span>;
+
+MlTheming.<span class='hljs-method'>init</span>(<span class='hljs-array'>[</span>
+  {{ "{" }} theme: ML_DARK_THEME, palette: ML_DEEPPURPLE_AMBER_PALETTE, wrapperClass: <span class='hljs-string'>'dark-theme'</span> {{ "}" }}
+<span class='hljs-array'>]</span>);</code></pre>
+</section>

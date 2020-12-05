@@ -1,3 +1,15 @@
+@function map-unquote($map) {
+  @each $key, $value in $map {
+      $newValue: unquote($value);
+      $map: map-merge($map, ($key: $newValue));
+  }
+  @return $map;
+}
+
+@function contains($list, $var) {
+    @return (null != index($list, $var));
+}
+
 $ml-amt-duration: (
   faster: 160ms,
   fast:   200ms,
@@ -251,7 +263,7 @@ $ml-elevation-amt-duration: map-get($ml-amt-duration, slow);
 $ml-elevation-amt-function: map-get($ml-amt-function, standard);
 $ml-elevation-color: black !default;
 
-@mixin mat-elevation($zValue, $color: $mat-elevation-color, $opacity: $mat-elevation-opacity) {
+@mixin ml-elevation($zValue, $color: $mat-elevation-color, $opacity: $mat-elevation-opacity) {
   box-shadow: #{map-get(_get-umbra-map($color, $opacity), $zValue)},
               #{map-get(_get-penumbra-map($color, $opacity), $zValue)},
               #{map-get(_get-ambient-map($color, $opacity), $zValue)};
@@ -316,12 +328,17 @@ $ml-elevation-color: black !default;
   }
 }
 
+$ml-theme-component-list: (
+  button
+);
 
-@mixin ml-theme($theme, $palette) {
+@mixin ml-theme($theme, $palette, $use: $ml-theme-component-list) {
   $theme: _createTemplateTheme($theme);
   $palette: _createTemplatePalette($palette);
 
-  @include ml-button-theme($theme, $palette);
+  @if (contains($use, button)) {
+    @include ml-button-theme($theme, $palette);
+  }
 }
 
 @function ml-create-theme($theme, $base: light) {

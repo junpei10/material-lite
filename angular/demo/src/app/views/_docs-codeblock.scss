@@ -17,6 +17,10 @@
     overflow: hidden;
   }
 
+  &codeblock.h3 {
+    margin: 8px 0;
+  }
+
   &codeblock-tab {
     display: flex;
     .ml-button {

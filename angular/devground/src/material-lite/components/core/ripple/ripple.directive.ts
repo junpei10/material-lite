@@ -3,21 +3,21 @@ import { DOCUMENT } from '@angular/common';
 import { listen, ListenTarget, noop, RunOutside, RUN_OUTSIDE } from '@material-lite/angular-cdk/utils';
 
 export interface MlRippleBinder {
-  mlRipple: boolean | '';
-  mlRippleOverdrive: boolean;
-  mlRippleTypeBreakpoint: { width?: number, height?: number } | undefined;
+  mlRipple?: boolean | '';
+  mlRippleOverdrive?: boolean;
+  mlRippleTypeBreakpoint?: { width?: number, height?: number };
 
-  mlRippleColor: string;
-  mlRippleTheme: string;
-  mlRippleOpacity: number;
-  mlRippleRadius: number;
-  mlRippleAnimationDuration: { enter?: number, leave?: number } | number;
+  mlRippleColor?: string;
+  mlRippleTheme?: string;
+  mlRippleOpacity?: number;
+  mlRippleRadius?: number;
+  mlRippleAnimationDuration?: { enter?: number, leave?: number } | number;
 
-  mlRippleTarget: ListenTarget | ElementRef<ListenTarget>;
-  mlRippleTargetIsLargerThanOutlet: boolean;
+  mlRippleTarget?: ListenTarget;
+  mlRippleTargetIsOutside?: boolean;
 
-  mlRippleCentered: boolean;
-  mlRippleFixedSize: boolean;
+  mlRippleCentered?: boolean;
+  mlRippleFixedSize?: boolean;
 }
 
 type Binder = MlRippleBinder;
@@ -48,7 +48,12 @@ export class MlRippleDirective implements OnChanges {
   @Input() mlRippleOpacity: Binder['mlRippleOpacity'];
 
   @Input() set mlRippleAnimationDuration(duration: Binder['mlRippleAnimationDuration']) {
-    if (typeof duration === 'number') {
+    if (!duration) {
+      this._currAmtDuration = {
+        enter: 450,
+        leave: 400
+      };
+    } else if (typeof duration === 'number') {
       const _entryDuration = duration * 0.5;
       this._currAmtDuration = {
         enter: _entryDuration,
@@ -66,14 +71,12 @@ export class MlRippleDirective implements OnChanges {
   };
 
   @Input() set mlRippleTarget(target: Binder['mlRippleTarget']) {
-    this._currListenTarget = (target instanceof ElementRef)
-      ? target.nativeElement
-      : target;
+    this._currListenTarget = target;
     this._needSetPointerdownListener = true;
   }
-  private _currListenTarget: ListenTarget;
+  private _currListenTarget?: ListenTarget;
 
-  @Input() mlRippleTargetIsLargerThanOutlet: Binder['mlRippleTargetIsLargerThanOutlet'];
+  @Input() mlRippleTargetIsOutside: Binder['mlRippleTargetIsOutside'];
 
   @Input() mlRippleCentered: Binder['mlRippleCentered'];
 
@@ -173,7 +176,7 @@ export class MlRippleDirective implements OnChanges {
       if (this.mlRippleCentered) {
         x = containerRect.left + containerRect.width * 0.5;
         y = containerRect.top + containerRect.height * 0.5;
-      } else if (this._currListenTarget || !this.mlRippleTargetIsLargerThanOutlet) {
+      } else if (this._currListenTarget && this.mlRippleTargetIsOutside) {
         const left = ~~containerRect.left;
         const right = ~~containerRect.right;
         x =

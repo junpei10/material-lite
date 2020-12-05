@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { OverviewComponent, ReferenceComponent } from './pages';
 
 @Component({
   selector: 'app-ripple',
@@ -12,7 +13,16 @@ import { Component, OnInit } from '@angular/core';
   `]
 })
 export class RippleComponent implements OnInit {
+  pageName: string;
   constructor() { }
 
   ngOnInit(): void { }
+
+  onRouteChange(event: any): void {
+    this.pageName = event instanceof OverviewComponent
+      ? 'overview'
+      : event instanceof ReferenceComponent
+        ? 'reference'
+        : 'example';
+  }
 }

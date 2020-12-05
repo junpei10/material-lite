@@ -1,6 +1,6 @@
-import { MlThemePalette } from '../../theming';
+import { MlPalette } from '../../theming';
 
-export const ML_INDIGO_PINK_PALETTE: MlThemePalette = {
+export const ML_INDIGO_PINK_PALETTE: MlPalette = {
   primary: {
     color: '#3f51b5',
     contrast: '#fff'

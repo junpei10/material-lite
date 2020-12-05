@@ -16,47 +16,51 @@
     <tr>
       <td><code>theme</code></td>
       <td>string</td>
-      <td>ボタンを指定したThemeの配色のスタイルに設定する。</td>
+      <td>ボタンの配色を設定済みのTheme用に設定する。</td>
     </tr>
     <tr>
       <td><code>variant</code></td>
       <td>string</td>
-      <td>
-        ボタンのスタイルを設定する。<br>
-        Types： <code>'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon'</code>
-      </td>
+      <td>ボタンのスタイルを設定する。<br></td>
     </tr>
 
     <tr>
       <td><code>hoverAction</code></td>
       <td>string</td>
-      <td>
-        Hover時の背景色をスタイルを設定する。<br>
-        Types： <code>'auto' | 'enable' | 'disable'</code>
-      </td>
+      <td>Hover時の背景色をスタイルを設定する。</td>
     </tr>
     <tr>
       <td><code>wrapAnchor</code></td>
       <td>boolean</td>
-      <td>ボタンの内部に&lt;a&gt;を設置する場合のスタイルをサポートするかどうかを設定する。</td>
+      <td>ボタンの内部に&lt;a&gt;を設置する場合のスタイルを設定する。</td>
     </tr>
     <tr>
       <td><code>rippleDisabled</code></td>
       <td>boolean</td>
-      <td>ボタンの内部に&lt;a&gt;を設置する場合のスタイルをサポートするかどうかを設定する。</td>
+      <td>Rippleを無効化する。</td>
     </tr>
     <tr>
-      <td><code>rippleDisabled</code></td>
+      <td><code>rippleOverdrive</code></td>
       <td>boolean</td>
-      <td>ボタンの内部に&lt;a&gt;を設置する場合のスタイルをサポートするかどうかを設定する。</td>
+      <td>RippleをのタイプをOverdriveにする。</td>
     </tr>
     <tr>
       <td><code>rippleTypeBreakpoint</code></td>
       <td>object</td>
-      <td>
-        クリック時、ボタンのサイズが<span class='bold'>設定したサイズより小さい場合</span>は通常の"Ripple"を表示し、ボタンのサイズが<span class='bold'>設定したサイズをより大きい場合</span>は"Ripple Overdrive"が表示するようになる。<br>
-        Types: <code>{{ "{" }} width: number, height: number {{ "}" }}</code>
-      </td>
+      <td>クリック時、ボタンのサイズが設定したサイズより同じか小さい場合は通常の"Ripple"を表示し、大きい場合は"Overdrive"を表示するようになる。</td>
     </tr>
   </tbody>
 </table>
+<pre class='docs-codeblock-pre'><code class='js'><span class='hljs-name'>interface</span> MlButtonBinder {{ "{" }}
+  mlButton<span class='hljs-keyword'>?:</span> <span class='hljs-type'>boolean</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>''</span>;
+  theme<span class='hljs-keyword'>?:</span> <span class='hljs-type'>string</span>;
+  variant<span class='hljs-keyword'>?:</span> <span class='hljs-string'>'basic'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'raised'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'stroked'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'flat'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'fab'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'icon'</span>;
+  hoverAction<span class='hljs-keyword'>?:</span> <span class='hljs-string'>'auto'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'enable'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'disable'</span>;
+  wrapAnchor<span class='hljs-keyword'>?:</span> <span class='hljs-type'>boolean</span>;
+  rippleDisabled<span class='hljs-keyword'>?:</span> <span class='hljs-type'>boolean</span>;
+  rippleOverdrive<span class='hljs-keyword'>?:</span> <span class='hljs-type'>boolean</span>;
+  rippleTypeBreakpoint<span class='hljs-keyword'>?:</span> {{ "{" }}
+    width<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>,
+    height<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>
+  {{ "}" }};
+{{ "}" }}</code></pre>

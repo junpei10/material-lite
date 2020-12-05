@@ -45,14 +45,14 @@
     <!-- JS -->
     <ng-template [ngIf]='type === 1'><code class='js'><span class="hljs-keyword">import</span> {{ "{ Component }" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@angular/core'</span>;
 <span class="hljs-keyword">import</span> {{ "{ MlPortalAttachContent, MlPortalAttachConfig, MlPortalAttachedRef }" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@material-lite/angular/button'</span>;
-<span class="hljs-keyword">import</span> {{ "{ Class }" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@material-lite/angular-cdk/utils'</span>;
+<span class="hljs-keyword">import</span> {{ "{ Class }" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@material-lite/angular/utils'</span>;
 
 @<span class="hljs-decorator">Component</span>({{ "{" }}
   selector: <span class="hljs-string">'app-example'</span>,
   templateUrl: <span class="hljs-string">'./example.component.html'</span>,
   styleUrls: <span class='hljs-array'>[</span><span class='hljs-string'>'./example.component.css'</span><span class='hljs-array'>]</span>
 {{ "}" }})
-<span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-name">class</span> <span class="hljs-title">ExampleComponent</span> {{ "{" }}</span>
+<span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-name">class</span> <span class="hljs-title">ExampleComponent</span>{{ "{" }}</span>
   portalContent<span class='hljs-keyword'>:</span> MlPortalAttachContent;
   portalConfig<span class='hljs-keyword'>:</span> MlPortalAttachConfig <span class='hljs-keyword'>=</span> {{ "{" }}{{ "}" }};
 

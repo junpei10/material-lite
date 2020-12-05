@@ -1,18 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { SettingComponent } from './page';
 
 @Component({
   selector: 'app-theming',
-  templateUrl: './theming.component.html'
+  templateUrl: './theming.component.html',
 })
-export class ThemingComponent implements OnInit {
+export class ThemingComponent {
+  pageName: string;
+
   constructor(
     private _router: Router
   ) { }
 
-  ngOnInit(): void { }
-
   fragmentScrollTo(fragment: string): void {
     this._router.navigate([], { fragment });
+  }
+
+  onRouteChange(event): void {
+    this.pageName = event instanceof SettingComponent
+      ? 'setting'
+      : 'scss';
   }
 }

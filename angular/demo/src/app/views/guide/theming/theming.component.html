@@ -1,10 +1,25 @@
-<nav class='route-nav'>
-  <button mlButton (click)='fragmentScrollTo("description")'>Description</button>
-  <button mlButton (click)='fragmentScrollTo("usage")'>Usage</button>
+<nav class='docs-route-nav' *ngIf='pageName === "setting"'>
+  <button mlButton (click)='fragmentScrollTo("overview")'>overview</button>
+  <button mlButton (click)='fragmentScrollTo("theme-color")'>Theme color</button>
+  <button mlButton (click)='fragmentScrollTo("palette-color")'>Palette color</button>
+  <button mlButton (click)='fragmentScrollTo("palette-class")'>Palette class</button>
+  <button mlButton (click)='fragmentScrollTo("wrapper-class")'>Wrapper class</button>
+</nav>
+
+<nav class='docs-route-nav' *ngIf='pageName === "scss"'>
+  <button mlButton (click)='fragmentScrollTo("overview")'>overview</button>
+  <!-- <button mlButton (click)='fragmentScrollTo("theme-color")'>Theme color</button>
+  <button mlButton (click)='fragmentScrollTo("palette-color")'>Palette color</button> -->
 </nav>
 
 
-<section class='view'>
-  <h1 class='h1-title'>Theming</h1>
-  <h2 class='h2-title' id='description'>Description</h2>
+<section class='docs-viewer'>
+  <nav class='docs-page-tab'>
+    <button mlButton [theme]='pageName === "setting" ? "primary" : ""' routerLink='setting'>Setting</button>
+    <button mlButton [theme]='pageName === "scss" ? "primary" : ""' routerLink='scss'>Scss</button>
+  </nav>
+
+  <h1 class='docs-h1'>Theming</h1>
+
+  <router-outlet (activate)='onRouteChange($event)'></router-outlet>
 </section>

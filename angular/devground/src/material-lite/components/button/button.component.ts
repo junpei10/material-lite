@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges } from
 import { createListenTarget, ListenTarget } from '@material-lite/angular-cdk/utils';
 
 export interface MlButtonBinder {
-  mlButton: boolean | '';
+  mlButton?: boolean | '';
   theme?: string;
   variant?: 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
   hoverAction?: 'enable' | 'disable' | 'auto';

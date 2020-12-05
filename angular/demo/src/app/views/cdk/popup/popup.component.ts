@@ -1,12 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { OverviewComponent, ReferenceComponent } from './pages';
 
 @Component({
   selector: 'app-popup',
   templateUrl: 'popup.component.html'
 })
 
-export class PopupComponent implements OnInit {
-  constructor() { }
+export class PopupComponent {
+  pageName: string;
 
-  ngOnInit(): void { }
+  onRouteChange(event): void {
+    this.pageName = event instanceof OverviewComponent
+      ? 'overview'
+      : event instanceof ReferenceComponent
+        ? 'reference'
+        : 'example';
+  }
 }

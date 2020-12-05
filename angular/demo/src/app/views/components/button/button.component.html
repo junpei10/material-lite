@@ -1,12 +1,12 @@
 <nav class='docs-page-tab'>
-  <button mlButton routerLink='overview'>Overview</button>
-  <button mlButton routerLink='reference'>Reference</button>
-  <button mlButton routerLink='example'>Example</button>
+  <button mlButton [theme]='pageName === "overview" ? "primary" : ""' routerLink='overview'>Overview</button>
+  <button mlButton [theme]='pageName === "reference" ? "primary" : ""' routerLink='reference'>Reference</button>
+  <button mlButton [theme]='pageName === "example" ? "primary" : ""' routerLink='example'>Example</button>
 </nav>
 
 <h1 class='docs-h1'>Button<code>- [mlButton]</code></h1>
 <p class='docs-h1-desc'>
-  &lt;button&gt;や、&lt;a&gt;に縛られず、全てのタグで利用可能です。
+  &lt;<code class='html'><span class='hljs-name'>button</span></code>&gt;や、&lt;<code class='html'><span class='hljs-name'>a</span></code>&gt;に縛られず、全てのタグで利用可能です。
 </p>
 
-<router-outlet></router-outlet>
+<router-outlet (activate)='onRouteChange($event)'></router-outlet>

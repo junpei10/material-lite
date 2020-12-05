@@ -1,11 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { OverviewComponent, ReferenceComponent } from './pages';
 
 @Component({
   selector: 'app-portal',
   templateUrl: './portal.component.html',
 })
-export class PortalComponent implements OnInit {
-  constructor() { }
+export class PortalComponent {
+  pageName: string;
 
-  ngOnInit(): void { }
+  onRouteChange(event): void {
+    this.pageName = event instanceof OverviewComponent
+      ? 'overview'
+      : event instanceof ReferenceComponent
+        ? 'reference'
+        : 'example';
+  }
 }

@@ -5,3 +5,7 @@
   }
   @return $map;
 }
+
+@function contains($list, $var) {
+    @return (null != index($list, $var));
+}

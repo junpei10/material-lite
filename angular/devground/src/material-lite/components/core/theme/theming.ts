@@ -13,7 +13,7 @@ export type MlTheme = {
   [key in MlThemeKeys[number]]: string;
 };
 
-export type MlThemePalette = {
+export type MlPalette = {
   [palette: string]: {
     color: string;
     contrast: string;
@@ -31,11 +31,11 @@ export interface MlThemingType {
     [key: string]: {
       wrapperClass: string;
       theme: MlTheme,
-      palette: MlThemePalette & { keys: string[] },
+      palette: MlPalette & { keys: string[] },
     }
   };
 
-  init(themes: { theme: MlTheme, palette: MlThemePalette, wrapperClass?: string | null }[]): void;
+  init(themes: { theme: MlTheme, palette: MlPalette, wrapperClass?: string | null }[]): void;
 
   setStyle(style: MlThemeStyle): void;
 }
@@ -60,7 +60,7 @@ export const MlTheming: MlThemingType = {
       const val = this.value[argWc] = {
         wrapperClass: argWc,
         theme: argValue.theme,
-        palette: argValue.palette as MlThemePalette & { keys: string[] }
+        palette: argValue.palette as MlPalette & { keys: string[] }
       };
       val.palette.keys = Object.keys(argValue.palette);
     }

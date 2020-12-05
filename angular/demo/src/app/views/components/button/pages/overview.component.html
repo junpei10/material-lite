@@ -57,9 +57,9 @@
   </div>
 
 <pre class='docs-codeblock-pre'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">mlButton</span>&gt;</span>a-tag Button<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> [<span class="hljs-attr">inlineLink</span>]=<span class="hljs-string">"true"</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">a</span>&gt;</span>Inline Link Button<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">mlButton</span>&gt;</span>Anchor<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> [<span class="hljs-attr">wrapAnchor</span>]=<span class="hljs-string">"true"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span>&gt;</span>Wrapping Anchor<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
 </section>
@@ -107,8 +107,8 @@
 
 <h2 class='docs-h2'>Ripple config</h2>
 <p class='docs-h2-desc'>
-  ３つのRippleの設定(<code>[rippleDisabled], [rippleOverdrive], [rippleTypeBreakpoint]</code>)を変更可能です。<br>
-  詳しくは<a routerLink='/components/ripple'>Ripple</a>を参照してください！
+  <code>[rippleDisabled], [rippleOverdrive], [rippleTypeBreakpoint]</code>の３つのRippleの設定を変更可能です。<br>
+  詳しくは<a routerLink='/components/ripple'>Ripple</a>を参照してください。
 </p>
 <section class='docs-codeblock'>
   <div class='docs-codeblock-prod'>
@@ -117,7 +117,7 @@
   </div>
 
 <pre class='docs-codeblock-pre'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> [<span class="hljs-attr">disableRipple</span>]=<span class="hljs-string">true</span>&gt;</span>Disable Ripple<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> [<span class="hljs-attr">immediateRipple</span>]=<span class="hljs-string">true</span>&gt;</span>Immediate Ripple<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> [<span class="hljs-attr">rippleDisabled</span>]=<span class="hljs-string">true</span>&gt;</span>Disable Ripple<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> [<span class="hljs-attr">rippleOverdrive</span>]=<span class="hljs-string">true</span>&gt;</span>Immediate Ripple<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
 </section>

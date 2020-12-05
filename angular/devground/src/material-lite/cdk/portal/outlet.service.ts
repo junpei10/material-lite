@@ -19,6 +19,7 @@ export interface MlPortalAttachConfig {
     className?: string;
     enter?: number;
     leave?: number;
+    onOutletDestroyDuration?: number;
   };
   component?: {
     injector?: Injector;

@@ -1,7 +1,64 @@
-<h2 class='docs-h2'>Type</h2>
+<h2 class='docs-h2'>Color</h2>
+<p class='docs-h2-desc'><code>theme</code>と<code>color</code>で配色を設定できます。</p>
 <section class='docs-codeblock'>
-  <div class='docs-codeblock-prod'>
+  <div class='docs-codeblock-prod first-prod'>
+    <div mlRipple theme="primary">Primary</div>
+    <div mlRipple theme="accent">Accent</div>
+    <div mlRipple theme="warn">Warn</div>
+    <div mlRipple color="#8BC34A">#8BC34A</div>
+    <div mlRipple color="#03A9F4">#03A9F4</div>
   </div>
-  <pre class='docs-codeblock-pre'><code class='html'>
-  </code></pre>
+  <pre class='docs-codeblock-pre'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> <span class="hljs-attr">theme</span>=<span class="hljs-string">"primary"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> <span class="hljs-attr">theme</span>=<span class="hljs-string">"accent"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> <span class="hljs-attr">theme</span>=<span class="hljs-string">"warn"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> <span class="hljs-attr">color</span>=<span class="hljs-string">"#8BC34A"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> <span class="hljs-attr">color</span>=<span class="hljs-string">"#03A9F4"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+</section>
+
+
+<h2 class='docs-h2'>Type</h2>
+<p class='docs-h2-desc'>
+  Rippleには、通常の <code>Ripple</code> と <code>OverdriveRipple</code> の２種類が存在します。<br>
+  主なOverdriveRippleの用途としては、コンテナのサイズが大きすぎる場合のアニメーションが窮屈になる、速くなりすぎるのを防ぐためです。
+</p>
+<section class='docs-codeblock'>
+  <div class='docs-codeblock-prod second-prod'>
+    <div mlRipple>Default</div>
+    <!-- <div mlRipple [immediateRipple]=true>Overdrive</div> -->
+  </div>
+  <pre class='docs-codeblock-pre'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span>&gt;</span>Default<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> [<span class="hljs-attr">mlRippleOverdrive</span>]=<span class="hljs-string">true</span>&gt;</span>Overdrive<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+</section>
+
+
+<h2 class='docs-h2'>Type Breakpoint</h2>
+<p class='docs-h2-desc'>
+  コンテナのサイズからRippleのTypeを変更することができます。<br>
+  クリック時、コンテナのサイズが設定したサイズと<span class='bold'>同じか小さい場合は通常の"Ripple"を表示し</span>、<span class='bold'>大きい場合は"Overdrive"を表示する</span>ようになる。
+</p>
+<section class='docs-codeblock'>
+  <div class='docs-codeblock-form third-form' style='flex-direction: column;'>
+    <div>
+      <button mlButton variant='raised' (click)='typeBpRippleWidth === 250 ? typeBpRippleWidth = 500 : typeBpRippleWidth = 250'>Change Width</button>
+      <button mlButton variant='raised' (click)='typeBpRippleHeight === 250 ? typeBpRippleHeight = 500 : typeBpRippleHeight = 250'>Change Height</button>
+    </div>
+
+    <div style='display: flex; justify-content: center; margin: 8px 0; align-items: center'>
+      <span>Width： <code>{{ typeBpRippleWidth }}</code> px</span>
+      <span>・</span>
+      <span>Height: <code>{{ typeBpRippleHeight }}</code>px</span>
+    </div>
+
+    <span>Ripple type： <code>{{ typeBpRippleHeight === 500 || typeBpRippleWidth === 500 ? "Overdrive" : "Ripple" }}</code></span>
+
+  </div>
+  <div class='docs-codeblock-prod third-prod'>
+    <div [style]='{ width: typeBpRippleWidth + "px", height: typeBpRippleHeight + "px" }' mlRipple></div>
+  </div>
+  <pre class='docs-codeblock-pre'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> [<span class="hljs-attr">mlRippleOverdrive</span>]=<span class="hljs-string">true</span> [<span class="hljs-attr">mlRippleTypeBreakpoint</span>]=<span class="hljs-string">"{{ "{" }} width: <span class='hljs-literal'>500</span>; height: <span class='hljs-literal'>500</span>; {{ "}" }}"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
 </section>

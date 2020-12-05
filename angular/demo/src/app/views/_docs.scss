@@ -28,6 +28,7 @@
   .ml-button {
     padding: 0 32px;
     border-radius: 0;
+    white-space: nowrap;
   }
 }
 
@@ -97,7 +98,7 @@
 }
 
 &h3-desc {
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.5;
   margin: 4px 0;
 }
