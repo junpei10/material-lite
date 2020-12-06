@@ -22,6 +22,7 @@ export interface MlRippleBinder {
 
 type Binder = MlRippleBinder;
 
+// @dynamic
 @Directive({
   selector: '[mlRipple]'
 })

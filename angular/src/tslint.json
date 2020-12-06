@@ -52,11 +52,8 @@
       "trace"
     ],
     "no-empty": false,
-    "no-inferrable-types": [
-      true,
-      "ignore-params"
-    ],
-    "no-non-null-assertion": true,
+    "no-inferrable-types": false,
+    "no-non-null-assertion": false,
     "no-redundant-jsdoc": true,
     "no-switch-case-fall-through": true,
     "no-var-requires": false,
@@ -108,7 +105,9 @@
       "options": [
         "ban-keywords",
         "check-format",
-        "allow-pascal-case"
+        "allow-pascal-case",
+        // Added
+        "allow-leading-underscore"
       ]
     },
     "whitespace": {
@@ -121,6 +120,7 @@
         "check-typecast"
       ]
     },
+    "unified-signatures": false,
     "component-class-suffix": true,
     "contextual-lifecycle": true,
     "directive-class-suffix": true,

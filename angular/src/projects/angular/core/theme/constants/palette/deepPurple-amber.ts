@@ -1,6 +1,6 @@
-import { MlThemePalette } from '../../theming';
+import { MlPalette } from '../../theming';
 
-export const ML_DEEPPURPLE_AMBER_PALETTE: MlThemePalette = {
+export const ML_DEEPPURPLE_AMBER_PALETTE: MlPalette = {
   primary: {
     color: '#673ab7',
     contrast: '#fff'

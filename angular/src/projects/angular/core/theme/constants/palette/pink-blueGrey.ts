@@ -1,6 +1,6 @@
-import { MlThemePalette } from '../../theming';
+import { MlPalette } from '../../theming';
 
-export const ML_PINK_BLUEGLEY_PALETTE: MlThemePalette = {
+export const ML_PINK_BLUEGLEY_PALETTE: MlPalette = {
   primary: {
     color: '#e91e63',
     contrast: '#fff'

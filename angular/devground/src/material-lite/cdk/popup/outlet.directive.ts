@@ -5,6 +5,7 @@ import { createListenTarget } from '@material-lite/angular-cdk/utils';
 import { MlPopupAttachConfig, MlPopupAttachedRef, MlPopupOutletData } from './attached-ref';
 import { MlPopupOutlet } from './outlet.service';
 
+// @dynamic
 @Directive({
   selector: '[mlPopupOutlet]'
 })

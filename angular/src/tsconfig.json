@@ -26,9 +26,6 @@
       "@material-lite/angular/button": [
         "dist/angular/button"
       ],
-      "@material-lite/angular/popup": [
-        "dist/angular/popup"
-      ],
       "@material-lite/angular-cdk": [
         "dist/angular-cdk/angular-cdk",
         "dist/angular-cdk"
@@ -39,6 +36,9 @@
       "@material-lite/angular-cdk/utils": [
         "dist/angular/utils"
       ],
+      "@material-lite/angular-cdk/popup": [
+        "dist/angular-cdk/popup"
+      ]
     }
   }
 }

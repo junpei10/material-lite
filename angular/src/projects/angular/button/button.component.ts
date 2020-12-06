@@ -2,18 +2,19 @@ import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges } from
 import { createListenTarget, ListenTarget } from '@material-lite/angular-cdk/utils';
 
 export interface MlButtonBinder {
-  mlButton: boolean | '';
-  variant?: 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
-  hoverAction?: 'enable' | 'disable' | 'default';
+  mlButton?: boolean | '';
   theme?: string;
-  inlineLink?: boolean;
-  disableRipple?: boolean;
-  immediateRipple?: boolean;
-  immediateRippleBreakpoint?: { width?: number, height?: number } | undefined;
+  variant?: 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
+  hoverAction?: 'enable' | 'disable' | 'auto';
+  wrapAnchor?: boolean;
+  rippleDisabled?: boolean;
+  rippleOverdrive?: boolean;
+  rippleTypeBreakpoint?: { width?: number, height?: number } | undefined;
 }
 
-type B = MlButtonBinder;
+type Binder = MlButtonBinder;
 
+// @dynamic
 @Component({
   selector: '[mlButton]',
   templateUrl: './button.component.html',
@@ -27,26 +28,26 @@ export class MlButtonComponent implements OnChanges {
 
   private _currClassList: string[] = [];
 
-  @Input() set mlButton(_enable: B['mlButton']) {
+  @Input() set mlButton(_enable: Binder['mlButton']) {
     const enable = _enable === '' || _enable;
     (enable)
       ? this._hostElementClassList.remove('ml-disabled-button')
       : this._hostElementClassList.add('ml-disabled-button');
   }
 
-  @Input() set variant(variant: B['variant']) {
+  @Input() set variant(variant: Binder['variant']) {
     this._currVariant = variant;
     this._needSetVariant = true;
   }
-  private _currVariant: B['variant'];
+  private _currVariant: Binder['variant'];
 
-  @Input() set hoverAction(type: B['hoverAction']) {
+  @Input() set hoverAction(type: Binder['hoverAction']) {
     this._currHoverAction = type;
     this._needSetVariant = true;
   }
-  private _currHoverAction: B['hoverAction'];
+  private _currHoverAction: Binder['hoverAction'];
 
-  @Input() set theme(nextTheme: B['theme']) {
+  @Input() set theme(nextTheme: Binder['theme']) {
     const hostClassList = this._hostElementClassList;
 
     if (this._currTheme) {
@@ -58,18 +59,17 @@ export class MlButtonComponent implements OnChanges {
 
     this._currTheme = nextTheme;
   }
-  private _currTheme: B['theme'];
+  private _currTheme: Binder['theme'];
 
-  @Input() set inlineLink(enable: boolean) {
+  @Input() set wrapAnchor(enable: boolean) {
     enable
-      ? this._hostElementClassList.add('Ml-link-button')
-      : this._hostElementClassList.remove('Ml-link-button');
+      ? this._hostElementClassList.add('Ml-anchor-button')
+      : this._hostElementClassList.remove('Ml-anchor-button');
   }
 
-  @Input() disableRipple: boolean;
-  @Input() immediateRipple: boolean;
-  @Input() immediateRippleBreakpoint: MlButtonBinder['immediateRippleBreakpoint'];
-
+  @Input() rippleDisabled: Binder['rippleDisabled'];
+  @Input() rippleOverdrive: Binder['rippleOverdrive'];
+  @Input() rippleTypeBreakpoint: Binder['rippleTypeBreakpoint'];
   public rippleCentered: boolean;
 
   constructor(elementRef: ElementRef<HTMLElement>) {
@@ -129,6 +129,14 @@ export class MlButtonComponent implements OnChanges {
       } else if (v === 'stroked') {
         this._currClassList = [
           'ml-stroked-button',
+          'ml-simple-button',
+        ];
+        this.rippleCentered = false;
+        this._setHoverActionForEnabledByDefault();
+
+      } else {
+        this._currClassList = [
+          'ml-basic-button',
           'ml-simple-button',
         ];
         this.rippleCentered = false;

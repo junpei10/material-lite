@@ -96,7 +96,7 @@ export abstract class MlPortalOutletDirectiveBase<R extends MlPortalAttachedRef,
   }
 }
 
-
+// @dynamic
 /* tslint:disable:no-input-rename no-output-rename */
 @Directive({
   selector: '[mlPortalOutlet]',

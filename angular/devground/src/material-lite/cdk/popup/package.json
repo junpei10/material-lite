@@ -3,7 +3,8 @@
     "lib": {
       "entryFile": "./index.ts",
       "umdModuleIds": {
-        "@material-lite/angular-cdk/utils": "utils"
+        "@material-lite/angular-cdk/utils": "utils",
+        "@material-lite/angular-cdk/portal": "portal"
       }
     }
   }

@@ -1,57 +1,9 @@
 # Material Lite Components for Angular
 
-[`Angular material`](https://material.angular.io/)を軽量化したコンポーネントです。    
-
-| 相違点 | Material lite | Angular material |
-| :-: | :-: | :-: |
-| パフォーマンス | ◎  |   |
-| カスタマイズ性 |    | ◎ |
-
-
-React版も同時作成中です。   
-
+[`Angular material`](https://material.angular.io/)を`Change detection`の発生を抑えることを目的としたコンポーネントです。    
 
 ## Demo page
-...作成中
+<h3><a href='https://angular-material-lite.web.app'>https://angular-material-lite.web.app</a></h3>
 
-
-## 状況
-
-- (名前) - 実装しないかもしれないコンポーネント
-- γ - Npmにリリース済み
-- β - 完成・リリース間近
-- α - 開発中
-
-| 名前 | Angular | React |
-| --- | :-: | :-: |
-| Autocomplete     |   |   |
-| Badge            |   |   |
-| Bottom sheet     |   |   |
-| Button           | γ | β |
-| Button toggle    |   |   |
-| Card             |   |   |
-| (Datepicker)     |   |   |
-| Dialog           |   |   |
-| Divider          |   |   |
-| Expansion panel  |   |   |
-| Form field       |   |   |
-| (Grid list)      |   |   |
-| Header           |   |   |
-| Icon             |   |   |
-| List             |   |   |
-| Nav              | α |   |
-| Menu             |   |   |
-| Paginator        |   |   |
-| Progress bar     |   |   |
-| Progress spinner |   |   |
-| Radio button     |   |   |
-| Ripple           | γ | β |
-| Select           |   |   |
-| Slider           |   |   |
-| Snackbar         |   |   |
-| Stepper          |   |   |
-| (Sort header)    |   |   |
-| Table            |   |   |
-| Tabs             | α |   |
-| Toolbar          |   |   |
-| Tooltip          |   |   |
+## React版
+作成中...

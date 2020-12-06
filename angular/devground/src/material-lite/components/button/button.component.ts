@@ -14,6 +14,7 @@ export interface MlButtonBinder {
 
 type Binder = MlButtonBinder;
 
+// @dynamic
 @Component({
   selector: '[mlButton]',
   templateUrl: './button.component.html',

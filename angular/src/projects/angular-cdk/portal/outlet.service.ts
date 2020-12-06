@@ -19,7 +19,7 @@ export interface MlPortalAttachConfig {
     className?: string;
     enter?: number;
     leave?: number;
-    timeout?: number;
+    onOutletDestroyDuration?: number;
   };
   component?: {
     injector?: Injector;
@@ -28,15 +28,18 @@ export interface MlPortalAttachConfig {
     // ngModuleFactory?: NgModuleFactory<any>
   };
   template?: {
-    context?: { [key: string]: any };
+    context?: {
+      [key: string]: any
+    };
     index?: number;
   };
+  cloneDOM?: boolean;
 }
 
 export interface MlPortalOutletData {
   readonly outletElement: HTMLElement;
   readonly viewContainerRef: ViewContainerRef;
-  readonly detachEvents: (() => void)[];
+  readonly detachEvents: ((destroyOutlet?: boolean) => void)[];
 }
 
 // tslint:disable-next-line:max-line-length
@@ -109,19 +112,29 @@ export abstract class MlPortalOutletServiceBase<R extends MlPortalAttachedRef, D
 
     } else {
       /* DOM */
-      const element = (content instanceof ElementRef)
+      let element: HTMLElement = (content instanceof ElementRef)
         ? content.nativeElement
         : content;
 
-      console.log(content);
+      const parentElement = element.parentElement;
+      let destroy: () => void;
 
-      const parentElement = element.parentElement!;
-      const shadowWarrior = this._document.createComment('portal-container');
+      if (parentElement) {
+        if (config.cloneDOM) {
+          element = element.cloneNode(true) as HTMLElement;
+          destroy = () => data.outletElement.removeChild(element);
 
-      parentElement.replaceChild(shadowWarrior, element);
+        } else {
+          const shadowWarrior = this._document.createComment('portal-container');
+          parentElement.replaceChild(shadowWarrior, element);
+          destroy = () => parentElement.replaceChild(element, shadowWarrior);
+        }
+
+      } else {
+        destroy = () => element.remove();
+      }
+
       data.outletElement.appendChild(element);
-
-      const destroy = () => parentElement.replaceChild(element, shadowWarrior);
 
       attachedContent = {
         type: 'DOM',
@@ -186,7 +199,6 @@ export abstract class MlPortalOutletServiceBase<R extends MlPortalAttachedRef, D
   }
 
 }
-
 
 // @dynamic
 @Injectable({

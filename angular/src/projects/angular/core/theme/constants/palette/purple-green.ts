@@ -1,6 +1,6 @@
-import { MlThemePalette } from '../../theming';
+import { MlPalette } from '../../theming';
 
-export const ML_PURPLE_GREEN_PALETTE: MlThemePalette = {
+export const ML_PURPLE_GREEN_PALETTE: MlPalette = {
   primary: {
     color: '#9c27b0',
     contrast: '#fff'

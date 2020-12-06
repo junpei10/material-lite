@@ -2,11 +2,11 @@ import { Attribute, Directive, ViewContainerRef, OnDestroy, Input, Output, Event
 import { MlPortalAttachedRef } from './attached-ref';
 import { MlPortalAttachConfig, MlPortalAttachContent, MlPortalOutlet, MlPortalOutletData, MlPortalOutletServiceBase } from './outlet.service';
 
-// @dynamic
+
 @Directive() // tslint:disable-next-line:max-line-length directive-class-suffix
 export abstract class MlPortalOutletDirectiveBase<R extends MlPortalAttachedRef, D extends MlPortalOutletData, C extends MlPortalAttachConfig> implements OnDestroy, OnChanges {
 
-  abstract attachContent: MlPortalAttachContent | null;
+  abstract attachContent: MlPortalAttachContent | null | undefined;
   abstract attachConfig: C | undefined;
 
   /**
@@ -56,34 +56,48 @@ export abstract class MlPortalOutletDirectiveBase<R extends MlPortalAttachedRef,
   }
 
   ngOnDestroy(): void {
-    this._key
-      ? this._outletService.detachAll(this._key)
-      : this._privateOutletData!.detachEvents[0]();
+    const key = this._key;
+    if (key) {
+      const detachEvents = this._outletService.publicOutletDataStorage.get(key)!.detachEvents;
+      const length = detachEvents.length;
+
+      for (let i = 0; i < length; i++) {
+        detachEvents[i](true);
+      }
+
+      this._outletService.publicOutletDataStorage.delete(key);
+    } else {
+      this._privateOutletData!.detachEvents[0]();
+    }
   }
 
   ngOnChanges(): void {
-    if (this.attachContent) {
+    const currCont = this.attachContent;
+    // @ts-ignore
+    if (currCont !== 'done') {
       this._privateCurrentAttachedRef?.detach();
 
-      const newRef = this._privateCurrentAttachedRef =
-        this._outletService.attach(
-          this.attachContent,
-          (this._key) ? this._key : this._privateOutletData!,
-          this.attachConfig
-        );
+      if (currCont) {
+        const newRef = this._privateCurrentAttachedRef =
+          this._outletService.attach(
+            currCont,
+            (this._key) ? this._key : this._privateOutletData!,
+            this.attachConfig
+          );
 
-      this.attachContent = null;
-
-      if (this._privateAttachedRefEmitter) {
-        this._privateAttachedRefEmitter.emit(newRef);
+        if (this._privateAttachedRefEmitter) {
+          this._privateAttachedRefEmitter.emit(newRef);
+        }
       }
+
+      // @ts-ignore
+      this.attachContent = 'done';
     }
   }
 }
 
-
-/* tslint:disable:no-input-rename no-output-rename */
 // @dynamic
+/* tslint:disable:no-input-rename no-output-rename */
 @Directive({
   selector: '[mlPortalOutlet]',
 })

@@ -9,77 +9,118 @@ export type MlThemeKeys = [
 
   'text', 'secondaryText', 'hintText', 'disabledText',
 ];
-export type MlTheme = Readonly<{
-  [key in MlThemeKeys[number]]: string; } & {
-  }>;
+export type MlTheme = {
+  [key in MlThemeKeys[number]]: string;
+};
 
-export type MlThemePalette = {
+export type MlPalette = {
   [palette: string]: {
     color: string;
     contrast: string;
   }
 };
 
-export type MlThemeFactory = (theme: MlTheme, forEach: MlTheming['forEachPalette']) => string;
-export type MlThemeStyle = { base: string, themeFactory?: MlThemeFactory };
-
-export type MlTheming = {
-  theme: MlTheme,
-  palette: (MlThemePalette & { keys: string[] }),
-  setStyle: (style: MlThemeStyle) => void,
-  init: (theme: MlTheme, palette: MlThemePalette) => void;
-  forEachPalette: (callbackFn: (name: string, color: string, contrast: string) => string) => string
+export type MlThemeStyle = {
+  base?: string,
+  theme?: (theme: MlTheme) => string,
+  palette?: (name: string, color: string, contrast: string) => string
 };
-export const MlTheming: MlTheming = {
+
+export interface MlThemingType {
+  value: { keys: string[] } & {
+    [key: string]: {
+      wrapperClass: string;
+      theme: MlTheme,
+      palette: MlPalette & { keys: string[] },
+    }
+  };
+
+  init(themes: { theme: MlTheme, palette: MlPalette, wrapperClass?: string | null }[]): void;
+
+  setStyle(style: MlThemeStyle): void;
+}
+
+export const MlTheming: MlThemingType = {
   // @ts-ignore
-  theme: undefined, palette: undefined,
-
-  setStyle(style): void {
-    if (!style.base) { return; }
-
-    const factory = style.themeFactory;
-    const theme = this.theme;
-
-    let entry = style.base;
-    if (factory && theme) { entry += factory(theme, this.forEachPalette.bind({ palette: this.palette })); }
-
-    insertStyleElement(entry);
-
-    // @ts-ignore
-    style.base = null; style.themeFactory = null;
+  value: {
+    keys: []
   },
 
-  init(theme, palette): void {
-    this.theme = theme;
+  init(themes): void {
+    const len = themes.length;
 
-    // @ts-ignore
-    this.palette = palette;
-    this.palette.keys = Object.keys(palette);
+    for (let i = 0; i < len; i++) {
+      const argValue = themes[i];
+      const argWc = argValue.wrapperClass || null!;
+      const valRef = this.value;
 
-    const initialStyle =
-      this.forEachPalette((name, color, contrast) => `.${name}-bg{background-color:${color}}.${name}-text{color:${color}}.${name}-contrast{color:${contrast}}`);
+      if (valRef[argWc]) { return; }
 
-    insertStyleElement(initialStyle);
-
-    // @ts-ignore: GC
-    this.init = null;
-  },
-
-  forEachPalette(callbackFn: (name: string, color: string, contrast: string) => string): string {
-    const paletteRef = this.palette as (MlThemePalette & { keys: string[] });
-
-    const keys = paletteRef.keys;
-    const length = keys.length;
-
-    let returns: string = '';
-
-    for (let i = 0; i < length; i++) {
-      const key = keys[i];
-      const content = paletteRef[key];
-      returns += callbackFn(key, content.color, content.contrast);
+      this.value.keys.push(argWc);
+      const val = this.value[argWc] = {
+        wrapperClass: argWc,
+        theme: argValue.theme,
+        palette: argValue.palette as MlPalette & { keys: string[] }
+      };
+      val.palette.keys = Object.keys(argValue.palette);
     }
 
-    return returns;
-  }
-};
+    this.setStyle({
+      palette: (name, color, contrast) => {
+        const head = '.ml-' + name;
+        return (`
+          ${head} {
+            background-color: ${color};
+            color: ${color};
+          }
+          ${head}-bg {
+            background-color: ${color};
+          }
+          ${head}-color {
+            color: ${color};
+          }
+          ${head}-contrast {
+            color: ${contrast};
+          }
+        `);
+      }
+    });
+  },
 
+  setStyle(style): void {
+    if (style.base === null) { return; }
+
+    let returns = style.base || '';
+
+    const valRef = this.value;
+    const valKeys = valRef.keys;
+    const valLen = valKeys.length;
+    for (let index = 0; index < valLen; index++) {
+      const val = valRef[valKeys[index]];
+      let entryStyle = style.theme?.(val.theme) || '';
+
+      if (style.palette) {
+        const pltRef = val.palette;
+        const pltKeys = pltRef.keys;
+        const pltLen = pltKeys.length;
+        for (let i = 0; i < pltLen; i++) {
+          const pltName = pltKeys[i];
+          const plt = pltRef[pltName];
+          entryStyle += style.palette(pltName, plt.color, plt.contrast);
+        }
+      }
+
+      if (val.wrapperClass) {
+        const wc = '.' + val.wrapperClass;
+
+        entryStyle = wc + ' ' + entryStyle.replace(/\}\s*\./g, `}${wc} .`).replace(/\,\s*\./g, `,${wc} .`);
+      }
+      returns += entryStyle;
+    }
+
+    insertStyleElement(returns);
+
+    // @ts-ignore
+    style.base = null; style.theme = null; style.palette = null;
+  },
+};

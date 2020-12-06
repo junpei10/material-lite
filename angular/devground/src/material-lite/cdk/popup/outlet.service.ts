@@ -4,7 +4,7 @@ import { MlPortalOutletServiceBase } from '@material-lite/angular-cdk/portal';
 import { RunOutside, RUN_OUTSIDE } from '@material-lite/angular-cdk/utils';
 import { MlPopupAttachConfig, MlPopupAttachedRef, MlPopupOutletData } from './attached-ref';
 
-
+// @dynamic
 @Injectable({
   providedIn: 'root'
 })

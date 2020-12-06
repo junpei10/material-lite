@@ -1,6 +1,6 @@
-import { MlThemePalette } from '../../theming';
+import { MlPalette } from '../../theming';
 
-export const ML_CSS_VARIABLE_PALETTE: MlThemePalette = {
+export const ML_CSS_VARIABLE_PALETTE: MlPalette = {
   primary: {
     color: 'var(--ml-primary)',
     contrast: 'var(--ml-primary-contrast)'
