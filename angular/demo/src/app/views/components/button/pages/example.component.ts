@@ -10,6 +10,6 @@ export class ExampleComponent {
 
   theme: string;
   variant: MlButtonBinder['variant'] = 'basic';
-  hoverAction: MlButtonBinder['hoverAction'] = 'default';
+  hoverAction: MlButtonBinder['hoverAction'] = 'auto';
   disabled: boolean;
 }

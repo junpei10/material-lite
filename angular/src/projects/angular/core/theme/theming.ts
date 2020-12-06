@@ -68,21 +68,7 @@ export const MlTheming: MlThemingType = {
     this.setStyle({
       palette: (name, color, contrast) => {
         const head = '.ml-' + name;
-        return (`
-          ${head} {
-            background-color: ${color};
-            color: ${color};
-          }
-          ${head}-bg {
-            background-color: ${color};
-          }
-          ${head}-color {
-            color: ${color};
-          }
-          ${head}-contrast {
-            color: ${contrast};
-          }
-        `);
+        return `${head}{background-color:${color};color:${contrast}}${head}-bg{background-color:${color}}${head}-color{color:${color}}${head}-contrast{color:${contrast}}`;
       }
     });
   },

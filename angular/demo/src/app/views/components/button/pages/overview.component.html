@@ -51,7 +51,7 @@
 <section class='docs-codeblock'>
   <div class='docs-codeblock-prod'>
     <a mlButton href='https://www.google.com/' target='_blank' rel='noopener noreferrer'>Anchor</a>
-    <button mlButton [inlineLink]='true'>
+    <button mlButton [wrapAnchor]='true'>
       <a href='https://www.google.com' target='_blank' rel='noopener noreferrer'>Wrapping Anchor</a>
     </button>
   </div>
@@ -112,8 +112,8 @@
 </p>
 <section class='docs-codeblock'>
   <div class='docs-codeblock-prod'>
-    <button mlButton [disableRipple]=true>Disable Ripple</button>
-    <button mlButton [immediateRipple]=true>Ripple Overdrive</button>
+    <button mlButton [rippleDisabled]=true>Disable Ripple</button>
+    <button mlButton [rippleOverdrive]=true>Ripple Overdrive</button>
   </div>
 
 <pre class='docs-codeblock-pre'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
