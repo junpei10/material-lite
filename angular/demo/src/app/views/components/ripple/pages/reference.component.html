@@ -15,13 +15,11 @@
     </tr>
     <tr>
       <td><code>mlRippleOverdrive</code></td>
-      <td>boolean</td>
-      <td>Overdriveを有効にするかどうかを設定うする。</td>
-    </tr>
-    <tr>
-      <td><code>mlRippleTypeBreakpoint</code></td>
-      <td>object</td>
-      <td>クリック時、コンテナのサイズが設定したサイズより同じか小さい場合は通常の"Ripple"を表示し、大きい場合は"Overdrive"を表示するようになる。</td>
+      <td>boolean | object</td>
+      <td>
+        booleanを代入すると、Overdriveを有効にするかどうかを設定する。<br>
+        Objectを代入すると、クリック時、コンテナのサイズが設定したサイズより同じか小さい場合は通常の"Ripple"を表示し、大きい場合は"Overdrive"を表示するようになる。
+      </td>
     </tr>
     <tr>
       <td><code>mlRippleTheme</code></td>
@@ -78,11 +76,11 @@
 </table>
 <pre class='docs-codeblock-pre'><code class='js'><span class='hljs-name'>interface</span> MlButtonBinder {{ "{" }}
   mlRipple<span class='hljs-keyword'>?:</span> <span class='hljs-type'>boolean</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>''</span>;
-  mlRippleOverdrive<span class='hljs-keyword'>?:</span> <span class='hljs-type'>boolean</span>;
-  mlRippleTypeBreakpoint<span class='hljs-keyword'>?:</span> {{ "{" }}
+  mlRippleOverdrive<span class='hljs-keyword'>?:</span> <span class='hljs-type'>boolean</span> <span class='hljs-keyword'>|</span> {{ "{" }}
     width<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>,
     height<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>
   {{ "}" }};
+  mlRippleTypeBreakpoint<span class='hljs-keyword'>?:</span>
   mlRippleTheme<span class='hljs-keyword'>?:</span> <span class='hljs-type'>string</span>;
   mlRippleColor<span class='hljs-keyword'>?:</span> <span class='hljs-type'>string</span>;
   mlRippleOpacity<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>;

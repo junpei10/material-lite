@@ -3,38 +3,38 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular": {
+    "components": {
       "projectType": "library",
-      "root": "projects/angular",
-      "sourceRoot": "projects/angular",
+      "root": "projects/components",
+      "sourceRoot": "projects/components",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "tsConfig": "projects/angular/tsconfig.lib.json",
-            "project": "projects/angular/ng-package.json"
+            "tsConfig": "projects/components/tsconfig.lib.json",
+            "project": "projects/components/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/angular/tsconfig.lib.prod.json"
+              "tsConfig": "projects/components/tsconfig.lib.prod.json"
             }
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/angular/src/test.ts",
-            "tsConfig": "projects/angular/tsconfig.spec.json",
-            "karmaConfig": "projects/angular/karma.conf.js"
+            "main": "projects/components/src/test.ts",
+            "tsConfig": "projects/components/tsconfig.spec.json",
+            "karmaConfig": "projects/components/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/angular/tsconfig.lib.json",
-              "projects/angular/tsconfig.spec.json"
+              "projects/components/tsconfig.lib.json",
+              "projects/components/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -43,38 +43,38 @@
         }
       }
     },
-    "angular-cdk": {
+    "cdk": {
       "projectType": "library",
-      "root": "projects/angular-cdk",
-      "sourceRoot": "projects/angular-cdk/src",
+      "root": "projects/cdk",
+      "sourceRoot": "projects/cdk/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "tsConfig": "projects/angular-cdk/tsconfig.lib.json",
-            "project": "projects/angular-cdk/ng-package.json"
+            "tsConfig": "projects/cdk/tsconfig.lib.json",
+            "project": "projects/cdk/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/angular-cdk/tsconfig.lib.prod.json"
+              "tsConfig": "projects/cdk/tsconfig.lib.prod.json"
             }
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/angular-cdk/src/test.ts",
-            "tsConfig": "projects/angular-cdk/tsconfig.spec.json",
-            "karmaConfig": "projects/angular-cdk/karma.conf.js"
+            "main": "projects/cdk/src/test.ts",
+            "tsConfig": "projects/cdk/tsconfig.spec.json",
+            "karmaConfig": "projects/cdk/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/angular-cdk/tsconfig.lib.json",
-              "projects/angular-cdk/tsconfig.spec.json"
+              "projects/cdk/tsconfig.lib.json",
+              "projects/cdk/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -87,5 +87,5 @@
   "cli": {
     "analytics": "300aa598-7b5b-4857-a12f-53e82a45a9e2"
   },
-  "defaultProject": "angular"
+  "defaultProject": "components"
 }

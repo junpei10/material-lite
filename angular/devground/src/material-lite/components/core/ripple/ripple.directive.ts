@@ -122,7 +122,7 @@ export class MlRippleDirective implements OnChanges {
     if (overdrive && overdrive !== true) {
       const height = overdrive.height;
       const width = overdrive.width;
-      overdrive = !!((height && height > containerRect.height) || (width && width > containerRect.width));
+      overdrive = !!((height && height <= containerRect.height) || (width && width <= containerRect.width));
     }
 
     const ripple: HTMLElement = this._document.createElement('div');
