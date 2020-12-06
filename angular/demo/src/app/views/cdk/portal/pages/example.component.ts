@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MlPortalAttachConfig, MlPortalAttachContent } from '@material-lite/angular-cdk/portal';
+import { MlPortalConfig, MlPortalContent } from '@material-lite/angular-cdk/portal';
 import { Class } from '@material-lite/angular-cdk/utils';
 
 @Component({
@@ -10,8 +10,8 @@ import { Class } from '@material-lite/angular-cdk/utils';
 export class ExampleComponent {
   type: 0 | 1 | 2 = 0;
 
-  portalContent: MlPortalAttachContent;
-  portalAttachConfig: MlPortalAttachConfig = {};
+  portalContent: MlPortalContent;
+  portalConfig: MlPortalConfig = {};
 
   componentPortalContent: Class<any> = ComponentPortalContent;
 }

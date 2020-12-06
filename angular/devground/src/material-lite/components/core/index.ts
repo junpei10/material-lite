@@ -1,2 +1,2 @@
-export * from './ripple';
+export * from './ripple/index';
 export * from './theme';

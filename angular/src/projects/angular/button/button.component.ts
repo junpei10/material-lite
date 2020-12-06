@@ -8,8 +8,7 @@ export interface MlButtonBinder {
   hoverAction?: 'enable' | 'disable' | 'auto';
   wrapAnchor?: boolean;
   rippleDisabled?: boolean;
-  rippleOverdrive?: boolean;
-  rippleTypeBreakpoint?: { width?: number, height?: number } | undefined;
+  rippleOverdrive?: boolean | { width?: number, height?: number };
 }
 
 type Binder = MlButtonBinder;
@@ -69,7 +68,6 @@ export class MlButtonComponent implements OnChanges {
 
   @Input() rippleDisabled: Binder['rippleDisabled'];
   @Input() rippleOverdrive: Binder['rippleOverdrive'];
-  @Input() rippleTypeBreakpoint: Binder['rippleTypeBreakpoint'];
   public rippleCentered: boolean;
 
   constructor(elementRef: ElementRef<HTMLElement>) {

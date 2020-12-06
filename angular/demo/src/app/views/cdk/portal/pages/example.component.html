@@ -9,13 +9,13 @@
   <div class="docs-codeblock-form">
     <button mlButton (click)='portalContent = componentPortalContent'>Attach component</button>
     <button mlButton (click)='portalContent = templatePortalContent'>Attach template</button>
-    <!-- <button mlButton (click)='portalContent = domPortalContent; portalAttachConfig.cloneDOM = false'>Attach DOM</button>
-    <button mlButton (click)='portalContent = clonedDomPortalContent; portalAttachConfig.cloneDOM = true'>Attach Clone DOM</button> -->
+    <button mlButton (click)='portalContent = domPortalContent; portalConfig.cloneDOM = false'>Attach DOM</button>
+    <button mlButton (click)='portalContent = clonedDomPortalContent; portalConfig.cloneDOM = true'>Attach Clone DOM</button>
   </div>
 
   <div class="docs-codeblock-prod">
     <div class="portal-outlet">
-      <ng-template [mlPortalOutlet]='portalContent' [mlPortalAttachConfig]='portalAttachConfig'></ng-template>
+      <ng-template [mlPortalOutlet]='portalContent' [mlPortalOutletConfig]='portalConfig'></ng-template>
     </div>
 
     <ng-template #templatePortalContent><h1>Template</h1></ng-template>
@@ -34,7 +34,7 @@
 
 <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"docs-codeblock-prod"</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"portal-outlet"</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">ng-template</span> [<span class="hljs-attr">mlPortalOutlet</span>]=<span class="hljs-string">"portalContent"</span> [<span class="hljs-attr">mlPortalAttachConfig</span>]=<span class="hljs-string">"portalConfig"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ng-template</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">ng-template</span> [<span class="hljs-attr">mlPortalOutlet</span>]=<span class="hljs-string">"portalContent"</span> [<span class="hljs-attr">mlPortalOutletConfig</span>]=<span class="hljs-string">"portalConfig"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ng-template</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
   <span class="hljs-tag">&lt;<span class="hljs-name">ng-template</span> #<span class="hljs-attr">templatePortalContent</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Template<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ng-template</span>&gt;</span>
@@ -44,7 +44,7 @@
 
     <!-- JS -->
     <ng-template [ngIf]='type === 1'><code class='js'><span class="hljs-keyword">import</span> {{ "{ Component }" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@angular/core'</span>;
-<span class="hljs-keyword">import</span> {{ "{ MlPortalAttachContent, MlPortalAttachConfig, MlPortalAttachedRef }" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@material-lite/angular/button'</span>;
+<span class="hljs-keyword">import</span> {{ "{ MlPortalContent, MlPortalConfig, MlPortalAttachedRef }" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@material-lite/angular/button'</span>;
 <span class="hljs-keyword">import</span> {{ "{ Class }" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@material-lite/angular/utils'</span>;
 
 @<span class="hljs-decorator">Component</span>({{ "{" }}
@@ -53,8 +53,8 @@
   styleUrls: <span class='hljs-array'>[</span><span class='hljs-string'>'./example.component.css'</span><span class='hljs-array'>]</span>
 {{ "}" }})
 <span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-name">class</span> <span class="hljs-title">ExampleComponent</span>{{ "{" }}</span>
-  portalContent<span class='hljs-keyword'>:</span> MlPortalAttachContent;
-  portalConfig<span class='hljs-keyword'>:</span> MlPortalAttachConfig <span class='hljs-keyword'>=</span> {{ "{" }}{{ "}" }};
+  portalContent<span class='hljs-keyword'>:</span> MlPortalContent;
+  portalConfig<span class='hljs-keyword'>:</span> MlPortalConfig <span class='hljs-keyword'>=</span> {{ "{" }}{{ "}" }};
 
   componentPortalContent<span class='hljs-keyword'>:</span> Class&lt;<span class="hljs-name">any</span>&gt; <span class='hljs-keyword'>=</span> ComponentPortalContent;
 {{ "}" }}

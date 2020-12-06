@@ -5,6 +5,7 @@ import { RippleRoutingModule } from './ripple-routing.module';
 import { RippleComponent } from './ripple.component';
 import { MlRippleModule } from '@material-lite/angular/core';
 import { MlButtonModule } from '@material-lite/angular/button';
+import { MlPopupModule } from '@material-lite/angular-cdk/popup';
 import { FormsModule } from '@angular/forms';
 import { ExampleComponent, OverviewComponent, ReferenceComponent } from './pages';
 
@@ -20,6 +21,7 @@ import { ExampleComponent, OverviewComponent, ReferenceComponent } from './pages
     CommonModule,
     RippleRoutingModule,
     MlRippleModule,
+    MlPopupModule,
     MlButtonModule,
     FormsModule
   ]

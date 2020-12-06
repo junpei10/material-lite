@@ -1,20 +1,18 @@
 import { DOCUMENT } from '@angular/common';
 import { Attribute, Directive, ElementRef, Inject, Input, Output, ViewContainerRef } from '@angular/core';
-import { MlPortalAttachContent, MlPortalOutletDirectiveBase } from '@material-lite/angular-cdk/portal';
+import { MlPortalContent, MlPortalOutletDirectiveBase } from '@material-lite/angular-cdk/portal';
 import { createListenTarget } from '@material-lite/angular-cdk/utils';
-import { MlPopupAttachConfig, MlPopupAttachedRef, MlPopupOutletData } from './attached-ref';
+import { MlPopupConfig, MlPopupAttachedRef, MlPopupOutletData } from './attached-ref';
 import { MlPopupOutlet } from './outlet.service';
 
 // @dynamic
 @Directive({
   selector: '[mlPopupOutlet]'
 })
-export class MlPopupOutletDirective extends MlPortalOutletDirectiveBase<MlPopupAttachedRef, MlPopupOutletData, MlPopupAttachConfig> {
-  @Input('mlPopupOutlet') attachContent: MlPortalAttachContent;
-  // tslint:disable-next-line:no-input-rename
-  @Input('mlPopupAttachConfig') attachConfig: MlPopupAttachConfig;
-  // tslint:disable-next-line:no-output-rename
-  @Output('mlPopupAttachedRef') getAttachedRef = this._getPrivateAttachedRefEmitter;
+export class MlPopupOutletDirective extends MlPortalOutletDirectiveBase<MlPopupAttachedRef, MlPopupOutletData, MlPopupConfig> {
+  @Input('mlPopupOutlet') content: MlPortalContent;
+  @Input('mlPopupOutletConfig') config: MlPopupConfig;
+  @Output('mlPopupOutletAttached') attachedEmitter = this._getAttachedEmitter;
 
   constructor(
     elementRef: ElementRef<HTMLElement>,

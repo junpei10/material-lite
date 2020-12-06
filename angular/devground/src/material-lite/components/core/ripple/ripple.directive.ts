@@ -4,8 +4,7 @@ import { listen, ListenTarget, noop, RunOutside, RUN_OUTSIDE } from '@material-l
 
 export interface MlRippleBinder {
   mlRipple?: boolean | '';
-  mlRippleOverdrive?: boolean;
-  mlRippleTypeBreakpoint?: { width?: number, height?: number };
+  mlRippleOverdrive?: boolean | { width?: number, height?: number };
 
   mlRippleColor?: string;
   mlRippleTheme?: string;
@@ -27,7 +26,7 @@ type Binder = MlRippleBinder;
   selector: '[mlRipple]'
 })
 export class MlRippleDirective implements OnChanges {
-  @Input('mlRipple') set mlRipple(_enable: Binder['mlRipple']) {
+  @Input() set mlRipple(_enable: Binder['mlRipple']) {
     const enable = _enable === '' || _enable;
     (enable)
       ? this._needSetPointerdownListener = true
@@ -35,7 +34,6 @@ export class MlRippleDirective implements OnChanges {
   }
 
   @Input() mlRippleOverdrive: Binder['mlRippleOverdrive'];
-  @Input() mlRippleTypeBreakpoint: Binder['mlRippleTypeBreakpoint'];
 
   private _hostElement: HTMLElement;
   private _needSetPointerdownListener: boolean;
@@ -116,32 +114,20 @@ export class MlRippleDirective implements OnChanges {
   }
 
   private _fadeInRipple(listenTarget: ListenTarget, containerElement: HTMLElement, x: number, y: number): void {
-    let enableOverdrive: true | undefined;
-
     const containerRect = this._containerRect =
       this._containerRect || containerElement.getBoundingClientRect();
 
+    let overdrive = this.mlRippleOverdrive;
     /* 通常の`Ripple`か`overdrive`かを判断する */
-    if (this.mlRippleOverdrive) {
-      /**
-       * `Breakpoint`が設定されている場合、コンテンツの大きさを比較し`Breakpoint`より大きかった場合`overdrive`の処理へ
-       * `Breakpoint`が設定されていない場合は`overdrive`の処理へ
-       */
-      const breakpoint = this.mlRippleTypeBreakpoint;
-      if (breakpoint) {
-        const height = breakpoint.height;
-        const width = breakpoint.width;
-        if ((height && height > containerRect.height) || (width && width > containerRect.width)) {
-          enableOverdrive = true;
-        }
-      } else {
-        enableOverdrive = true;
-      }
+    if (overdrive && overdrive !== true) {
+      const height = overdrive.height;
+      const width = overdrive.width;
+      overdrive = !!((height && height > containerRect.height) || (width && width > containerRect.width));
     }
 
     const ripple: HTMLElement = this._document.createElement('div');
 
-    if (enableOverdrive) {
+    if (overdrive) {
       /** Overdrive の処理 */
       ripple.classList.add('ml-ripple-overdrive');
 

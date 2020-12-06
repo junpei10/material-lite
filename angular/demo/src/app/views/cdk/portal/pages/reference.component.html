@@ -30,12 +30,12 @@
   <tbody>
     <tr>
       <td><code>mlPortalOutlet</code></td>
-      <td><a fragment='types'>MlPortalAttachContent</a></td>
+      <td><a fragment='types'>MlPortalContent</a></td>
       <td></td>
     </tr>
     <tr>
-      <td><code>mlPortalOutletConfig</code></td>
-      <td><a fragment='types'>MlPortalAttachConfig</a></td>
+      <td><code>mlPortalConfig</code></td>
+      <td><a fragment='types'>MlPortalConfig</a></td>
       <td><code>[mlPortalOutlet]</code>に値が代入され、Portalから出力した際に参照される設定。Portalから値が出力される際にしか参照されないため、Portalが出力されたあとに変更しても再出力されない限り設定は変わらない。</td>
     </tr>
   </tbody>
@@ -89,8 +89,8 @@
   </tbody>
 </table>
 <pre class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>interface</span> MlPortalOutlet {{ "{" }}
-  <span class='hljs-method'>attach</span>(<span class='hljs-arg'>content</span><span class='hljs-keyword'>:</span> MlPortalAttachContent, <span class='hljs-arg'>keyOrData</span><span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span> <span class='hljs-keyword'>|</span> MlPortalOutletData, <span class='hljs-arg'>config</span><span class='hljs-keyword'>?:</span> MlPortalAttachConfig)<span class='hljs-keyword'>:</span> MlPortalAttachedRef;
-  <span class='hljs-method'>attachContents</span>(<span class='hljs-arg'>contents</span><span class='hljs-keyword'>:</span> MlPortalAttachContent<span class='hljs-array'>[]</span>, <span class='hljs-arg'>keyOrData</span><span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span> <span class='hljs-keyword'>|</span> MlPortalOutletData, <span class='hljs-arg'>config</span><span class='hljs-keyword'>?:</span> MlPortalAttachConfig)<span class='hljs-keyword'>:</span> MlPortalAttachedRef<span class='hljs-type'>[]</span>;
+  <span class='hljs-method'>attach</span>(<span class='hljs-arg'>content</span><span class='hljs-keyword'>:</span> MlPortalContent, <span class='hljs-arg'>keyOrData</span><span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span> <span class='hljs-keyword'>|</span> MlPortalOutletData, <span class='hljs-arg'>config</span><span class='hljs-keyword'>?:</span> MlPortalConfig)<span class='hljs-keyword'>:</span> MlPortalAttachedRef;
+  <span class='hljs-method'>attachContents</span>(<span class='hljs-arg'>contents</span><span class='hljs-keyword'>:</span> MlPortalContent<span class='hljs-array'>[]</span>, <span class='hljs-arg'>keyOrData</span><span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span> <span class='hljs-keyword'>|</span> MlPortalOutletData, <span class='hljs-arg'>config</span><span class='hljs-keyword'>?:</span> MlPortalConfig)<span class='hljs-keyword'>:</span> MlPortalAttachedRef<span class='hljs-type'>[]</span>;
   <span class='hljs-method'>detachAll</span>(<span class='hljs-arg'>keyOrData</span><span class='hljs-keyword'>:</span> <span class='hljs-string'>'all'</span> <span class='hljs-keyword'>|</span> <span class='hljs-type'>string</span> <span class='hljs-keyword'>|</span> MlPortalOutletData)<span class='hljs-keyword'>:</span> <span class='hljs-type'>void</span>;
 {{ "}" }}</code></pre>
 
@@ -164,11 +164,11 @@
 
 
 <h2 class='docs-h2' id='types'>Misc</h2>
-<h3 class='docs-h3'><code>MlPortalAttachContent</code></h3>
-<pre style='margin-top: 8px' class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>type</span> MlPortalAttachContent = Class<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> <span class='hljs-keyword'>|</span> TemplateRef<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> <span class='hljs-keyword'>|</span> HTMLElement <span class='hljs-keyword'>|</span> ElementRef<span class="hljs-tag">&lt;HTMLElement&gt;</span>;</code></pre>
+<h3 class='docs-h3'><code>MlPortalContent</code></h3>
+<pre style='margin-top: 8px' class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>type</span> MlPortalContent = Class<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> <span class='hljs-keyword'>|</span> TemplateRef<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> <span class='hljs-keyword'>|</span> HTMLElement <span class='hljs-keyword'>|</span> ElementRef<span class="hljs-tag">&lt;HTMLElement&gt;</span>;</code></pre>
 
 
-<h3 class='docs-h3'><code>MlPortalAttachConfig</code></h3>
+<h3 class='docs-h3'><code>MlPortalConfig</code></h3>
 <table class='docs-ref-table'>
   <thead>
     <tr>
@@ -195,7 +195,7 @@
     </tr>
   </tbody>
 </table>
-<pre class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>interface</span> MlPortalAttachConfig {{ "{" }}
+<pre class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>interface</span> MlPortalConfig {{ "{" }}
   animation<span class='hljs-keyword'>?:</span> {{ "{" }}
     className<span class='hljs-keyword'>?:</span> <span class='hljs-type'>string</span>;
     enter<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>;
@@ -243,7 +243,7 @@
     </tr>
   </tbody>
 </table>
-<pre class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>interface</span> MlPortalAttachConfig {{ "{" }}
+<pre class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>interface</span> MlPortalConfig {{ "{" }}
   type<span class='hljs-keyword'>:</span> <span class='hljs-string'>'component'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'template'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'DOM'</span>;
   ref<span class='hljs-keyword'>:</span> ComponentRef&lt;<span class='hljs-type'>any</span>&gt; <span class='hljs-keyword'>|</span> EmbeddedViewRef&lt;<span class='hljs-type'>any</span>&gt; <span class='hljs-keyword'>|</span> {{ "{" }} <span class='hljs-method'>destroy</span><span class='hljs-keyword'>:</span> () => <span class='hljs-type'>void</span> {{ "}" }};
   rootElement: HTMLElement;

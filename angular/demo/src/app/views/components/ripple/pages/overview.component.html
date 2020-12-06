@@ -2,11 +2,11 @@
 <p class='docs-h2-desc'><code>theme</code>と<code>color</code>で配色を設定できます。</p>
 <section class='docs-codeblock'>
   <div class='docs-codeblock-prod first-prod'>
-    <div mlRipple theme="primary">Primary</div>
-    <div mlRipple theme="accent">Accent</div>
-    <div mlRipple theme="warn">Warn</div>
-    <div mlRipple color="#8BC34A">#8BC34A</div>
-    <div mlRipple color="#03A9F4">#03A9F4</div>
+    <div mlRipple mlRippleTheme="primary">Primary</div>
+    <div mlRipple mlRippleTheme="accent">Accent</div>
+    <div mlRipple mlRippleTheme="warn">Warn</div>
+    <div mlRipple mlRippleColor="#8BC34A">#8BC34A</div>
+    <div mlRipple mlRippleColor="#03A9F4">#03A9F4</div>
   </div>
   <pre class='docs-codeblock-pre'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> <span class="hljs-attr">theme</span>=<span class="hljs-string">"primary"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
@@ -27,7 +27,8 @@
 <section class='docs-codeblock'>
   <div class='docs-codeblock-prod second-prod'>
     <div mlRipple>Default</div>
-    <!-- <div mlRipple [immediateRipple]=true>Overdrive</div> -->
+    <div mlRipple [mlRippleOverdrive]=true>Overdrive</div>
+    <button mlButton></button>
   </div>
   <pre class='docs-codeblock-pre'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span>&gt;</span>Default<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
@@ -58,7 +59,7 @@
 
   </div>
   <div class='docs-codeblock-prod third-prod'>
-    <div [style]='{ width: typeBpRippleWidth + "px", height: typeBpRippleHeight + "px" }' mlRipple></div>
+    <div [style]='{ width: typeBpRippleWidth + "px", height: typeBpRippleHeight + "px" }' mlRipple [mlRippleOverdrive]='{ width: 249, height: 238 }'></div>
   </div>
   <pre class='docs-codeblock-pre'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> [<span class="hljs-attr">mlRippleOverdrive</span>]=<span class="hljs-string">true</span> [<span class="hljs-attr">mlRippleTypeBreakpoint</span>]=<span class="hljs-string">"{{ "{" }} width: <span class='hljs-literal'>500</span>; height: <span class='hljs-literal'>500</span>; {{ "}" }}"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
 </section>

@@ -1,6 +1,6 @@
 import { animate, query, state, style, transition, trigger } from '@angular/animations';
 import { Component, DoCheck, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
-import { MlPortalAttachConfig, MlPortalAttachContent, MlPortalOutlet } from '@material-lite/angular-cdk/portal';
+import { MlPortalConfig, MlPortalContent, MlPortalOutlet } from '@material-lite/angular-cdk/portal';
 import { MlTheming } from '@material-lite/angular/core';
 import { MlCssVariables } from 'src/material-lite/components/core/theme/css-theme-variables.service';
 
@@ -31,8 +31,8 @@ export class AppComponent implements OnInit, DoCheck {
   @ViewChild('test', { static: true }) private _testTemplateRef: TemplateRef<any>;
 
   title = 'devground';
-  portalContent: MlPortalAttachContent | false;
-  portalConfig: MlPortalAttachConfig = {
+  portalContent: MlPortalContent | false;
+  portalConfig: MlPortalConfig = {
     animation: {
       className: 'test',
       enter: 500,

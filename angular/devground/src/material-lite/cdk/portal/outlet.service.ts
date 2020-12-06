@@ -7,19 +7,14 @@ import { Class, RunOutside, RUN_OUTSIDE } from '@material-lite/angular-cdk/utils
 import { MlPortalAttachedRef, MlPortalAttachedRefArg } from './attached-ref';
 
 
-export type MlPortalAttachContent = Class<any> | TemplateRef<any> | HTMLElement | ElementRef<HTMLElement>;
-export type MlPortalAttachContentType = 'component' | 'template' | 'DOM';
-export interface MlPortalAttachedContent<T extends MlPortalAttachContentType = MlPortalAttachContentType> {
-  type: T;
-  ref: T extends 'component' ? ComponentRef<any> : T extends 'template' ? EmbeddedViewRef<any> : { destroy: () => void };
-  rootElement: HTMLElement;
-}
-export interface MlPortalAttachConfig {
+export type MlPortalContent = Class<any> | TemplateRef<any> | HTMLElement | ElementRef<HTMLElement>;
+export type MlPortalContentType = 'component' | 'template' | 'DOM';
+export interface MlPortalConfig {
   animation?: {
     className?: string;
     enter?: number;
     leave?: number;
-    onOutletDestroyDuration?: number;
+    destroy?: number;
   };
   component?: {
     injector?: Injector;
@@ -41,9 +36,14 @@ export interface MlPortalOutletData {
   readonly viewContainerRef: ViewContainerRef;
   readonly detachEvents: ((destroyOutlet?: boolean) => void)[];
 }
+export interface MlPortalContentData<T extends MlPortalContentType = MlPortalContentType> {
+  readonly type: T;
+  readonly ref: T extends 'component' ? ComponentRef<any> : T extends 'template' ? EmbeddedViewRef<any> : { destroy: () => void };
+  readonly rootElement: HTMLElement;
+}
 
 // tslint:disable-next-line:max-line-length
-export abstract class MlPortalOutletServiceBase<R extends MlPortalAttachedRef, D extends MlPortalOutletData, C extends MlPortalAttachConfig> {
+export abstract class MlPortalOutletServiceBase<R extends MlPortalAttachedRef, D extends MlPortalOutletData, C extends MlPortalConfig> {
 
   publicOutletDataStorage: Map<string, D> = new Map();
 
@@ -54,7 +54,7 @@ export abstract class MlPortalOutletServiceBase<R extends MlPortalAttachedRef, D
     private _AttachedRef: Class<R, MlPortalAttachedRefArg>,
   ) { }
 
-  attach(content: MlPortalAttachContent, keyOrData: string | MlPortalOutletData, config: C | undefined = {} as any): R {
+  attach(content: MlPortalContent, keyOrData: string | MlPortalOutletData, config: C | undefined = {} as any): R {
     let outletKey: string | undefined;
     let data: MlPortalOutletData;
 
@@ -67,7 +67,7 @@ export abstract class MlPortalOutletServiceBase<R extends MlPortalAttachedRef, D
       data = keyOrData;
     }
 
-    let attachedContent: MlPortalAttachedContent;
+    let attachedContent: MlPortalContentData;
 
     if (typeof content === 'function') {
       /* Component */
@@ -149,7 +149,7 @@ export abstract class MlPortalOutletServiceBase<R extends MlPortalAttachedRef, D
   }
 
   // TODO: 処理として、単純に`this.attach`をループさせているだけなので、ちゃんと最適化させる
-  attachContents(contents: MlPortalAttachContent[], keyOrData: string | MlPortalOutletData, config: C = {} as any): R[] {
+  attachContents(contents: MlPortalContent[], keyOrData: string | MlPortalOutletData, config: C = {} as any): R[] {
     const returns: R[] = [];
 
     const length = contents.length;
@@ -204,7 +204,7 @@ export abstract class MlPortalOutletServiceBase<R extends MlPortalAttachedRef, D
 @Injectable({
   providedIn: 'root'
 })
-export class MlPortalOutlet extends MlPortalOutletServiceBase<MlPortalAttachedRef, MlPortalOutletData, MlPortalAttachConfig> {
+export class MlPortalOutlet extends MlPortalOutletServiceBase<MlPortalAttachedRef, MlPortalOutletData, MlPortalConfig> {
   constructor(
     @Inject(DOCUMENT) document: Document,
     @Inject(RUN_OUTSIDE) runOutside: RunOutside,

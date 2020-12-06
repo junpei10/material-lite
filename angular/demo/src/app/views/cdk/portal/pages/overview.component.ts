@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MlPortalAttachConfig, MlPortalAttachContent, MlPortalAttachedRef, MlPortalOutlet } from '@material-lite/angular-cdk/portal';
+import { MlPortalConfig, MlPortalContent, MlPortalAttachedRef, MlPortalOutlet } from '@material-lite/angular-cdk/portal';
 
 @Component({
   selector: 'app-overview',
@@ -24,16 +24,16 @@ import { MlPortalAttachConfig, MlPortalAttachContent, MlPortalAttachedRef, MlPor
 export class OverviewComponent {
 
   privateCodeViewer: 0 | 1 = 0;
-  privatePortalContent: MlPortalAttachContent | false;
-  privatePortalConfig: MlPortalAttachConfig = {};
+  privatePortalContent: MlPortalContent | false;
+  privatePortalConfig: MlPortalConfig = {};
 
   publicCodeViewer: 0 | 1 = 0;
-  publicPortalContent: MlPortalAttachContent | false;
-  publicPortalConfig: MlPortalAttachConfig = {};
+  publicPortalContent: MlPortalContent | false;
+  publicPortalConfig: MlPortalConfig = {};
 
   animationCodeViewer: 0 | 1 | 2 = 0;
-  animationPortalContent: MlPortalAttachContent | false;
-  animationPortalConfig: MlPortalAttachConfig = {
+  animationPortalContent: MlPortalContent | false;
+  animationPortalConfig: MlPortalConfig = {
     animation: {
       className: 'example',
       enter: 500,
@@ -75,7 +75,8 @@ export class OverviewComponent {
 
 @Component({
   selector: 'app-portal-attached-component',
-  template: '<h1 style="margin: auto;">Portal Attached Component</h1>'
+  template: '<h1 style="margin: auto;">Portal Attached Component</h1>',
+  styles: [':host { display: block; } ']
 })
 class PortalAttachedComponent {
 }

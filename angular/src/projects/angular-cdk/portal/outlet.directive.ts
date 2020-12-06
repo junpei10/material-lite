@@ -1,27 +1,27 @@
 import { Attribute, Directive, ViewContainerRef, OnDestroy, Input, Output, EventEmitter, OnChanges, ElementRef } from '@angular/core';
 import { MlPortalAttachedRef } from './attached-ref';
-import { MlPortalAttachConfig, MlPortalAttachContent, MlPortalOutlet, MlPortalOutletData, MlPortalOutletServiceBase } from './outlet.service';
-
+import { MlPortalConfig, MlPortalContent, MlPortalOutlet, MlPortalOutletData, MlPortalOutletServiceBase } from './outlet.service';
 
 @Directive() // tslint:disable-next-line:max-line-length directive-class-suffix
-export abstract class MlPortalOutletDirectiveBase<R extends MlPortalAttachedRef, D extends MlPortalOutletData, C extends MlPortalAttachConfig> implements OnDestroy, OnChanges {
+export abstract class MlPortalOutletDirectiveBase<R extends MlPortalAttachedRef, D extends MlPortalOutletData, C extends MlPortalConfig> implements OnDestroy, OnChanges {
 
-  abstract attachContent: MlPortalAttachContent | null | undefined;
-  abstract attachConfig: C | undefined;
+  abstract content: MlPortalContent | null | undefined | 'done';
+  abstract config: C | undefined;
 
   /**
+   * @description Outputのための変数
    * @example
-   * output('...attachedRef') getAttachedRef = this._getPrivateAttachedRefEmitter;
+   * output('...attachedRef') getAttachedRef = this._getAttachedEmitter;
    */
-  abstract getAttachedRef: EventEmitter<R>;
-  protected get _getPrivateAttachedRefEmitter(): EventEmitter<R> {
+  abstract attachedEmitter: EventEmitter<R>;
+  protected get _getAttachedEmitter(): EventEmitter<R> {
     let attachedRef = this._privateAttachedRefEmitter;
     if (!attachedRef) {
       attachedRef = this._privateAttachedRefEmitter = new EventEmitter();
     }
     return attachedRef;
   }
-  protected _privateAttachedRefEmitter: EventEmitter<R> | null;
+  private _privateAttachedRefEmitter: EventEmitter<R> | null;
 
   protected _privateCurrentAttachedRef: R | undefined;
 
@@ -72,17 +72,16 @@ export abstract class MlPortalOutletDirectiveBase<R extends MlPortalAttachedRef,
   }
 
   ngOnChanges(): void {
-    const currCont = this.attachContent;
-    // @ts-ignore
-    if (currCont !== 'done') {
+    const content = this.content;
+    if (content !== 'done') {
       this._privateCurrentAttachedRef?.detach();
 
-      if (currCont) {
+      if (content) {
         const newRef = this._privateCurrentAttachedRef =
           this._outletService.attach(
-            currCont,
+            content,
             (this._key) ? this._key : this._privateOutletData!,
-            this.attachConfig
+            this.config
           );
 
         if (this._privateAttachedRefEmitter) {
@@ -97,15 +96,13 @@ export abstract class MlPortalOutletDirectiveBase<R extends MlPortalAttachedRef,
 }
 
 // @dynamic
-/* tslint:disable:no-input-rename no-output-rename */
 @Directive({
-  // tslint:disable-next-line:directive-selector
   selector: '[mlPortalOutlet]',
 })
-export class MlPortalOutletDirective extends MlPortalOutletDirectiveBase<MlPortalAttachedRef, MlPortalOutletData, MlPortalAttachConfig> {
-  @Input('mlPortalOutlet') attachContent: MlPortalAttachContent;
-  @Input('mlPortalAttachConfig') attachConfig: MlPortalAttachConfig;
-  @Output('mlPortalAttachedRef') getAttachedRef = this._getPrivateAttachedRefEmitter;
+export class MlPortalOutletDirective extends MlPortalOutletDirectiveBase<MlPortalAttachedRef, MlPortalOutletData, MlPortalConfig> {
+  @Input('mlPortalOutlet') content: MlPortalContent;
+  @Input('mlPortalOutletConfig') config: MlPortalConfig;
+  @Output('mlPortalOutletAttached') attachedEmitter = this._getAttachedEmitter;
 
   constructor(
     elementRef: ElementRef<HTMLElement>,

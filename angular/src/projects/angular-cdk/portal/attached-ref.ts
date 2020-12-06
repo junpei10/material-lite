@@ -1,14 +1,14 @@
 import { Observable, PartialObserver, Subject, Subscription } from 'rxjs';
 import { RunOutside } from '@material-lite/angular-cdk/utils';
-import { MlPortalAttachConfig, MlPortalAttachedContent, MlPortalOutletData } from './outlet.service';
+import { MlPortalConfig, MlPortalOutletData, MlPortalContentData } from './outlet.service';
 
 /** @description `AttachedRef class`のconstructorを固定するための引数 */
 export type MlPortalAttachedRefArg = [
   outletKey: string | undefined,
   attachedOrder: number,
   attachConfig: any,
-  attachedContent: MlPortalAttachedContent,
-  _outletData: any,
+  contentData: MlPortalContentData,
+  outletData: any,
   _runOutside: RunOutside
 ];
 
@@ -35,30 +35,30 @@ interface LifecycleHandler {
   observable?: NoCompleteObservable<void>;
 }
 
-export class MlPortalAttachedRef<D extends MlPortalOutletData = MlPortalOutletData, C extends MlPortalAttachConfig = MlPortalAttachConfig> {
+export class MlPortalAttachedRef<D extends MlPortalOutletData = MlPortalOutletData, C extends MlPortalConfig = MlPortalConfig> {
   /** Local handlers */
   private _afterAttachedHandler: LifecycleHandler | null;
   private _beforeDetachedHandler: LifecycleHandler | null;
   private _afterDetachedHandler: LifecycleHandler | null;
 
-  protected _attachAnimation: NonNullable<MlPortalAttachConfig['animation']>;
+  protected _animationConfig: NonNullable<MlPortalConfig['animation']>;
   private _animationTimeout: number;
 
   constructor(
     public outletKey: string | undefined,
     public attachedOrder: number,
     attachConfig: C,
-    public attachedContent: MlPortalAttachedContent,
-    protected _outletData: D,
+    public contentData: MlPortalContentData,
+    public outletData: D, // Which protected ???
     protected _runOutside: RunOutside,
   ) {
-    const { enter } = this._attachAnimation = attachConfig.animation || {};
+    const { enter } = this._animationConfig = attachConfig.animation || {};
 
     (enter)
       ? this._animate('enter', this._afterAttach.bind(this))
       : _runOutside(() => setTimeout(this._afterAttach.bind(this)));
 
-    _outletData.detachEvents.push(this._detach.bind(this));
+    outletData.detachEvents.push(this._detach.bind(this));
   }
   private _afterAttach(): void {
     const handler = this._afterAttachedHandler;
@@ -75,7 +75,7 @@ export class MlPortalAttachedRef<D extends MlPortalOutletData = MlPortalOutletDa
   }
 
   /** @param destroy DirectiveのngOnDestroy時、処理を変更しないといけない */
-  private _detach(destroyOutlet?: boolean): void {
+  private _detach(destroyedOutlet?: boolean): void {
     const beforeDetachedHandler = this._beforeDetachedHandler;
     if (beforeDetachedHandler) {
       this._fireLifecycleSubjectNext(beforeDetachedHandler.subject!);
@@ -84,15 +84,18 @@ export class MlPortalAttachedRef<D extends MlPortalOutletData = MlPortalOutletDa
     // @ts-ignore
     if (this.onDetachInit) { this.onDetachInit(); }
 
-    if (destroyOutlet) {
-      this._afterDetach();
+    if (destroyedOutlet) {
+      const dest = this._animationConfig.destroy;
+      dest
+        ? this._runOutside(() => setTimeout(() => this._afterDetach(), dest))
+        : this._afterDetach();
 
     } else {
       this._animate('leave', () => {
-        this.attachedContent.ref.destroy();
+        this.contentData.ref.destroy();
         this._afterDetach();
       });
-      this._outletData.detachEvents.splice(this.attachedOrder, 1);
+      this.outletData.detachEvents.splice(this.attachedOrder, 1);
     }
   }
   private _afterDetach(): void {
@@ -105,18 +108,18 @@ export class MlPortalAttachedRef<D extends MlPortalOutletData = MlPortalOutletDa
     // @ts-ignore
     if (this.afterDetachInit) { this.afterDetachInit(); }
 
-    /* 重要な処理じゃないため最後に */
     this._afterAttachedHandler = null;
     this._beforeDetachedHandler = null;
   }
 
 
   private _animate(eventType: 'enter' | 'leave', finish: () => any): void {
-    const amtConf = this._attachAnimation;
+    const amtConf = this._animationConfig;
     const duration: number | undefined = amtConf[eventType];
 
     if (!duration) {
-      return finish();
+      finish();
+      return;
     }
 
     const name = amtConf.className;
@@ -125,9 +128,9 @@ export class MlPortalAttachedRef<D extends MlPortalOutletData = MlPortalOutletDa
     if (name) {
       const eventClass = name + '-' + eventType;
       const eventToClass = eventClass + '-to';
-      const eventActionClass = eventClass + '-action';
+      const eventActionClass = eventClass + '-active';
 
-      const classList = this.attachedContent.rootElement.classList;
+      const classList = this.contentData.rootElement.classList;
       classList.add(eventActionClass, eventClass);
 
       this._runOutside(() => {

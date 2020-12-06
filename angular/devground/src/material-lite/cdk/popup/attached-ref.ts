@@ -1,4 +1,4 @@
-import { MlPortalAttachConfig, MlPortalAttachedRef, MlPortalAttachedContent, MlPortalOutletData, MlAfterDetachInit, MlOnDetachInit } from '@material-lite/angular-cdk/portal';
+import { MlPortalConfig, MlPortalAttachedRef, MlPortalContentData, MlPortalOutletData, MlAfterDetachInit, MlOnDetachInit } from '@material-lite/angular-cdk/portal';
 import { listen, ListenTarget } from '@material-lite/angular-cdk/utils';
 import { Observable, Subject } from 'rxjs';
 import { RunOutside } from '@material-lite/angular-cdk/utils';
@@ -12,7 +12,7 @@ interface CommonHandler<T> {
 
 let KEYDOWN_EVENTS_HANDLER: CommonHandler<KeyboardEvent> = {};
 
-export interface MlPopupAttachConfig extends MlPortalAttachConfig {
+export interface MlPopupConfig extends MlPortalConfig {
   hasBackdrop?: boolean;
 }
 
@@ -27,7 +27,7 @@ export interface MlPopupOutletData extends MlPortalOutletData {
 }
 
 export class MlPopupAttachedRef
-  extends MlPortalAttachedRef<MlPopupOutletData, MlPopupAttachConfig>
+  extends MlPortalAttachedRef<MlPopupOutletData, MlPopupConfig>
   implements MlOnDetachInit, MlAfterDetachInit {
 
   private _hasBackdrop: boolean | undefined;
@@ -37,22 +37,21 @@ export class MlPopupAttachedRef
   constructor(
     outletKey: string | undefined,
     attachedOrder: number,
-    attachConfig: MlPopupAttachConfig,
-    attachedContent: MlPortalAttachedContent,
-    _outletData: MlPopupOutletData,
+    attachConfig: MlPopupConfig,
+    contentData: MlPortalContentData,
+    outletData: MlPopupOutletData,
     _runOutside: RunOutside,
   ) {
-    attachedContent.rootElement.classList.add('ml-popup-content');
-    const animation = attachConfig.animation;
+    contentData.rootElement.classList.add('ml-popup-content');
 
-    super(outletKey, attachedOrder, attachConfig, attachedContent, _outletData, _runOutside);
+    super(outletKey, attachedOrder, attachConfig, contentData, outletData, _runOutside);
 
     const hasBackdrop = this._hasBackdrop = attachConfig.hasBackdrop;
     if (hasBackdrop) {
-      const backdropRef = _outletData.backdrop;
+      const backdropRef = outletData.backdrop;
       backdropRef.usedCount++;
 
-      backdropRef.style.transitionDuration = animation?.leave + 'ms';
+      backdropRef.style.transitionDuration = this._animationConfig?.leave + 'ms';
       backdropRef.classList.add('ml-active');
     }
   }
@@ -63,7 +62,7 @@ export class MlPopupAttachedRef
 
   afterDetachInit(): void {
     if (this._hasFiredBackdropClick) {
-      const backdropRef = this._outletData.backdrop;
+      const backdropRef = this.outletData.backdrop;
       const handlerRef = backdropRef.clickHandler;
 
       const count = handlerRef.usedCount = (handlerRef.usedCount! - 1);
@@ -87,7 +86,7 @@ export class MlPopupAttachedRef
   }
 
   backdropClick(): Observable<void> {
-    const outletData = this._outletData;
+    const outletData = this.outletData;
     const handlerRef = outletData.backdrop.clickHandler;
 
     if (!handlerRef.subject) {
@@ -133,18 +132,18 @@ export class MlPopupAttachedRef
 
     this._hasBackdrop = enabled;
 
-    const backdropRef = this._outletData.backdrop;
+    const backdropRef = this.outletData.backdrop;
     (enabled)
       ? backdropRef.usedCount++
       : backdropRef.usedCount--;
 
     switch (backdropRef.usedCount) {
       case 0:
-        backdropRef.style.transitionDuration = this._attachAnimation.leave + 'ms';
+        backdropRef.style.transitionDuration = this._animationConfig.leave + 'ms';
         backdropRef.classList.remove('ml-active');
         break;
       case 1:
-        backdropRef.style.transitionDuration = this._attachAnimation.enter + 'ms';
+        backdropRef.style.transitionDuration = this._animationConfig.enter + 'ms';
         backdropRef.classList.add('ml-active');
         break;
     }
@@ -152,11 +151,11 @@ export class MlPopupAttachedRef
 
   set backdropOpacity(value: number) {
     if (!this._hasBackdrop) { return; }
-    this._outletData.backdrop.style.opacity = value + '';
+    this.outletData.backdrop.style.opacity = value + '';
   }
 
   set backdropTransitionDuration(value: number) {
     if (!this._hasBackdrop) { return; }
-    this._outletData.backdrop.style.transitionDuration = value + 'ms';
+    this.outletData.backdrop.style.transitionDuration = value + 'ms';
   }
 }

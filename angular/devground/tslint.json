@@ -52,14 +52,12 @@
       "trace"
     ],
     "no-empty": false,
-    // Added
+    "no-bitwise": false,
     "no-inferrable-types": false,
     "no-non-null-assertion": false,
     "no-redundant-jsdoc": true,
     "no-switch-case-fall-through": true,
     "no-var-requires": false,
-    // Added
-    "no-bitwise": false,
     "object-literal-key-quotes": [
       true,
       "as-needed"
@@ -108,9 +106,7 @@
       "options": [
         "ban-keywords",
         "check-format",
-        // Added
         "allow-pascal-case",
-        // Added
         "allow-leading-underscore"
       ]
     },
@@ -124,18 +120,17 @@
         "check-typecast"
       ]
     },
-    // Add
     "unified-signatures": false,
     "component-class-suffix": true,
     "contextual-lifecycle": true,
     "directive-class-suffix": true,
     "no-conflicting-lifecycle": true,
     "no-host-metadata-property": true,
-    "no-input-rename": true,
+    "no-input-rename": false,
     "no-inputs-metadata-property": true,
     "no-output-native": true,
     "no-output-on-prefix": true,
-    "no-output-rename": true,
+    "no-output-rename": false,
     "no-outputs-metadata-property": true,
     "template-banana-in-box": true,
     "template-no-negated-async": true,
@@ -144,18 +139,16 @@
     "directive-selector": [
       true,
       "attribute",
-      "app",
-      // Added
-      "ml",
-      "camelCase"
+      "lib",
+      "camelCase",
+      "ml"
     ],
     "component-selector": [
       true,
       "element",
-      "app",
-      // Added
-      "ml",
-      "kebab-case"
+      "lib",
+      "kebab-case",
+      "ml"
     ]
   }
 }
