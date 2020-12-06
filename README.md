@@ -76,6 +76,7 @@
 | (Overlay)        |   |   |
 | (Platform)       |   |   |
 | Portal           | γ |   |
+| Popup            | γ |   |
 | Scrolling        |   |   |
 | Stepper          |   |   |
 | Table            |   |   |
