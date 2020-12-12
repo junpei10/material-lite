@@ -1,4 +1,4 @@
-<h2 class='docs-h2'>Content</h2>
+<h2 class='docs-h2'>Overview</h2>
 <p class='docs-h2-desc'>Attach可能な要素は４つあります。</p>
 <pre style='margin-top: 8px' class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>type</span> MlPortalContent <span class='hljs-keyword'>=</span> Class<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> <span class='hljs-keyword'>|</span> TemplateRef<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> <span class='hljs-keyword'>|</span> HTMLElement <span class='hljs-keyword'>|</span> ElementRef<span class="hljs-tag">&lt;HTMLElement&gt;</span>;</code></pre>
 
@@ -242,5 +242,8 @@
 <p class='docs-h2-desc'>直感的で実装が簡単ですが、カプセル化されていないclassを用いる必要があるため、管理に十分気をつける必要があります。</p>
 
 
-<h2 class='docs-h2'>Rendered DOM</h2>
-<p class='docs-h2-desc'>レンダリング済みのDOMをポータルから出力する際、レンダリング済みのDOMを削除してからDOMのクローンを出力します。</p>
+<h2 class='docs-h2'>DOM</h2>
+<p class='docs-h2-desc'>
+  レンダリング済みのDOMをポータルから出力する際、レンダリング済みのDOMを一旦削除してからDOMを出力します。<br>
+  レンダリング済みのDOMを削除したくない場合は、<code>cloneDOM: true</code> を設定してください。
+</p>

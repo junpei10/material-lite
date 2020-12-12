@@ -1,10 +1,11 @@
 import {
   ComponentFactoryResolver, ElementRef, EmbeddedViewRef, Inject,
-  Injectable, Injector, TemplateRef, ViewContainerRef, ComponentRef
+  Injectable, TemplateRef, ViewContainerRef, ComponentRef, StaticProvider, Injector
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Class, RunOutside, RUN_OUTSIDE } from '@material-lite/angular-cdk/utils';
 import { MlPortalAttachedRef, MlPortalAttachedRefArg } from './attached-ref';
+import { ML_DATA, ML_REF } from '../utils';
 
 
 export type MlPortalContent = Class<any> | TemplateRef<any> | HTMLElement | ElementRef<HTMLElement>;
@@ -17,7 +18,8 @@ export interface MlPortalConfig {
     destroy?: number;
   };
   component?: {
-    injector?: Injector;
+    injectData?: any;
+    provider?: StaticProvider[];
     index?: number;
     ngContent?: any[][];
     // ngModuleFactory?: NgModuleFactory<any>
@@ -32,14 +34,14 @@ export interface MlPortalConfig {
 }
 
 export interface MlPortalOutletData {
-  readonly outletElement: HTMLElement;
-  readonly viewContainerRef: ViewContainerRef;
-  readonly detachEvents: ((destroyOutlet?: boolean) => void)[];
+  outletElement: HTMLElement;
+  viewContainerRef: ViewContainerRef;
+  detachEvents: ((destroyedOutlet?: boolean) => void)[];
 }
 export interface MlPortalContentData<T extends MlPortalContentType = MlPortalContentType> {
-  readonly type: T;
-  readonly ref: T extends 'component' ? ComponentRef<any> : T extends 'template' ? EmbeddedViewRef<any> : { destroy: () => void };
-  readonly rootElement: HTMLElement;
+  type: T;
+  ref: T extends 'component' ? ComponentRef<any> : T extends 'template' ? EmbeddedViewRef<any> : { destroy: () => void };
+  rootElement: HTMLElement;
 }
 
 // tslint:disable-next-line:max-line-length
@@ -48,10 +50,11 @@ export abstract class MlPortalOutletServiceBase<R extends MlPortalAttachedRef, D
   publicOutletDataStorage: Map<string, D> = new Map();
 
   constructor(
+    private _AttachedRef: Class<R, MlPortalAttachedRefArg>,
     private _document: Document,
     private _runOutside: RunOutside,
     private _resolver: ComponentFactoryResolver,
-    private _AttachedRef: Class<R, MlPortalAttachedRefArg>,
+    private _injector: Injector
   ) { }
 
   attach(content: MlPortalContent, keyOrData: string | MlPortalOutletData, config: C | undefined = {} as any): R {
@@ -67,34 +70,50 @@ export abstract class MlPortalOutletServiceBase<R extends MlPortalAttachedRef, D
       data = keyOrData;
     }
 
-    let attachedContent: MlPortalContentData;
+    let contentData: MlPortalContentData;
 
+    // コンポーネントのときの処理
     if (typeof content === 'function') {
-      /* Component */
       const compConf = config.component;
       const viewContainerRef = data.viewContainerRef;
 
       let compRef: ComponentRef<any>;
 
       if (compConf) {
-        const elInjector = compConf.injector || viewContainerRef.parentInjector;
+        // @ts-ignore
+        contentData = {};
+        const attachedRef = new this._AttachedRef(outletKey, data.detachEvents.length, config, contentData, data, this._runOutside);
+
+        const providers = compConf.provider || [];
+        providers.push({ provide: ML_REF, useValue: attachedRef }, { provide: ML_DATA, useValue: compConf.injectData });
+
+        const elInjector = Injector.create({ providers, parent: this._injector });
         const compResolver = elInjector.get(ComponentFactoryResolver);
         const compFactory = compResolver.resolveComponentFactory(content);
+        // tslint:disable-next-line:max-line-length
         compRef = viewContainerRef.createComponent(compFactory, compConf.index || viewContainerRef.length, elInjector, compConf.ngContent);
+
+        contentData.type = 'component';
+        contentData.ref = compRef;
+        contentData.rootElement = compRef.location.nativeElement;
+
+        // // コンポーネントかつ設定があった場合のみ、ここでreturnする
+        return attachedRef._init();
+
       } else {
         compRef =
           viewContainerRef.createComponent(
             this._resolver.resolveComponentFactory(content),
             viewContainerRef.length
           );
+        contentData = {
+          type: 'component',
+          ref: compRef,
+          rootElement: compRef.location.nativeElement
+        };
       }
 
-      attachedContent = {
-        type: 'component',
-        ref: compRef,
-        rootElement: compRef.location.nativeElement
-      };
-
+      // Template時の処理
     } else if (content instanceof TemplateRef) {
       /* Template */
       const tempConf = config.template;
@@ -104,7 +123,7 @@ export abstract class MlPortalOutletServiceBase<R extends MlPortalAttachedRef, D
         ? viewContainerRef.createEmbeddedView(content, tempConf.context, tempConf.index || viewContainerRef.length)
         : viewContainerRef.createEmbeddedView(content);
 
-      attachedContent = {
+      contentData = {
         type: 'template',
         ref: tempViewRef,
         rootElement: tempViewRef.rootNodes[0]
@@ -136,7 +155,7 @@ export abstract class MlPortalOutletServiceBase<R extends MlPortalAttachedRef, D
 
       data.outletElement.appendChild(element);
 
-      attachedContent = {
+      contentData = {
         type: 'DOM',
         ref: { destroy },
         rootElement: element
@@ -144,8 +163,7 @@ export abstract class MlPortalOutletServiceBase<R extends MlPortalAttachedRef, D
     }
 
     const attachedOrder = data.detachEvents.length;
-
-    return new this._AttachedRef(outletKey, attachedOrder, config, attachedContent, data, this._runOutside);
+    return new this._AttachedRef(outletKey, attachedOrder, config, contentData, data, this._runOutside)._init();
   }
 
   // TODO: 処理として、単純に`this.attach`をループさせているだけなので、ちゃんと最適化させる
@@ -208,6 +226,7 @@ export class MlPortalOutlet extends MlPortalOutletServiceBase<MlPortalAttachedRe
   constructor(
     @Inject(DOCUMENT) document: Document,
     @Inject(RUN_OUTSIDE) runOutside: RunOutside,
-    resolver: ComponentFactoryResolver
-  ) { super(document, runOutside, resolver, MlPortalAttachedRef); }
+    resolver: ComponentFactoryResolver,
+    injector: Injector
+  ) { super(MlPortalAttachedRef, document, runOutside, resolver, injector); }
 }

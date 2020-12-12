@@ -1,2 +1,14 @@
-<h2 class='docs-h2'>Usage</h2>
-<p>使い方は <a routerLink='/cdk/portal'><code>Portal</code></a> と同じなのでそちらを参照してください。</p>
+<h2 class='docs-h2'>Overview</h2>
+<p class='docs-h2-desc'>使い方は <a routerLink='/cdk/portal'><code>Portal</code></a> と同じなのでそちらを参照してください。</p>
+
+<h2 class='docs-h2'>Backdrop</h2>
+<section class='docs-codeblock'>
+  <div class='docs-codeblock-prod'>
+    <button mlButton (click)="backdropAttachPortal()">Attach</button>
+    <div class='portal-outlet'>
+      <ng-template mlPortalOutlet key="example"></ng-template>
+    </div>
+  </div>
+  <pre class='docs-codeblock-pre'><code class='js'>
+</code></pre>
+</section>

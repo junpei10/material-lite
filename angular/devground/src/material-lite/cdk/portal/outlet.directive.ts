@@ -68,7 +68,10 @@ export abstract class MlPortalOutletDirectiveBase<R extends MlPortalAttachedRef,
 
       this._outletService.publicOutletDataStorage.delete(key);
     } else {
-      this._privateOutletData!.detachEvents[0]?.();
+      const detachEvent = this._privateOutletData!.detachEvents[0];
+      if (detachEvent as any) {
+        detachEvent();
+      }
     }
   }
 

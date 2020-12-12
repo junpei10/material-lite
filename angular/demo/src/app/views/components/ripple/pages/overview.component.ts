@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
     .docs-codeblock-prod {
       padding: 8px;
     }
-    .docs-codeblock-prod div {
+    .ml-ripple {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -15,13 +15,22 @@ import { Component } from '@angular/core';
       box-sizing: border-box;
       margin: 8px 16px;
     }
-    .first-prod div {
+    .first-prod .ml-ripple {
       width: 80px;
       height: 80px;
     }
-    .second-prod div {
+    .second-prod .ml-ripple, .fourth-prod .ml-ripple {
       width: 160px;
       height: 80px;
+    }
+    .fourth-prod {
+      display: flex;
+      flex-direction: column;
+    }
+    .forth-prod-wrapper {
+      display: flex;
+      width: 100%;
+      justify-content: space-around;
     }
     .third-form button {
       margin: 0 8px;
@@ -39,4 +48,6 @@ export class OverviewComponent {
   typeBpViewer = 0;
   typeBpRippleWidth: 250 | 500 = 250;
   typeBpRippleHeight: 250 | 500 = 250;
+
+  triggerVisualizeRipple: boolean;
 }

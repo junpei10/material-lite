@@ -31,9 +31,16 @@
 
   &codeblock-form {
     @include _docs-codeblock-container();
+    padding-top: 0;
     justify-content: space-evenly;
     align-items: center;
     border-bottom: 1px solid #9E9E9E;
+    > * {
+      margin: 16px 16px 0px;
+    }
+    [type=number] {
+      width: 80px;
+    }
     span {
       margin-right: 8px;
     }

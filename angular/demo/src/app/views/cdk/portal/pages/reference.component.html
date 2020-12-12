@@ -1,90 +1,94 @@
-<h2 class='docs-h2'>Directives</h2>
-<h3 class='docs-h3'><code>@Attribute</code></h3>
+<h2 class='docs-ref-h2'>Directives</h2>
+<h3 class='docs-ref-h3 first'>
+  <span>selector：</span><code>[mlPortalOutlet]</code><br>
+  <span>exportAs：</span><code>mlPortalOutlet</code>
+</h3>
+<h4 class='docs-ref-h4'><code>@Attribute</code></h4>
 <table class='docs-ref-table'>
   <thead>
     <tr>
       <th>Selector</th>
-      <th>Type</th>
+      <th>Name</th>
       <th class='grow'>Description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code>key</code></td>
-      <td>string</td>
+      <td><code>key</code></td>
       <td>設定すると、"<code>PortalOutlet</code>"Serviceを用いてアクセスすることが可能となり、どこからでも出力できる。</td>
     </tr>
   </tbody>
 </table>
+<pre class='docs-codeblock-pre'><code class='js'>@<span class='hljs-decorator'>Attribute</span>(<span class='hljs-string'>'key'</span>) <span class='hljs-prop'>key</span><span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;</code></pre>
 
-
-<h3 class='docs-h3'><code>@Input</code></h3>
+<h4 class='docs-ref-h4'><code>@Input</code></h4>
 <table class='docs-ref-table'>
   <thead>
     <tr>
       <th>Selector</th>
-      <th>Type</th>
+      <th>Name</th>
       <th class='grow'>Description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code>mlPortalOutlet</code></td>
-      <td><a fragment='types'>MlPortalContent</a></td>
-      <td></td>
+      <td><code>content</code></td>
+      <td>コンテンツが代入されたときに出力する。１つしか出力できない。</td>
     </tr>
     <tr>
-      <td><code>mlPortalConfig</code></td>
-      <td><a fragment='types'>MlPortalConfig</a></td>
-      <td><code>[mlPortalOutlet]</code>に値が代入され、Portalから出力した際に参照される設定。Portalから値が出力される際にしか参照されないため、Portalが出力されたあとに変更しても再出力されない限り設定は変わらない。</td>
+      <td><code>mlPortalOutletConfig</code></td>
+      <td><code>config</code></td>
+      <td><code>[mlPortalOutlet]</code>にコンテンツが代入され、Portalから出力した際に参照される設定。Portalから値が出力される際にしか参照されないため、Portalが出力されたあとに変更しても再出力されない限り設定は変わらない。</td>
     </tr>
   </tbody>
 </table>
+<pre class='docs-codeblock-pre'><code class='js'>@<span class='hljs-decorator'>Input</span>(<span class='hljs-string'>'mlPortalOutlet'</span>) <span class='hljs-prop'>content</span><span class='hljs-keyword'>:</span> MlPortalContent;
+@<span class='hljs-decorator'>Input</span>(<span class='hljs-string'>'mlPortalOutletConfig'</span>) <span class='hljs-prop'>config</span><span class='hljs-keyword'>:</span> MlPortalConfig;</code></pre>
 
-<h3 class='docs-h3'><code>@Output</code></h3>
+<h4 class='docs-ref-h4'><code>@Output</code></h4>
 <table class='docs-ref-table'>
   <thead>
     <tr>
       <th>Selector</th>
-      <th>Type</th>
+      <th>Name</th>
       <th class='grow'>Description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><code>mlPortalAttachedRef</code></td>
-      <td><a fragment='types'>MlPortalAttachedRef</a></td>
+      <td><code>mlPortalOutletAttached</code></td>
+      <td><code>attachedEmitter</code></td>
       <td>出力されるタイミングは、<code>[mlPortalOutlet]</code>に値が代入され、Portalから出力したとき。</td>
     </tr>
   </tbody>
 </table>
+<pre class='docs-codeblock-pre'><code class='js'>@<span class='hljs-decorator'>Input</span>(<span class='hljs-string'>'mlPortalOutletAttached'</span>) <span class='hljs-prop'>attachedEmitter</span><span class='hljs-keyword'>:</span> MLPortalAttachedRef;</code></pre>
 
 
-<h2 class='docs-h2'>Services</h2>
-<h3 class='docs-h3'><code>MlPortalOutlet</code></h3>
+
+<h2 class='docs-ref-h2'>Services</h2>
+<h3 class='docs-ref-h3 first'><code>MlPortalOutlet</code></h3>
 <table class='docs-ref-table'>
   <thead>
     <tr>
       <th>Property</th>
-      <th>Type</th>
       <th class='grow'>Description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code>attach</code></td>
-      <td>function</td>
-      <td></td>
+      <td>第２引数に代入した値に対応した出力先(outlet)に、第１引数に代入したコンテンツを出力する。</td>
     </tr>
     <tr>
       <td><code>attachContents</code></td>
-      <td>function</td>
-      <td></td>
+      <td>複数の値を同時に出力する。戻り値は配列で出力される。</td>
     </tr>
     <tr>
       <td><code>detachAll</code></td>
-      <td>function</td>
-      <td></td>
+      <td>第１引数に代入した値に対応した出力先(outlet)に出力済みのコンテンツをすべて削除する。</td>
     </tr>
   </tbody>
 </table>
@@ -95,58 +99,55 @@
 {{ "}" }}</code></pre>
 
 
-<h2 class='docs-h2'>Classes</h2>
-<h3 class='docs-h3'><code>MlPortalAttachedRef</code></h3>
+<h2 class='docs-ref-h2'>Classes</h2>
+<h3 class='docs-ref-h3 first'><code>MlPortalAttachedRef</code></h3>
 <table class='docs-ref-table'>
   <thead>
     <tr>
       <th>Property</th>
-      <th>Type</th>
       <th class='grow'>Description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code>outletKey</code></td>
-      <td>string</td>
-      <td></td>
+      <td>outletのkeyの名前。</td>
     </tr>
     <tr>
       <td><code>attachedOrder</code></td>
-      <td>number</td>
-      <td></td>
+      <td>attachした順番。</td>
     </tr>
     <tr>
-      <td><code>attachedContent</code></td>
-      <td>MlPortalAttachedContent</td>
-      <td></td>
+      <td><code>contentData</code></td>
+      <td>出力したコンテンツのデータ。</td>
+    </tr>
+    <tr>
+      <td><code>outletData</code></td>
+      <td>出力先のデータ。</td>
     </tr>
     <tr>
       <td><code>detach</code></td>
-      <td>function</td>
-      <td></td>
+      <td>出力したコンテンツを削除する。</td>
     </tr>
     <tr>
       <td><code>afterAttached</code></td>
-      <td>function</td>
-      <td></td>
+      <td>アタッチされ、アニメーション終了後を伝えるObservableを出力する関数。completeは呼び出されない。</td>
     </tr>
     <tr>
       <td><code>beforeDetached</code></td>
-      <td>function</td>
-      <td></td>
+      <td>デタッチされた瞬間を伝えるObservableを出力する関数。completeは呼び出されない。</td>
     </tr>
     <tr>
       <td><code>afterDetached</code></td>
-      <td>function</td>
-      <td></td>
+      <td>デタッチされ、アニメーション終了後を伝えるObservableを出力する関数。completeは呼び出されない。</td>
     </tr>
   </tbody>
 </table>
 <pre class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>interface</span> MlPortalAttachedRef {{ "{" }}
   outletKey<span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>;
   attachedOrder<span class='hljs-keyword'>:</span> <span class='hljs-type'>number</span>;
-  attachedContent<span class='hljs-keyword'>:</span> MlPortalAttachedContent,
+  contentData<span class='hljs-keyword'>:</span> MlPortalContentData,
+  outletData<span class='hljs-keyword'>:</span> MlPortalOutletData,
   <span class='hljs-method'>detach</span>()<span class='hljs-keyword'>:</span> <span class='hljs-type'>void</span>
   <span class='hljs-method'>afterAttached</span>()<span class='hljs-keyword'>:</span> NoCompleteObservable&lt;<span class='hljs-type'>void</span>&gt;;
   <span class='hljs-method'>beforeDetached</span>()<span class='hljs-keyword'>:</span> NoCompleteObservable&lt;<span class='hljs-type'>void</span>&gt;;
@@ -162,45 +163,18 @@
 {{ "}" }}</code></pre>
 
 
-
-<h2 class='docs-h2' id='types'>Misc</h2>
-<h3 class='docs-h3'><code>MlPortalContent</code></h3>
+<h2 class='docs-ref-h2'>Types</h2>
+<h3 class='docs-ref-h3 first'><code>MlPortalContent</code></h3>
 <pre style='margin-top: 8px' class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>type</span> MlPortalContent = Class<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> <span class='hljs-keyword'>|</span> TemplateRef<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> <span class='hljs-keyword'>|</span> HTMLElement <span class='hljs-keyword'>|</span> ElementRef<span class="hljs-tag">&lt;HTMLElement&gt;</span>;</code></pre>
 
 
-<h3 class='docs-h3'><code>MlPortalConfig</code></h3>
-<table class='docs-ref-table'>
-  <thead>
-    <tr>
-      <th>Property</th>
-      <th>Type</th>
-      <th class='grow'>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>animation</code></td>
-      <td>object</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td><code>component</code></td>
-      <td>object</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td><code>template</code></td>
-      <td>object</td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+<h3 class='docs-ref-h3'><code>MlPortalConfig</code></h3>
 <pre class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>interface</span> MlPortalConfig {{ "{" }}
   animation<span class='hljs-keyword'>?:</span> {{ "{" }}
     className<span class='hljs-keyword'>?:</span> <span class='hljs-type'>string</span>;
     enter<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>;
     leave<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>;
-    _timeout<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>;
+    destroy<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>;
   {{ "}" }};
   component<span class='hljs-keyword'>?:</span> {{ "{" }}
     injector<span class='hljs-keyword'>?:</span> Injector;
@@ -213,39 +187,22 @@
     {{ "}" }};
     index<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>;
   {{ "}" }};
+  cloneDOM<span class='hljs-keyword'>?:</span> <span class='hljs-type'>boolean</span>
 {{ "}" }}</code></pre>
 
 
-<h3 class='docs-h3'><code>MlPortalAttachedContent</code></h3>
-<table class='docs-ref-table'>
-  <thead>
-    <tr>
-      <th>Property</th>
-      <th>Type</th>
-      <th class='grow'>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>type</code></td>
-      <td>string</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td><code>ref</code></td>
-      <td>object</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td><code>rootElement</code></td>
-      <td>HTMLElement</td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
-<pre class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>interface</span> MlPortalConfig {{ "{" }}
+<h3 class='docs-ref-h3'><code>MlPortalContentData</code></h3>
+<pre class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>interface</span> MlPortalContentData {{ "{" }}
   type<span class='hljs-keyword'>:</span> <span class='hljs-string'>'component'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'template'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'DOM'</span>;
   ref<span class='hljs-keyword'>:</span> ComponentRef&lt;<span class='hljs-type'>any</span>&gt; <span class='hljs-keyword'>|</span> EmbeddedViewRef&lt;<span class='hljs-type'>any</span>&gt; <span class='hljs-keyword'>|</span> {{ "{" }} <span class='hljs-method'>destroy</span><span class='hljs-keyword'>:</span> () => <span class='hljs-type'>void</span> {{ "}" }};
-  rootElement: HTMLElement;
+  rootElement<span class='hljs-keyword'>:</span> HTMLElement;
+{{ "}" }}</code></pre>
+
+
+<h3 class='docs-ref-h3'><code>MlPortalOutletData</code></h3>
+<pre class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>interface</span> MlPortalOutletData {{ "{" }}
+  outletElement<span class='hljs-keyword'>:</span> <span class='hljs-string'>'component'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'template'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'DOM'</span>;
+  viewContainerRef<span class='hljs-keyword'>:</span> ComponentRef&lt;<span class='hljs-type'>any</span>&gt; <span class='hljs-keyword'>|</span> EmbeddedViewRef&lt;<span class='hljs-type'>any</span>&gt; <span class='hljs-keyword'>|</span> {{ "{" }} <span class='hljs-method'>destroy</span><span class='hljs-keyword'>:</span> () => <span class='hljs-type'>void</span> {{ "}" }};
+  detachEvents<span class='hljs-keyword'>:</span> (<span class='hljs-keyword'>(</span><span class='hljs-prop'>destroyedOutlet</span><span class='hljs-keyword'>?:</span> <span class='hljs-type'>boolean</span><span class='hljs-keyword'>)</span> => <span class='hljs-type'>void</span>)<span class='hljs-array'>[]</span>;
 {{ "}" }}</code></pre>
 

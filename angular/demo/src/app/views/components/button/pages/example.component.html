@@ -23,13 +23,13 @@
     <div>
       <span>hoverAction</span>
       <select [(ngModel)]="hoverAction">
-        <option value="default">auto</option>
+        <option value="auto">auto</option>
         <option value="enable">enable</option>
         <option value="disable">disable</option>
       </select>
     </div>
 
-    <label for="disabled"><input type="checkbox" id="disabled" [(ngModel)]="disabled">Disabled</label>
+    <label for="disabled"><input type="checkbox" id="disabled" [(ngModel)]="disabled">disabled</label>
   </div>
 
   <div class="docs-codeblock-prod">
@@ -79,8 +79,8 @@
   &gt;</span>BUTTON<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></ng-template>
 
-    <ng-template [ngIf]='type === 1'><code class='js'><span class="hljs-keyword">import</span> {{ "{" }} Component{{ "}" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@angular/core'</span>;
-<span class="hljs-keyword">import</span> {{ "{" }} MlButtonBinder{{ "}" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@material-lite/angular/button'</span>;
+    <ng-template [ngIf]='type === 1'><code class='js'><span class="hljs-keyword">import</span> {{ "{" }} Component {{ "}" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@angular/core'</span>;
+<span class="hljs-keyword">import</span> {{ "{" }} MlButtonBinder {{ "}" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@material-lite/angular/button'</span>;
 
 @<span class="hljs-decorator">Component</span>({{ "{" }}
   selector: <span class="hljs-string">'app-example'</span>,

@@ -23,57 +23,66 @@ type Binder = MlRippleBinder;
 
 // @dynamic
 @Directive({
-  selector: '[mlRipple]'
+  selector: '[mlRipple]',
+  exportAs: 'mlRipple'
 })
 export class MlRippleDirective implements OnChanges {
   @Input() set mlRipple(_enable: Binder['mlRipple']) {
-    const enable = _enable === '' || _enable;
+    const enable = this.isEnabled = _enable === '' || _enable;
     (enable)
       ? this._needSetPointerdownListener = true
       : this._removePointerdownListener();
   }
+  isEnabled?: boolean;
 
-  @Input() mlRippleOverdrive: Binder['mlRippleOverdrive'];
+  @Input('mlRippleOverdrive') overdrive: Binder['mlRippleOverdrive'];
 
   private _hostElement: HTMLElement;
   private _needSetPointerdownListener: boolean;
 
   private _removePointerdownListener: () => void = noop;
 
-  @Input() mlRippleColor: Binder['mlRippleColor'];
+  @Input('mlRippleColor') color: Binder['mlRippleColor'];
 
-  @Input() mlRippleTheme: Binder['mlRippleTheme'];
+  @Input('mlRippleTheme') theme: Binder['mlRippleTheme'];
 
-  @Input() mlRippleOpacity: Binder['mlRippleOpacity'];
+  @Input('mlRippleOpacity') opacity: Binder['mlRippleOpacity'];
 
   @Input() set mlRippleAnimationDuration(duration: Binder['mlRippleAnimationDuration']) {
     if (!duration) {
-      this._currAmtDuration = {
-        enter: 450,
+      this.animationDuration = {
+        enter: 448,
         leave: 400
       };
+
     } else if (typeof duration === 'number') {
       const _entryDuration = duration * 0.5;
-      this._currAmtDuration = {
+      this.animationDuration = {
         enter: _entryDuration,
         leave: _entryDuration
       };
+
     } else {
-      const _amtDuration = this._currAmtDuration;
-      if (duration.enter) { _amtDuration.enter = duration.enter; }
-      if (duration.leave) { _amtDuration.leave = duration.leave; }
+      const amtDur = this.animationDuration;
+      amtDur.enter = (duration.enter) === 0
+        ? 0
+        : duration.enter || 448;
+
+      amtDur.leave = (duration.leave) === 0
+        ? 0
+        : duration.leave || 448;
     }
   }
-  private _currAmtDuration = {
-    enter: 450,
+  animationDuration = {
+    enter: 448,
     leave: 400
   };
 
-  @Input() set mlRippleTarget(target: Binder['mlRippleTarget']) {
-    this._currListenTarget = target;
+  @Input() set mlRippleTrigger(target: Binder['mlRippleTarget']) {
+    this.trigger = target;
     this._needSetPointerdownListener = true;
   }
-  private _currListenTarget?: ListenTarget;
+  trigger?: ListenTarget;
 
   @Input() mlRippleTargetIsOutside: Binder['mlRippleTargetIsOutside'];
 
@@ -100,7 +109,7 @@ export class MlRippleDirective implements OnChanges {
     if (this._needSetPointerdownListener) {
       this._removePointerdownListener();
 
-      const listenTarget = this._currListenTarget || this._hostElement;
+      const listenTarget = this.trigger || this._hostElement;
 
       this._runOutside(() => {
         this._removePointerdownListener =
@@ -117,7 +126,7 @@ export class MlRippleDirective implements OnChanges {
     const containerRect = this._containerRect =
       this._containerRect || containerElement.getBoundingClientRect();
 
-    let overdrive = this.mlRippleOverdrive;
+    let overdrive = this.overdrive;
     /* 通常の`Ripple`か`overdrive`かを判断する */
     if (overdrive && overdrive !== true) {
       const height = overdrive.height;
@@ -131,15 +140,15 @@ export class MlRippleDirective implements OnChanges {
       /** Overdrive の処理 */
       ripple.classList.add('ml-ripple-overdrive');
 
-      let rippleStyle = `transition-duration:${this._currAmtDuration.enter * 0.4}ms;`;
-      (this.mlRippleTheme)
-        ? ripple.classList.add(`ml-${this.mlRippleTheme}-bg`)
-        : rippleStyle += `background-color: ${this.mlRippleColor || 'currentColor'};`;
+      let rippleStyle = `transition-duration:${this.animationDuration.enter * 0.4}ms;`;
+      (this.theme)
+        ? ripple.classList.add(`ml-${this.theme}-bg`)
+        : rippleStyle += `background-color: ${this.color || 'currentColor'};`;
 
       ripple.setAttribute('style', rippleStyle);
       containerElement.appendChild(ripple);
 
-      setTimeout(() => ripple.style.opacity = (this.mlRippleOpacity || 0.12) + '');
+      setTimeout(() => ripple.style.opacity = (this.opacity || 0.12) + '');
 
       let removePointerupListener: () => void;
       let removePointerleaveListener: () => void;
@@ -158,12 +167,10 @@ export class MlRippleDirective implements OnChanges {
       /** 通常のRippleの処理 */
       ripple.classList.add('ml-ripple-element');
 
-      const enterDuration = this._currAmtDuration.enter;
-
       if (this.mlRippleCentered) {
         x = containerRect.left + containerRect.width * 0.5;
         y = containerRect.top + containerRect.height * 0.5;
-      } else if (this._currListenTarget && this.mlRippleTargetIsOutside) {
+      } else if (this.trigger && this.mlRippleTargetIsOutside) {
         const left = ~~containerRect.left;
         const right = ~~containerRect.right;
         x =
@@ -193,11 +200,12 @@ export class MlRippleDirective implements OnChanges {
       }
 
       const size = distance * 2;
-      let rippleStyle: string = `top:${y - containerRect.top - distance}px;left:${x - containerRect.left - distance}px;width:${size}px;height:${size}px;transition-duration:${this._currAmtDuration.enter}ms;opacity:${this.mlRippleOpacity || 0.12};`;
+      const enterDur = this.animationDuration.enter;
+      let rippleStyle: string = `top:${y - containerRect.top - distance}px;left:${x - containerRect.left - distance}px;width:${size}px;height:${size}px;transition-duration:${enterDur}ms;opacity:${this.opacity || 0.12};`;
 
-      (this.mlRippleTheme)
-        ? ripple.classList.add(`ml-${this.mlRippleTheme}-bg`)
-        : rippleStyle += `background-color: ${this.mlRippleColor || 'currentColor'};`;
+      (this.theme)
+        ? ripple.classList.add(`ml-${this.theme}-bg`)
+        : rippleStyle += `background-color: ${this.color || 'currentColor'};`;
 
       ripple.setAttribute('style', rippleStyle);
       containerElement.appendChild(ripple);
@@ -213,7 +221,7 @@ export class MlRippleDirective implements OnChanges {
         (listenerEventHasFired)
           ? this._fadeOutRipple(ripple, containerElement)
           : rippleHasEntered = true;
-      }, enterDuration);
+      }, enterDur);
 
       let removePointerupListener: () => void;
       let removePointerleaveListener: () => void;
@@ -235,7 +243,7 @@ export class MlRippleDirective implements OnChanges {
   }
 
   private _fadeOutRipple(rippleElement: HTMLElement, containerElement: HTMLElement): void {
-    const leaveTiming = this._currAmtDuration.leave;
+    const leaveTiming = this.animationDuration.leave;
 
     rippleElement.style.transitionDuration = leaveTiming + 'ms';
     rippleElement.style.opacity = '0';

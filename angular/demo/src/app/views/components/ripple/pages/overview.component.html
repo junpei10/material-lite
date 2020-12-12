@@ -19,7 +19,7 @@
 </section>
 
 
-<h2 class='docs-h2'>Type</h2>
+<h2 class='docs-h2' id='type'>Type</h2>
 <p class='docs-h2-desc'>
   Rippleには、通常の <code>Ripple</code> と <code>OverdriveRipple</code> の２種類が存在します。<br>
   主なOverdriveRippleの用途としては、コンテナのサイズが大きすぎる場合のアニメーションが窮屈になる、速くなりすぎるのを防ぐためです。
@@ -40,7 +40,7 @@
 <h2 class='docs-h2'>Type Breakpoint</h2>
 <p class='docs-h2-desc'>
   コンテナのサイズからRippleのTypeを変更することができます。<br>
-  クリック時、コンテナのサイズが設定したサイズと<span class='bold'>同じか小さい場合は通常の"Ripple"を表示し</span>、<span class='bold'>大きい場合は"Overdrive"を表示する</span>ようになる。
+  クリック時、コンテナのサイズが設定したサイズより<span class='bold'>小さい場合は通常の"Ripple"を表示し</span>、<span class='bold'>同じか大きい場合は"Overdrive"を表示する</span>ようになる。
 </p>
 <section class='docs-codeblock'>
   <div class='docs-codeblock-form third-form' style='flex-direction: column;'>
@@ -61,5 +61,37 @@
   <div class='docs-codeblock-prod third-prod'>
     <div [style]='{ width: typeBpRippleWidth + "px", height: typeBpRippleHeight + "px" }' mlRipple [mlRippleOverdrive]='{ width: 500, height: 500 }'></div>
   </div>
-  <pre class='docs-codeblock-pre'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> [<span class="hljs-attr">mlRippleOverdrive</span>]=<span class="hljs-string">true</span> [<span class="hljs-attr">mlRippleTypeBreakpoint</span>]=<span class="hljs-string">"{{ "{" }} width: <span class='hljs-literal'>500</span>; height: <span class='hljs-literal'>500</span>; {{ "}" }}"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+  <pre class='docs-codeblock-pre'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> [<span class="hljs-attr">mlRippleOverdrive</span>]=<span class="hljs-string">"{{ "{" }} width: <span class='hljs-literal'>500</span>; height: <span class='hljs-literal'>500</span>; {{ "}" }}"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+</section>
+
+
+<h2 class='docs-h2'>Trigger</h2>
+<p class='docs-h2-desc'>
+Rippleを呼び出せるElementを追加できます。<br>
+<code class='js'>[mlRippleTargetIsOutside]=<span class='hljs-literal'>true</span></code> に設定することで、Targetが外側にあるときに発生する遅延を無くす事ができます。
+</p>
+<section class='docs-codeblock'>
+  <div class='docs-codeblock-form'>
+    <button mlButton variant='raised' (click)='triggerVisualizeRipple = !triggerVisualizeRipple'>{{ triggerVisualizeRipple ? "Invisualize" : "Visualize" }} Ripple</button>
+  </div>
+  <div class='docs-codeblock-prod fourth-prod'>
+    <div class='forth-prod-wrapper'>
+      <div mlRipple [mlRippleTarget]='listenerTarget' [style]='triggerVisualizeRipple ? "overflow: visible" : ""'></div>
+      <div #listenerTarget class='ml-ripple'>Trigger</div>
+    </div>
+
+    <div class='forth-prod-wrapper'>
+      <div mlRipple [mlRippleTarget]='listenerTarget2' [mlRippleTargetIsOutside]=true [style]='triggerVisualizeRipple ? "overflow: visible" : ""'></div>
+      <div #listenerTarget2 class='ml-ripple'>Trigger2</div>
+    </div>
+  </div>
+  <pre class='docs-codeblock-pre'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> [<span class="hljs-attr">mlRippleTrigger</span>]=<span class="hljs-string">'listenerTarget'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> #<span class="hljs-attr">listenerTarget</span>&gt;</span>Trigger<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> [<span class="hljs-attr">mlRippleTrigger</span>]=<span class="hljs-string">'listenerTarget2'</span> [<span class="hljs-attr">mlRippleTriggerIsOutside</span>]=<span class="hljs-string">true</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> #<span class="hljs-attr">listenerTarget2</span>&gt;</span>Trigger2<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
 </section>

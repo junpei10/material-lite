@@ -1,7 +1,8 @@
-import { animate, query, state, style, transition, trigger } from '@angular/animations';
-import { Component, DoCheck, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { animate, query, style, transition, trigger } from '@angular/animations';
+import { Component, DoCheck, Inject, OnInit, Optional, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { MlPortalConfig, MlPortalContent, MlPortalOutlet } from '@material-lite/angular-cdk/portal';
 import { MlTheming } from '@material-lite/angular/core';
+import { ML_DATA, ML_REF } from 'src/material-lite/cdk/utils';
 import { MlCssVariables } from 'src/material-lite/components/core/theme/css-theme-variables.service';
 
 @Component({
@@ -37,6 +38,9 @@ export class AppComponent implements OnInit, DoCheck {
       className: 'test',
       enter: 500,
       leave: 500
+    },
+    component: {
+      injectData: 'test',
     }
   };
 
@@ -63,10 +67,6 @@ export class AppComponent implements OnInit, DoCheck {
     const ref = this.portalOutlet.attach(TestComponent, 'test', this.portalConfig);
     ref.beforeDetached().subscribe(() => console.log('Before detach'));
     ref.afterDetached().subscribe(() => console.log('After detach'));
-    setTimeout(() => {
-      this.ngIf = false;
-      setTimeout(() => this.ngIf = true, 2000);
-    }, 2000);
   }
 
   onAttachPortal(): void {
@@ -78,7 +78,18 @@ export class AppComponent implements OnInit, DoCheck {
 
 @Component({
   selector: 'app-test',
-  template: `<h1>TEST</h1>`
+  template: `<h1>TEST {{ data }} </h1>`
 })
-class TestComponent { }
+class TestComponent implements OnInit {
+  constructor(
+    @Optional() @Inject(ML_DATA) public data: string,
+    @Optional() @Inject(ML_REF) public ref: any
+  ) {
+    console.log(ref, ref.contentData);
+  }
+
+  ngOnInit(): void {
+    // console.log(this.ref, this.ref.contentData.type);
+  }
+}
 

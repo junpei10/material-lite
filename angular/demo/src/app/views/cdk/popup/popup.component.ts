@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { OverviewComponent, ReferenceComponent } from './pages';
+import { OverviewComponent } from './pages';
 
 @Component({
   selector: 'app-popup',
@@ -12,8 +12,6 @@ export class PopupComponent {
   onRouteChange(event): void {
     this.pageName = event instanceof OverviewComponent
       ? 'overview'
-      : event instanceof ReferenceComponent
-        ? 'reference'
-        : 'example';
+      : 'reference';
   }
 }

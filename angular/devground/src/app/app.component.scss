@@ -12,8 +12,8 @@ body {
     opacity: 0;
   }
 
-  .test-enter-action, .test-leave-action {
-    transition: opacity 1s;
+  .test-enter-active, .test-leave-active {
+    transition: opacity .5s;
   }
 
   .portal-outlet {

@@ -99,7 +99,7 @@ $ml-elevation-amt-duration: map-get($ml-amt-duration, slow);
 $ml-elevation-amt-function: map-get($ml-amt-function, standard);
 $ml-elevation-color: black !default;
 
-@mixin mat-elevation($zValue, $color: $mat-elevation-color, $opacity: $mat-elevation-opacity) {
+@mixin ml-elevation($zValue, $color: $mat-elevation-color, $opacity: $mat-elevation-opacity) {
   box-shadow: #{map-get(_get-umbra-map($color, $opacity), $zValue)},
               #{map-get(_get-penumbra-map($color, $opacity), $zValue)},
               #{map-get(_get-ambient-map($color, $opacity), $zValue)};

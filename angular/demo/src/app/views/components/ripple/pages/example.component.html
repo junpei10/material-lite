@@ -6,19 +6,143 @@
   </nav>
 
   <div class="docs-codeblock-form">
+    <div>
+      <span>theme</span>
+      <input placeholder="theme" [(ngModel)]="theme" />
+    </div>
+
+    <div>
+      <span>color</span>
+      <input placeholder="color" [(ngModel)]="color" />
+    </div>
+
+    <div>
+      <span>opacity</span>
+      <input placeholder="opacity" type="number" step="0.01" min="0" max="1" [(ngModel)]="opacity" />
+    </div>
+
+    <div>
+      <span>radius</span>
+      <input placeholder="radius" type="number" min="0" [(ngModel)]="radius" />
+    </div>
+
+    <div>
+      <span>enter duration</span>
+      <input placeholder="enter duration" type="number" min="0" [(ngModel)]="animationDuration.enter" />
+    </div>
+
+    <div>
+      <span>leave duration</span>
+      <input placeholder="leave duration" type="number" min="0" [(ngModel)]="animationDuration.leave" />
+    </div>
+
+    <label for="disabled"><input type="checkbox" id="disabled" [(ngModel)]="disabled">disabled</label>
+
+    <label for="overdrive"><input type="checkbox" id="overdrive" [(ngModel)]="overdrive">overdrive</label>
+
+    <label for="centered"><input type="checkbox" id="centered" [(ngModel)]="centered">centered</label>
   </div>
 
   <div class="docs-codeblock-prod">
+    <div
+      class="example-ripple"
+      [mlRipple]="!disabled"
+      [mlRippleOverdrive]="overdrive"
+      [mlRippleCentered]="centered"
+      [mlRippleTheme]="theme"
+      [mlRippleColor]="color"
+      [mlRippleOpacity]="opacity"
+      [mlRippleRadius]="radius"
+      [mlRippleAnimationDuration]="animationDuration"
+    >RIPPLE</div>
   </div>
 
   <pre class='docs-codeblock-pre'>
-    <ng-template [ngIf]='type === 0'><code class='html'>
-    </code></ng-template>
+    <ng-template [ngIf]='type === 0'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"docs-codeblock-form"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>theme<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">placeholder</span>=<span class="hljs-string">"theme"</span> [(<span class="hljs-attr">ngModel</span>)]=<span class="hljs-string">"theme"</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
-    <ng-template [ngIf]='type === 1'><code class='js'>
-    </code></ng-template>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>color<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">placeholder</span>=<span class="hljs-string">"color"</span> [(<span class="hljs-attr">ngModel</span>)]=<span class="hljs-string">"color"</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
-    <ng-template [ngIf]='type === 2'><code class='css'>
-    </code></ng-template>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>opacity<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">placeholder</span>=<span class="hljs-string">"opacity"</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"number"</span> <span class="hljs-attr">step</span>=<span class="hljs-string">"0.01"</span> <span class="hljs-attr">min</span>=<span class="hljs-string">"0"</span> <span class="hljs-attr">max</span>=<span class="hljs-string">"1"</span> [(<span class="hljs-attr">ngModel</span>)]=<span class="hljs-string">"opacity"</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>radius<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">placeholder</span>=<span class="hljs-string">"radius"</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"number"</span> <span class="hljs-attr">min</span>=<span class="hljs-string">"0"</span> [(<span class="hljs-attr">ngModel</span>)]=<span class="hljs-string">"radius"</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>enter duration<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">placeholder</span>=<span class="hljs-string">"enter duration"</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"number"</span> <span class="hljs-attr">min</span>=<span class="hljs-string">"0"</span> [(<span class="hljs-attr">ngModel</span>)]=<span class="hljs-string">"animationDuration.enter"</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>leave duration<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">placeholder</span>=<span class="hljs-string">"leave duration"</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"number"</span> <span class="hljs-attr">min</span>=<span class="hljs-string">"0"</span> [(<span class="hljs-attr">ngModel</span>)]=<span class="hljs-string">"animationDuration.leave"</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">for</span>=<span class="hljs-string">"disabled"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"checkbox"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"disabled"</span> [(<span class="hljs-attr">ngModel</span>)]=<span class="hljs-string">"disabled"</span>&gt;</span>disabled<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">for</span>=<span class="hljs-string">"overdrive"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"checkbox"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"overdrive"</span> [(<span class="hljs-attr">ngModel</span>)]=<span class="hljs-string">"overdrive"</span>&gt;</span>overdrive<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">for</span>=<span class="hljs-string">"centered"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"checkbox"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"centered"</span> [(<span class="hljs-attr">ngModel</span>)]=<span class="hljs-string">"centered"</span>&gt;</span>centered<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"docs-codeblock-prod"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span>
+    <span class="hljs-attr">class</span>=<span class="hljs-string">"example-ripple"</span>
+    [<span class="hljs-attr">mlRipple</span>]=<span class="hljs-string">"<span class='hljs-name'>!</span>disabled"</span>
+    [<span class="hljs-attr">mlRippleOverdrive</span>]=<span class="hljs-string">"overdrive"</span>
+    [<span class="hljs-attr">mlRippleCentered</span>]=<span class="hljs-string">"centered"</span>
+    [<span class="hljs-attr">mlRippleTheme</span>]=<span class="hljs-string">"theme"</span>
+    [<span class="hljs-attr">mlRippleColor</span>]=<span class="hljs-string">"color"</span>
+    [<span class="hljs-attr">mlRippleOpacity</span>]=<span class="hljs-string">"opacity"</span>
+    [<span class="hljs-attr">mlRippleRadius</span>]=<span class="hljs-string">"radius"</span>
+    [<span class="hljs-attr">mlRippleAnimationDuration</span>]=<span class="hljs-string">"animationDuration"</span>
+  &gt;</span>RIPPLE<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></ng-template>
+
+    <ng-template [ngIf]='type === 1'><code class='js'><span class="hljs-keyword">import</span> {{ "{" }} Component {{ "}" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@angular/core'</span>;
+
+@<span class="hljs-decorator">Component</span>({{ "{" }}
+  selector: <span class="hljs-string">'app-example'</span>,
+  templateUrl: <span class="hljs-string">'./example.component.html'</span>,
+  styleUrls: <span class='hljs-array'>[</span><span class="hljs-string">'./example.component.css'</span><span class='hljs-array'>]</span>
+{{ "}" }})
+<span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-name">class</span> <span class="hljs-title">ExampleComponent</span> {{ "{" }}</span>
+  disabled<span class='hljs-keyword'>:</span> <span class="hljs-type">boolean</span>;
+  overdrive<span class='hljs-keyword'>:</span> <span class="hljs-type">boolean</span>;
+  centered<span class='hljs-keyword'>:</span> <span class="hljs-type">boolean</span>;
+
+  theme<span class='hljs-keyword'>:</span> <span class="hljs-type">string</span>;
+  color<span class='hljs-keyword'>:</span> <span class="hljs-type">string</span>;
+
+  opacity<span class='hljs-keyword'>:</span> <span class="hljs-type">number</span>;
+  radius<span class='hljs-keyword'>:</span> <span class="hljs-type">number</span>;
+
+  animationDuration<span class='hljs-keyword'>:</span> {{ "{" }}
+    enter<span class='hljs-keyword'>?:</span> <span class="hljs-type">number</span>,
+    leave<span class='hljs-keyword'>?:</span><span class="hljs-type">number</span>
+  {{ "}" }};
+{{ "}" }}</code></ng-template>
+
+    <ng-template [ngIf]='type === 2'><code class='css'><span class="hljs-selector-class">.example-ripple</span> {{ "{" }}
+  <span class="hljs-attribute">cursor</span>: pointer;
+  <span class="hljs-attribute">text-align</span>: center;
+
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">300px</span>;
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">300px</span>;
+  <span class="hljs-attribute">line-height</span>: <span class="hljs-number">300px</span>;
+
+  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid <span class="hljs-number">#9E9E9E</span>;
+{{ "}" }}</code></ng-template>
   </pre>
 </section>
