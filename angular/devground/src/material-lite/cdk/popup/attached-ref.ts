@@ -25,7 +25,6 @@ export interface MlPopupOutletData extends MlPortalOutletData {
     clickHandler: CommonHandler<void>;
     usedCount: number;
   };
-  finisher: [number, number];
 }
 
 export class MlPopupAttachedRef extends MlPortalAttachedRef<MlPopupOutletData, MlPopupConfig> {

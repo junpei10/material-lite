@@ -85,10 +85,10 @@ const STYLE: MlThemeStyle = {
       box-shadow: 0px 7px 8px -4px rgba(0,0,0,0.2), 0px 12px 17px 2px rgba(0,0,0,0.14), 0px 5px 22px 4px rgba(0,0,0,0.12);
     }
 
-    .ml-link-button {
+    .ml-anchor-button {
       padding: 0;
     }
-    .ml-link-button a {
+    .ml-anchor-button a {
       display: inline-flex;
       justify-content: center;
       align-items: center;

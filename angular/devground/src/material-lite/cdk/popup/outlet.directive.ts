@@ -7,7 +7,8 @@ import { MlPopupOutlet } from './outlet.service';
 
 // @dynamic
 @Directive({
-  selector: '[mlPopupOutlet]'
+  selector: '[mlPopupOutlet]',
+  exportAs: 'mlPopupOutlet'
 })
 export class MlPopupOutletDirective extends MlPortalOutletDirectiveBase<MlPopupAttachedRef, MlPopupOutletData, MlPopupConfig> {
   @Input('mlPopupOutlet') content: MlPortalContent;
@@ -38,8 +39,7 @@ export class MlPopupOutletDirective extends MlPortalOutletDirectiveBase<MlPopupA
         classList: backdropElement.classList,
         clickHandler: {},
         usedCount: 0
-      },
-      finisher: [0, 0]
+      }
     });
   }
 }

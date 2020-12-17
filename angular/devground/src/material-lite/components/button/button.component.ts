@@ -6,9 +6,12 @@ export interface MlButtonBinder {
   theme?: string;
   variant?: 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
   hoverAction?: 'enable' | 'disable' | 'auto';
-  wrapAnchor?: boolean;
-  rippleDisabled?: boolean;
-  rippleOverdrive?: boolean | { width?: number, height?: number };
+  wrapAnchor?: boolean | '';
+  rippleDisabled?: boolean | '';
+  rippleOverdrive?: {
+    width?: number,
+    height?: number
+  } | boolean;
 }
 
 type Binder = MlButtonBinder;
@@ -16,55 +19,59 @@ type Binder = MlButtonBinder;
 // @dynamic
 @Component({
   selector: '[mlButton]',
+  exportAs: 'mlButton',
   templateUrl: './button.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MlButtonComponent implements OnChanges {
-  public hostElementListenTarget: ListenTarget;
+  hostElementListenTarget: ListenTarget;
   private _hostElementClassList: DOMTokenList;
 
   private _needSetVariant: boolean = true;
 
   private _currClassList: string[] = [];
 
-  @Input() set mlButton(_enable: Binder['mlButton']) {
-    const enable = _enable === '' || _enable;
+  @Input() private set mlButton(_enable: Binder['mlButton']) {
+    const enable = this.isEnabled = _enable === '' || _enable;
     (enable)
       ? this._hostElementClassList.remove('ml-disabled-button')
       : this._hostElementClassList.add('ml-disabled-button');
   }
+  isEnabled: boolean | undefined;
 
-  @Input() set variant(variant: Binder['variant']) {
-    this._currVariant = variant;
+  @Input('variant') private set setVariant(variant: Binder['variant']) {
+    this.variant = variant;
     this._needSetVariant = true;
   }
-  private _currVariant: Binder['variant'];
+  variant: Binder['variant'];
 
-  @Input() set hoverAction(type: Binder['hoverAction']) {
-    this._currHoverAction = type;
+  @Input('hoverAction') private set setHoverAction(type: Binder['hoverAction']) {
+    this.hoverAction = type;
     this._needSetVariant = true;
   }
-  private _currHoverAction: Binder['hoverAction'];
+  hoverAction: Binder['hoverAction'];
 
-  @Input() set theme(nextTheme: Binder['theme']) {
+  @Input('theme') private set setTheme(nextTheme: Binder['theme']) {
     const hostClassList = this._hostElementClassList;
 
-    if (this._currTheme) {
-      hostClassList.remove('ml-button-' + this._currTheme);
+    if (this.theme) {
+      hostClassList.remove('ml-button-' + this.theme);
     }
     if (nextTheme) {
       hostClassList.add('ml-button-' + nextTheme);
     }
 
-    this._currTheme = nextTheme;
+    this.theme = nextTheme;
   }
-  private _currTheme: Binder['theme'];
+  theme: Binder['theme'];
 
-  @Input() set wrapAnchor(enable: boolean) {
+  @Input('wrapAnchor') private set setWrapAnchor(_enable: Binder['wrapAnchor']) {
+    const enable = _enable;
     enable
-      ? this._hostElementClassList.add('Ml-anchor-button')
-      : this._hostElementClassList.remove('Ml-anchor-button');
+      ? this._hostElementClassList.add('ml-anchor-button')
+      : this._hostElementClassList.remove('ml-anchor-button');
   }
+  wrapAnchor?: boolean;
 
   @Input() rippleDisabled: Binder['rippleDisabled'];
   @Input() rippleOverdrive: Binder['rippleOverdrive'];
@@ -81,7 +88,7 @@ export class MlButtonComponent implements OnChanges {
     if (this._needSetVariant) {
       this._needSetVariant = false;
       const hostClassList = this._hostElementClassList;
-      const v = this._currVariant;
+      const v = this.variant;
       hostClassList.remove(...this._currClassList);
 
       if (!v || v === 'basic') {
@@ -146,13 +153,13 @@ export class MlButtonComponent implements OnChanges {
   }
 
   private _setHoverActionForEnabledByDefault(): void {
-    if (this._currHoverAction !== 'disable') {
+    if (this.hoverAction !== 'disable') {
       this._currClassList.push('ml-button-hover-action');
     }
   }
 
   private _setHoverActionForDisabledByDefault(): void {
-    if (this._currHoverAction === 'enable') {
+    if (this.hoverAction === 'enable') {
       this._currClassList.push('ml-button-hover-action');
     }
   }

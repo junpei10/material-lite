@@ -1,7 +1,8 @@
 import { animate, query, style, transition, trigger } from '@angular/animations';
 import { Component, DoCheck, Inject, OnInit, Optional, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { MlPortalConfig, MlPortalContent, MlPortalOutlet } from '@material-lite/angular-cdk/portal';
-import { MlTheming } from '@material-lite/angular/core';
+import { MlRippleDirective, MlTheming } from '@material-lite/angular/core';
+import { environment } from 'src/environments/environment';
 import { ML_DATA, ML_REF } from 'src/material-lite/cdk/utils';
 import { MlCssVariables } from 'src/material-lite/components/core/theme/css-theme-variables.service';
 
@@ -29,7 +30,7 @@ import { MlCssVariables } from 'src/material-lite/components/core/theme/css-them
   ]
 })
 export class AppComponent implements OnInit, DoCheck {
-  @ViewChild('test', { static: true }) private _testTemplateRef: TemplateRef<any>;
+  @ViewChild('mlRipple', { static: true }) private _rippleRef: MlRippleDirective;
 
   title = 'devground';
   portalContent: MlPortalContent | false;
@@ -56,6 +57,8 @@ export class AppComponent implements OnInit, DoCheck {
   }
 
   ngOnInit(): void {
+    console.log('レンダリングまでの時間', performance.now() - environment.start);
+    console.log(this._rippleRef);
   }
 
   ngDoCheck(): void {
