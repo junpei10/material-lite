@@ -261,7 +261,6 @@ export class MlRippleDirective implements OnChanges {
     rippleElement.style.opacity = '0';
 
     setTimeout(() => {
-      console.log(this._containerElement.hasChildNodes());
       this._containerElement.removeChild(rippleElement);
 
       const count = this._existingRippleCount -= 1;
