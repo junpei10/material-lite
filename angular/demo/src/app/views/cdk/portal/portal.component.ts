@@ -15,4 +15,5 @@ export class PortalComponent {
         ? 'reference'
         : 'example';
   }
+
 }

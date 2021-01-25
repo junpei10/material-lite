@@ -5,7 +5,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 import { Class, RunOutside, RUN_OUTSIDE } from '@material-lite/angular-cdk/utils';
 import { MlPortalAttachedRef, MlPortalAttachedRefArg } from './attached-ref';
-import { ML_DATA, ML_REF } from '../utils';
+import { ML_DATA, ML_REF } from '@material-lite/angular-cdk/utils';
 
 
 export type MlPortalContent = Class<any> | TemplateRef<any> | HTMLElement | ElementRef<HTMLElement>;

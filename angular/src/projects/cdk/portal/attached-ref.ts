@@ -52,14 +52,22 @@ export class MlPortalAttachedRef<D extends MlPortalOutletData = MlPortalOutletDa
     public outletData: D, // Which protected ???
     protected _runOutside: RunOutside,
   ) {
-    const { enter } = this._animationConfig = attachConfig.animation || {};
-
-    (enter)
-      ? this._animate('enter', this._afterAttach.bind(this))
-      : _runOutside(() => setTimeout(this._afterAttach.bind(this)));
-
-    outletData.detachEvents.push(this._detach.bind(this));
+    this._animationConfig = attachConfig.animation || {};
   }
+
+  _init(): this {
+    (this._animationConfig.enter)
+      ? this._animate('enter', this._afterAttach.bind(this))
+      : this._runOutside(() => setTimeout(this._afterAttach.bind(this)));
+
+    this.outletData.detachEvents.push(this._detach.bind(this));
+
+    // @ts-ignore
+    if (this.onInit) { this.onInit(); }
+
+    return this;
+  }
+
   private _afterAttach(): void {
     const handler = this._afterAttachedHandler;
     if (handler) {
@@ -149,7 +157,7 @@ export class MlPortalAttachedRef<D extends MlPortalOutletData = MlPortalOutletDa
             this._animationTimeout = 0;
             finish();
           }, duration) as any;
-        });
+        }, 10);
       });
     } else {
       this._runOutside(() => setTimeout(finish, duration));
@@ -192,13 +200,3 @@ export class MlPortalAttachedRef<D extends MlPortalOutletData = MlPortalOutletDa
 
 }
 
-
-export declare interface MlAfterAttachInit {
-  afterAttachInit(): void;
-}
-export declare interface MlOnDetachInit {
-  onDetachInit(): void;
-}
-export declare interface MlAfterDetachInit {
-  afterDetachInit(): void;
-}

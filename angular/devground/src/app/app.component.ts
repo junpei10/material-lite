@@ -1,7 +1,7 @@
 import { animate, query, style, transition, trigger } from '@angular/animations';
 import { Component, DoCheck, Inject, OnInit, Optional, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { MlPortalConfig, MlPortalContent, MlPortalOutlet } from '@material-lite/angular-cdk/portal';
-import { MlRippleDirective, MlTheming } from '@material-lite/angular/core';
+import { MlRippleBinder, MlRippleDirective, MlTheming } from '@material-lite/angular/core';
 import { environment } from 'src/environments/environment';
 import { ML_DATA, ML_REF } from 'src/material-lite/cdk/utils';
 import { MlCssVariables } from 'src/material-lite/components/core/theme/css-theme-variables.service';
@@ -46,6 +46,16 @@ export class AppComponent implements OnInit, DoCheck {
   };
 
   ngIf = true;
+  innerHTML: string = '<div>First div</div>';
+
+  overdrive: MlRippleBinder['overdrive'] = {
+    width: 500,
+    height: 500
+  };
+  ripple = {
+    enter: 100,
+    leave: 100
+  };
 
   constructor(
     private renderer: Renderer2,
@@ -77,6 +87,8 @@ export class AppComponent implements OnInit, DoCheck {
       this.portalContent = false;
     }, 3000);
   }
+
+
 }
 
 @Component({

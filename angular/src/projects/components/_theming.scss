@@ -342,20 +342,20 @@ $ml-theme-component-list: (
 }
 
 @function ml-create-theme($theme, $base: light) {
-  $template: _createTemplatePalette($base);
+  $template: _pickTemplateTheme($base);
   $theme: map-unquote($theme);
   $returns: map-merge($base, $theme);
   @return $returns;
 }
 
 @function ml-create-palette($palette, $base: light) {
-  $template: _createTemplatePalette($base);
+  $template: _pickTemplatePalette($base);
   $palette: map-unquote($palette);
   $returns: map-merge($base, $palette);
   @return $returns;
 }
 
-@function _createTemplateTheme($theme) {
+@function _pickTemplateTheme($theme) {
   @if $theme == light {
     @return $ml-light-theme;
 
@@ -369,7 +369,7 @@ $ml-theme-component-list: (
     @return $theme;
   }
 }
-@function _createTemplatePalette($palette) {
+@function _pickTemplatePalette($palette) {
   @if $palette == css-variable or $palette == cssVariable {
     @return $ml-css-variable-palette;
 

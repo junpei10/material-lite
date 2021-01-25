@@ -68,7 +68,7 @@
 <h2 class='docs-h2'>Trigger</h2>
 <p class='docs-h2-desc'>
 Rippleを呼び出せるElementを追加できます。<br>
-<code class='js'>[mlRippleTargetIsOutside]=<span class='hljs-literal'>true</span></code> に設定することで、Targetが外側にあるときに発生する遅延を無くす事ができます。
+<code class='js'>[mlRippleTriggerIsOutside]=<span class='hljs-literal'>true</span></code> に設定することで、Triggerが外側にあるときに発生する遅延を無くす事ができます。
 </p>
 <section class='docs-codeblock'>
   <div class='docs-codeblock-form'>
@@ -76,12 +76,12 @@ Rippleを呼び出せるElementを追加できます。<br>
   </div>
   <div class='docs-codeblock-prod fourth-prod'>
     <div class='forth-prod-wrapper'>
-      <div mlRipple [mlRippleTarget]='listenerTarget' [style]='triggerVisualizeRipple ? "overflow: visible" : ""'></div>
+      <div mlRipple [mlRippleTrigger]='listenerTarget' [style]='triggerVisualizeRipple ? "overflow: visible" : ""'></div>
       <div #listenerTarget class='ml-ripple'>Trigger</div>
     </div>
 
     <div class='forth-prod-wrapper'>
-      <div mlRipple [mlRippleTarget]='listenerTarget2' [mlRippleTargetIsOutside]=true [style]='triggerVisualizeRipple ? "overflow: visible" : ""'></div>
+      <div mlRipple [mlRippleTrigger]='listenerTarget2' [mlRippleTriggerIsOutside]=true [style]='triggerVisualizeRipple ? "overflow: visible" : ""'></div>
       <div #listenerTarget2 class='ml-ripple'>Trigger2</div>
     </div>
   </div>

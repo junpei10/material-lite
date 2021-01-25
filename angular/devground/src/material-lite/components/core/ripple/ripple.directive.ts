@@ -13,7 +13,7 @@ export interface MlRippleBinder {
   theme?: string;
   opacity?: number;
   radius?: number;
-  animation?: {
+  duration?: {
     enter?: number,
     leave?: number
   } | number;
@@ -27,11 +27,6 @@ export interface MlRippleBinder {
 type Binder = MlRippleBinder;
 type FadeInRippleConfig = { [P in Exclude<keyof Binder, 'mlRipple'>]?: Binder[P] };
 
-// interface ContainerElement extends ListenTarget {
-//   getBoundingClientRect(): DOMRect;
-//   appendChild<T extends Node>(newChild: T): T;
-//   removeChild<T extends Node>(oldChild: T): T;
-// }
 
 // @dynamic
 @Directive({
@@ -58,37 +53,32 @@ export class MlRippleDirective implements OnChanges {
 
   @Input('mlRippleTheme') theme: Binder['theme'];
 
-  @Input('mlRippleOpacity') opacity: Binder['opacity'];
+  @Input('mlRippleOpacity') opacity: Binder['opacity'] = 0.12;
 
-  @Input() private set mlRippleAnimation(duration: Binder['animation']) {
+  @Input() set mlRippleDuration(duration: Binder['duration']) {
     if (!duration) {
-      this.animation = {
-        enter: 448,
-        leave: 400
-      };
+      this.enterDuration = 448;
+      this.leaveDuration = 400;
 
     } else if (typeof duration === 'number') {
-      const _entryDuration = duration * 0.5;
-      this.animation = {
-        enter: _entryDuration,
-        leave: _entryDuration
-      };
+      const dur = duration * 0.5;
+      this.enterDuration = dur;
+      this.leaveDuration = dur;
 
     } else {
-      const amtDur = this.animation;
-      amtDur.enter = (duration.enter) === 0
+      const enterDur = this.enterDuration;
+      this.enterDuration = (enterDur) === 0
         ? 0
-        : duration.enter || 448;
+        : enterDur || 448;
 
-      amtDur.leave = (duration.leave) === 0
+      const leaveDur = this.leaveDuration;
+      this.leaveDuration = (leaveDur) === 0
         ? 0
-        : duration.leave || 448;
+        : leaveDur || 448;
     }
   }
-  animation: { enter: number, leave: number; } = {
-    enter: 448,
-    leave: 400
-  };
+  @Input('mlRippleDuration.enter') enterDuration?: number = 448;
+  @Input('mlRippleDuration.leave') leaveDuration?: number = 400;
 
   @Input() private set mlRippleTrigger(target: Binder['trigger']) {
     this.trigger = target;
@@ -119,7 +109,7 @@ export class MlRippleDirective implements OnChanges {
   }
 
   ngOnChanges(): void {
-    if (this._needSetPointerdownListener) {
+    if (this._needSetPointerdownListener && this.isEnabled) {
       this._removePointerdownListener();
 
       const listenTarget = this.trigger || this._containerElement;
@@ -145,6 +135,7 @@ export class MlRippleDirective implements OnChanges {
     const containerEl = this._containerElement;
     const containerRect = this._containerRect =
       this._containerRect || containerEl.getBoundingClientRect();
+    this._existingRippleCount++;
 
     let overdrive = this.overdrive;
     /* 通常の`Ripple`か`overdrive`かを判断する */
@@ -160,7 +151,7 @@ export class MlRippleDirective implements OnChanges {
       /** Overdrive の処理 */
       ripple.classList.add('ml-ripple-overdrive');
 
-      let rippleStyle = `transition-duration:${this.animation.enter * 0.4}ms;`;
+      let rippleStyle = `transition-duration:${(this.enterDuration || 448) * 0.4}ms;`;
       (this.theme)
         ? ripple.classList.add(`ml-${this.theme}-bg`)
         : rippleStyle += `background-color: ${this.color || 'currentColor'};`;
@@ -220,7 +211,7 @@ export class MlRippleDirective implements OnChanges {
         distance = Math.sqrt(distX * distX + distY * distY);
       }
 
-      const enterDur = this.animation.enter;
+      const enterDur = this.enterDuration || 448;
       const size = distance * 2;
       let rippleStyle: string = `top:${y - containerRect.top - distance}px;left:${x - containerRect.left - distance}px;width:${size}px;height:${size}px;transition-duration:${enterDur}ms;opacity:${this.opacity || 0.12};`;
 
@@ -264,12 +255,13 @@ export class MlRippleDirective implements OnChanges {
   }
 
   private _fadeOutRipple(rippleElement: HTMLElement): void {
-    const leaveTiming = this.animation.leave;
+    const leaveTiming = this.leaveDuration || 400;
 
     rippleElement.style.transitionDuration = leaveTiming + 'ms';
     rippleElement.style.opacity = '0';
 
     setTimeout(() => {
+      console.log(this._containerElement.hasChildNodes());
       this._containerElement.removeChild(rippleElement);
 
       const count = this._existingRippleCount -= 1;

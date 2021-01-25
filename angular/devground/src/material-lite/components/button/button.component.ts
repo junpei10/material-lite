@@ -6,8 +6,8 @@ export interface MlButtonBinder {
   theme?: string;
   variant?: 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
   hoverAction?: 'enable' | 'disable' | 'auto';
-  wrapAnchor?: boolean | '';
-  rippleDisabled?: boolean | '';
+  wrapAnchor?: boolean;
+  rippleDisabled?: boolean;
   rippleOverdrive?: {
     width?: number,
     height?: number
@@ -65,8 +65,8 @@ export class MlButtonComponent implements OnChanges {
   }
   theme: Binder['theme'];
 
-  @Input('wrapAnchor') private set setWrapAnchor(_enable: Binder['wrapAnchor']) {
-    const enable = _enable;
+  @Input('wrapAnchor') private set setWrapAnchor(enable: Binder['wrapAnchor']) {
+    this.wrapAnchor = enable;
     enable
       ? this._hostElementClassList.add('ml-anchor-button')
       : this._hostElementClassList.remove('ml-anchor-button');

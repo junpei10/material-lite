@@ -2,10 +2,11 @@ import { Attribute, Directive, ViewContainerRef, OnDestroy, Input, Output, Event
 import { MlPortalAttachedRef } from './attached-ref';
 import { MlPortalConfig, MlPortalContent, MlPortalOutlet, MlPortalOutletData, MlPortalOutletServiceBase } from './outlet.service';
 
+
 @Directive() // tslint:disable-next-line:max-line-length directive-class-suffix
 export abstract class MlPortalOutletDirectiveBase<R extends MlPortalAttachedRef, D extends MlPortalOutletData, C extends MlPortalConfig> implements OnDestroy, OnChanges {
 
-  abstract content: MlPortalContent | null | undefined | 'done';
+  abstract content: MlPortalContent | null | undefined | 'gc';
   abstract config: C | undefined;
 
   /**
@@ -37,12 +38,12 @@ export abstract class MlPortalOutletDirectiveBase<R extends MlPortalAttachedRef,
   protected _privateOutletData: D | undefined;
 
   constructor(
-    protected _key: string | undefined,
+    public key: string | undefined,
     protected _outletService: MlPortalOutletServiceBase<R, D, C>,
   ) { }
 
   protected _init(data: D): void {
-    const key = this._key;
+    const key = this.key;
     const publicStorage = this._outletService.publicOutletDataStorage;
 
     if (key) {
@@ -56,7 +57,7 @@ export abstract class MlPortalOutletDirectiveBase<R extends MlPortalAttachedRef,
   }
 
   ngOnDestroy(): void {
-    const key = this._key;
+    const key = this.key;
     if (key) {
       const detachEvents = this._outletService.publicOutletDataStorage.get(key)!.detachEvents;
       const length = detachEvents.length;
@@ -67,20 +68,23 @@ export abstract class MlPortalOutletDirectiveBase<R extends MlPortalAttachedRef,
 
       this._outletService.publicOutletDataStorage.delete(key);
     } else {
-      this._privateOutletData!.detachEvents[0]?.();
+      const detachEvent = this._privateOutletData!.detachEvents[0];
+      if (detachEvent as any) {
+        detachEvent();
+      }
     }
   }
 
   ngOnChanges(): void {
     const content = this.content;
-    if (content !== 'done') {
+    if (content !== 'gc') {
       this._privateCurrentAttachedRef?.detach();
 
       if (content) {
         const newRef = this._privateCurrentAttachedRef =
           this._outletService.attach(
             content,
-            (this._key) ? this._key : this._privateOutletData!,
+            (this.key) ? this.key : this._privateOutletData!,
             this.config
           );
 
@@ -90,7 +94,7 @@ export abstract class MlPortalOutletDirectiveBase<R extends MlPortalAttachedRef,
       }
 
       // @ts-ignore
-      this.attachContent = 'done';
+      this.attachContent = 'gc';
     }
   }
 }
@@ -98,6 +102,7 @@ export abstract class MlPortalOutletDirectiveBase<R extends MlPortalAttachedRef,
 // @dynamic
 @Directive({
   selector: '[mlPortalOutlet]',
+  exportAs: 'mlPortalOutlet'
 })
 export class MlPortalOutletDirective extends MlPortalOutletDirectiveBase<MlPortalAttachedRef, MlPortalOutletData, MlPortalConfig> {
   @Input('mlPortalOutlet') content: MlPortalContent;

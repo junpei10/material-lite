@@ -134,21 +134,21 @@ export class MlPortalAttachedRef<D extends MlPortalOutletData = MlPortalOutletDa
 
     // Nameがない場合、Classを付与する処理をスキップする
     if (name) {
+      const classList = this.contentData.rootElement.classList;
+      const timeout = this._animationTimeout;
+      if (timeout) {
+        clearTimeout(timeout);
+        classList.remove(name + '-enter-action', name + '-enter-to');
+      }
+
       const eventClass = name + '-' + eventType;
       const eventToClass = eventClass + '-to';
       const eventActionClass = eventClass + '-active';
 
-      const classList = this.contentData.rootElement.classList;
       classList.add(eventActionClass, eventClass);
 
       this._runOutside(() => {
         setTimeout(() => {
-          const timeout = this._animationTimeout;
-          if (timeout) {
-            clearTimeout(timeout);
-            classList.remove(name + '-enter-action', name + '-enter-to');
-          }
-
           classList.remove(eventClass);
           classList.add(eventToClass);
 

@@ -7,7 +7,8 @@ import { MlPopupOutlet } from './outlet.service';
 
 // @dynamic
 @Directive({
-  selector: '[mlPopupOutlet]'
+  selector: '[mlPopupOutlet]',
+  exportAs: 'mlPopupOutlet'
 })
 export class MlPopupOutletDirective extends MlPortalOutletDirectiveBase<MlPopupAttachedRef, MlPopupOutletData, MlPopupConfig> {
   @Input('mlPopupOutlet') content: MlPortalContent;
