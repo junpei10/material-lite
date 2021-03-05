@@ -1,6 +1,6 @@
 import { animate, query, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, Component, DoCheck, Inject, OnInit, Optional, Renderer2, TemplateRef, ViewChild } from '@angular/core';
-import { MlPortalAttachConfig, MlPortalContent, MlPortalOutlet } from '@material-lite/angular-cdk/portal';
+import { ChangeDetectionStrategy, Component, DoCheck, ElementRef, Inject, OnInit, Optional, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { MlPortalAttachConfig, MlPortalAttachedRef, MlPortalContent, MlPortalOutlet } from '@material-lite/angular-cdk/portal';
 import { MlTheming } from '@material-lite/angular/core';
 import { environment } from 'src/environments/environment';
 import { ML_DATA, ML_REF } from 'src/material-lite/cdk/utils';
@@ -32,6 +32,7 @@ import { MlCssVariables } from 'src/material-lite/components/core/theme/css-them
 })
 export class AppComponent implements OnInit, DoCheck {
   @ViewChild('test', { static: true }) private _templateRef: TemplateRef<any>;
+  @ViewChild('testDOM', { static: true }) private _domRef: ElementRef<HTMLElement>;
 
   title = 'devground';
   portalContent: MlPortalContent | false;
@@ -43,10 +44,11 @@ export class AppComponent implements OnInit, DoCheck {
     },
     component: {
       injectionData: 'injection data',
-    }
+    },
+    // cloneDOM: true
   };
 
-  index: number;
+  index: number = 0;
   width: number = 100;
 
   ngIf = true;
@@ -65,11 +67,12 @@ export class AppComponent implements OnInit, DoCheck {
 
   list: number[] = [0, 1, 2, 3, 4, 5];
 
+  outletHasShown = true;
+
   constructor(
     private renderer: Renderer2,
     private portalOutlet: MlPortalOutlet,
     private cssVariable: MlCssVariables,
-    // @Inject(RUN) run: Run
   ) {
     const themeValue = MlTheming.value.null;
     this.cssVariable.set(themeValue.theme, themeValue.palette);
@@ -87,10 +90,17 @@ export class AppComponent implements OnInit, DoCheck {
 
   attachPortal(): void {
     const ref = this.portalOutlet.attach(TestComponent, 'test', this.portalConfig);
+    console.log(ref);
 
-    setTimeout(() => {
-      ref.detach();
-    }, 2000);
+    if (ref.data.isFirstAttached) {
+      ref.lifecycle.beforeDetach().subscribe(() => console.log('before'));
+      ref.lifecycle.afterDetach().subscribe(() => console.log('after'));
+
+      setTimeout(() => {
+        console.log('test');
+        ref.detach();
+      }, 2000);
+    }
   }
 
   onAttachPortal(): void {
@@ -104,8 +114,6 @@ export class AppComponent implements OnInit, DoCheck {
       ? [0, 1, 2, 3, 4, 5]
       : [0, 1, 2, 3, 5];
   }
-
-
 }
 
 @Component({
@@ -115,12 +123,14 @@ export class AppComponent implements OnInit, DoCheck {
 class TestComponent implements OnInit {
   constructor(
     @Inject(ML_DATA) public data: string,
-    @Inject(ML_REF) public ref: any
+    @Inject(ML_REF) public ref: MlPortalAttachedRef
   ) {
     console.log(ref, data);
+    console.log(this.ref.data.rootContentElement);
   }
 
   ngOnInit(): void {
+    console.log(this.ref.data.rootContentElement);
     // console.log(this.ref, this.ref.contentData.type);
   }
 }

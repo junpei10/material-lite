@@ -3,20 +3,6 @@ import { ChangeDetectionStrategy, Component, ElementRef, Inject, Input, OnChange
 import { createListenedTarget, ListenedTarget, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
 import { MlRippleCore, MlRippleCoreConfig } from '../core/ripple/ripple-core';
 
-// export interface MlButtonBinder {
-//   mlButton?: boolean | '';
-//   theme?: string;
-//   variant?: 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
-//   hoverAction?: 'enable' | 'disable' | 'auto';
-//   wrapAnchor?: boolean;
-//   rippleDisabled?: boolean;
-//   rippleOverdrive?: {
-//     width?: number,
-//     height?: number
-//   } | boolean;
-// }
-
-// type Binder = MlButtonBinder;
 export type MlButtonVariant = 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
 export type MlButtonHoverAction = 'enable' | 'disable' | 'auto';
 
@@ -35,16 +21,16 @@ export class MlButtonComponent implements OnInit, OnChanges {
 
   private _currClassList: string[] = [];
 
-  @Input('mlButton') set setEnabled(isEnabled: boolean | '') {
+  @Input('mlButton') set setEnabled(isEnabled: boolean | undefined | '') {
     // @ts-ignore assign readonly variable
     const result = this.isEnabled =
-      isEnabled === '' || isEnabled;
+      isEnabled || isEnabled === '';
 
     (result)
       ? this._hostElementClassList.remove('ml-disabled-button')
       : this._hostElementClassList.add('ml-disabled-button');
   }
-  readonly isEnabled: boolean | undefined;
+  readonly isEnabled: boolean;
 
   @Input('variant') set setVariant(variant: MlButtonVariant) {
     // @ts-ignore assign readonly variable
@@ -75,16 +61,16 @@ export class MlButtonComponent implements OnInit, OnChanges {
   }
   readonly theme: string;
 
-  @Input('wrapAnchor') set setAnchorToWrapped(isEnabled: boolean | '') {
+  @Input('wrapAnchor') set setAnchorToWrapped(isEnabled: boolean | undefined | '') {
     // @ts-ignore assign readonly variable
-    const result = this.wrapAnchor =
-      isEnabled === '' || isEnabled;
+    const result = this.hasWrappedAnchor =
+      isEnabled || isEnabled === '';
 
     result
       ? this._hostElementClassList.add('ml-anchor-button')
       : this._hostElementClassList.remove('ml-anchor-button');
   }
-  readonly anchorIsWrapped: boolean;
+  readonly hasWrappedAnchor: boolean;
 
   rippleCore: MlRippleCore;
 
@@ -112,6 +98,9 @@ export class MlButtonComponent implements OnInit, OnChanges {
   }
   readonly rippleIsDisabled: boolean;
 
+  @Input() rippleConfig: MlRippleCoreConfig = {
+    fadeOutEventNames: []
+  };
   @Input() rippleOverdrive?: MlRippleCoreConfig['overdrive'];
   rippleCentered: boolean;
 
@@ -141,6 +130,7 @@ export class MlButtonComponent implements OnInit, OnChanges {
   ngOnChanges(): void {
     if (this._needSetVariant) {
       this._needSetVariant = false;
+
       const hostClassList = this._hostElementClassList;
       const v = this.variant;
       hostClassList.remove(...this._currClassList);

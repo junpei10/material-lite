@@ -172,6 +172,15 @@ export class MlPortalOutlet {
       // content = "DOM"
       let contentRef: MlPortalContentRef;
 
+      const prevMlPortalAttachedRef = // @ts-ignore
+        content.mlPortalAttachedRef as MlPortalAttachedRef | undefined;
+
+      if (prevMlPortalAttachedRef) {
+        // @ts-ignore: assign readonly variable
+        prevMlPortalAttachedRef.data.isFirstAttached = false;
+        return prevMlPortalAttachedRef;
+      }
+
       if (config.cloneDOM) {
         const clone = content.cloneNode(true) as HTMLElement;
 
@@ -186,23 +195,28 @@ export class MlPortalOutlet {
 
       } else {
         const shadowWarrior = this._createComment('portal-container');
-        const parentElement = content.parentElement!;
+        const parentEl = content.parentElement!;
 
         // 影武者とコンテンツを入れ替え
-        parentElement.replaceChild(shadowWarrior, content);
+        parentEl.replaceChild(shadowWarrior, content);
 
         contentRef = {
           rootElement: content,
-          destroy: () => parentElement.replaceChild(content, shadowWarrior) // 入れ替えたDOMをもとに戻す
+          destroy: () => parentEl.replaceChild(content, shadowWarrior) // 入れ替えたDOMをもとに戻す
         };
 
         portalData.outletElement.appendChild(content);
       }
 
-      return new MlPortalAttachedRef(
+      const currMlPortalAttachedRef =  new MlPortalAttachedRef(
         'DOM', key, attachedOrder, config.animation, contentRef,
         portalData, this._runOutsideNgZone // @ts-ignore
       )._initialize();
+
+      // @ts-ignore
+      content.mlPortalAttachedRef = currMlPortalAttachedRef;
+
+      return currMlPortalAttachedRef;
     }
   }
 

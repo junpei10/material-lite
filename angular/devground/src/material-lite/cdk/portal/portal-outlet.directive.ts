@@ -15,7 +15,7 @@ interface Changes extends SimpleChanges {
   exportAs: 'mlPortalOutlet'
 })
 export class MlPortalOutletDirective implements OnChanges, OnDestroy {
-  @Input('mlPortalOutletContent') content: MlPortalContent | null | undefined;
+  @Input('mlPortalOutlet') content: MlPortalContent | null | undefined;
 
   @Input('mlPortalOutletAttachConfig') config: MlPortalAttachConfig;
 
@@ -25,7 +25,7 @@ export class MlPortalOutletDirective implements OnChanges, OnDestroy {
   }
 
   @Input('mlPortalOutletDestroyingDuration')
-  set outletDestroyingDuration(duration: number) {
+  set setOutletDestroyingDuration(duration: number) {
     this._portalData.destroyingOutletDuration = duration;
   }
 
@@ -34,7 +34,7 @@ export class MlPortalOutletDirective implements OnChanges, OnDestroy {
     return this._attachedEmitter || (this._attachedEmitter = new EventEmitter());
   }
 
-  attachedRef: MlPortalAttachedRef | undefined;
+  readonly attachedRef: MlPortalAttachedRef | undefined;
 
   private _portalData: MlPortalData;
 
@@ -95,6 +95,7 @@ export class MlPortalOutletDirective implements OnChanges, OnDestroy {
 
         const keyOrData = this.key || this._portalData;
 
+        // @ts-ignore: assign readonly property
         const attachedRef = this.attachedRef =
           this._portalOutlet.attach(content, keyOrData, this.config);
 

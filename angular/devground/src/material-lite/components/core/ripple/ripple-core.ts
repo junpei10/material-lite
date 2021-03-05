@@ -57,7 +57,10 @@ export class MlRippleCore {
   }
 
   /**
-   * @returns `Ripple`を`fade out`させる方法は複数あるため、関数ではなく`Ripple`の要素を返し、柔軟に対応できるようしている。
+   * 通常のRippleを出現させる。
+   *
+   * @returns 出現させたRippleを削除するためのトークン(DOM)を返す。
+   * `Ripple`を削除させる方法は複数あるため、関数ではなく`Ripple`の要素を返し、柔軟に対応できるようしている。
    */
   fadeInRipple(x: number, y: number): RippleElement {
     // @ts-ignore
@@ -127,6 +130,8 @@ export class MlRippleCore {
 
   /**
    * 一瞬で広がる`Ripple`を出現させる。
+   *
+   * @returns 出現させたRippleを削除するためのトークン(DOM)を返す。
    */
   fadeInOverdrive(): RippleElement {
     // @ts-ignore
@@ -151,6 +156,12 @@ export class MlRippleCore {
     return rippleEl;
   }
 
+
+  /**
+   * Rippleを削除する。
+   *
+   * @param rippleElement `fadeInRipple`と`fadeInOverdrive`の戻り値。
+   */
   fadeOutRipple(rippleElement: RippleElement): void {
     const conf = this._config;
 
@@ -172,6 +183,13 @@ export class MlRippleCore {
     });
   }
 
+  /**
+   * Rippleを自動で削除するアクションを追加する。
+   * Duration
+   *
+   * @param rippleElement `fadeInRipple`と`fadeInOverdrive`の戻り値。
+   * @param listenedTarget 自動で
+   */
   autoFadeOutRipple(rippleElement: RippleElement, listenedTarget?: ListenedTarget): void {
     let listenerHasRemoved: boolean | undefined;
     let rippleHasEntered: boolean | undefined;
@@ -223,6 +241,9 @@ export class MlRippleCore {
     }
   }
 
+  /**
+   * トリガーを追加しない場合は、
+   */
   setTrigger(trigger: ListenedTarget | false): void {
     this._removeTriggerListener();
 
@@ -239,6 +260,9 @@ export class MlRippleCore {
     }
   }
 
+  /**
+   * デフォルトというか、
+   */
   addPointerdownListener(trigger: ListenedTarget): () => void {
     const removeListener =
       listen(trigger, 'pointerdown', (event) => this._addPointerdownListenerCallback(event, trigger));

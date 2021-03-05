@@ -1,4 +1,7 @@
 <button (click)="changeList()">Change List</button>
+
+<div #testDOM>これは テストDOM です。</div>
+
 <div
   [style]="
     '
@@ -19,14 +22,16 @@
     mlStraightTracker
     class="my-tracker"
     [mlStraightTrackerTargetIndex]="index"
+    [mlStraightTrackerObserveContainer]="true"
+    [mlStraightTrackerUnobserveContainer]="false"
     mlStraightTrackerPosition="before"
   ></div>
   <div
     style="
+      width: 100%;
       text-align: center;
       box-sizing: border-box;
       border: 4px solid black;
-      width: 100%;
     "
     *ngFor="let n of list"
     [id]="'test-' + n"
@@ -38,7 +43,17 @@
 
 <ng-template #test><h1>Portal</h1></ng-template>
 
-<ng-template mlPortalOutlet [mlPortalOutletKey]="'test'"></ng-template>
+<div *ngIf="outletHasShown">
+  <ng-template
+    mlPortalOutlet
+    [mlPortalOutletDestroyingDuration]="200"
+    [mlPortalOutletKey]="'test'"
+  ></ng-template>
+</div>
+
+<button mlButton (click)="outletHasShown = !outletHasShown">
+  Toggle outlet
+</button>
 
 <div mlRipple></div>
 
