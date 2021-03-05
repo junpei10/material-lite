@@ -12,33 +12,17 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "es2020",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
+    "lib": ["es2018", "dom"],
     "paths": {
-      "@material-lite/angular": [
-        "./src/material-lite",
-      ],
-      "@material-lite/angular/core": [
-        "./src/material-lite/components/core"
-      ],
+      "@material-lite/angular": ["./src/material-lite"],
+      "@material-lite/angular/core": ["./src/material-lite/components/core"],
       "@material-lite/angular/button": [
         "./src/material-lite/components/button"
       ],
       // CDK
-      "@material-lite/angular-cdk": [
-        "./src/material-lite/cdk"
-      ],
-      "@material-lite/angular-cdk/portal": [
-        "./src/material-lite/cdk/portal"
-      ],
-      "@material-lite/angular-cdk/popup": [
-        "./src/material-lite/cdk/popup"
-      ],
-      "@material-lite/angular-cdk/utils": [
-        "./src/material-lite/cdk/utils"
-      ]
+      "@material-lite/angular-cdk": ["./src/material-lite/cdk"],
+      "@material-lite/angular-cdk/portal": ["./src/material-lite/cdk/portal"],
+      "@material-lite/angular-cdk/utils": ["./src/material-lite/cdk/utils"]
     },
     "strict": true,
     "strictPropertyInitialization": false

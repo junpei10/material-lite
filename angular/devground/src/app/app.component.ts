@@ -1,7 +1,7 @@
 import { animate, query, style, transition, trigger } from '@angular/animations';
-import { Component, DoCheck, Inject, OnInit, Optional, Renderer2, TemplateRef, ViewChild } from '@angular/core';
-import { MlPortalConfig, MlPortalContent, MlPortalOutlet } from '@material-lite/angular-cdk/portal';
-import { MlRippleBinder, MlRippleDirective, MlTheming } from '@material-lite/angular/core';
+import { ChangeDetectionStrategy, Component, DoCheck, Inject, OnInit, Optional, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { MlPortalAttachConfig, MlPortalContent, MlPortalOutlet } from '@material-lite/angular-cdk/portal';
+import { MlTheming } from '@material-lite/angular/core';
 import { environment } from 'src/environments/environment';
 import { ML_DATA, ML_REF } from 'src/material-lite/cdk/utils';
 import { MlCssVariables } from 'src/material-lite/components/core/theme/css-theme-variables.service';
@@ -10,6 +10,7 @@ import { MlCssVariables } from 'src/material-lite/components/core/theme/css-them
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('animation', [
       transition('true <=> false', [
@@ -30,25 +31,28 @@ import { MlCssVariables } from 'src/material-lite/components/core/theme/css-them
   ]
 })
 export class AppComponent implements OnInit, DoCheck {
-  @ViewChild('mlRipple', { static: true }) private _rippleRef: MlRippleDirective;
+  @ViewChild('test', { static: true }) private _templateRef: TemplateRef<any>;
 
   title = 'devground';
   portalContent: MlPortalContent | false;
-  portalConfig: MlPortalConfig = {
+  portalConfig: MlPortalAttachConfig = {
     animation: {
       className: 'test',
       enter: 500,
-      leave: 500
+      leave: 500,
     },
     component: {
-      injectData: 'test',
+      injectionData: 'injection data',
     }
   };
+
+  index: number;
+  width: number = 100;
 
   ngIf = true;
   innerHTML: string = '<div>First div</div>';
 
-  overdrive: MlRippleBinder['overdrive'] = {
+  overdrive = {
     width: 500,
     height: 500
   };
@@ -57,10 +61,15 @@ export class AppComponent implements OnInit, DoCheck {
     leave: 100
   };
 
+  templateContent: TemplateRef<any> | null;
+
+  list: number[] = [0, 1, 2, 3, 4, 5];
+
   constructor(
     private renderer: Renderer2,
     private portalOutlet: MlPortalOutlet,
-    private cssVariable: MlCssVariables
+    private cssVariable: MlCssVariables,
+    // @Inject(RUN) run: Run
   ) {
     const themeValue = MlTheming.value.null;
     this.cssVariable.set(themeValue.theme, themeValue.palette);
@@ -68,7 +77,8 @@ export class AppComponent implements OnInit, DoCheck {
 
   ngOnInit(): void {
     console.log('レンダリングまでの時間', performance.now() - environment.start);
-    console.log(this._rippleRef);
+
+    this.templateContent = this._templateRef;
   }
 
   ngDoCheck(): void {
@@ -76,16 +86,23 @@ export class AppComponent implements OnInit, DoCheck {
   }
 
   attachPortal(): void {
-    // this.portalContent = TestComponent;
     const ref = this.portalOutlet.attach(TestComponent, 'test', this.portalConfig);
-    ref.beforeDetached().subscribe(() => console.log('Before detach'));
-    ref.afterDetached().subscribe(() => console.log('After detach'));
+
+    setTimeout(() => {
+      ref.detach();
+    }, 2000);
   }
 
   onAttachPortal(): void {
     setTimeout(() => {
       this.portalContent = false;
     }, 3000);
+  }
+
+  changeList(): void {
+    this.list = this.list.length === 5
+      ? [0, 1, 2, 3, 4, 5]
+      : [0, 1, 2, 3, 5];
   }
 
 
@@ -97,10 +114,10 @@ export class AppComponent implements OnInit, DoCheck {
 })
 class TestComponent implements OnInit {
   constructor(
-    @Optional() @Inject(ML_DATA) public data: string,
-    @Optional() @Inject(ML_REF) public ref: any
+    @Inject(ML_DATA) public data: string,
+    @Inject(ML_REF) public ref: any
   ) {
-    console.log(ref, ref.contentData);
+    console.log(ref, data);
   }
 
   ngOnInit(): void {

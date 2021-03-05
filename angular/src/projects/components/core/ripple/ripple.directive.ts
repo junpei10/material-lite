@@ -27,12 +27,6 @@ export interface MlRippleBinder {
 type Binder = MlRippleBinder;
 type FadeInRippleConfig = { [P in Exclude<keyof Binder, 'mlRipple'>]?: Binder[P] };
 
-// interface ContainerElement extends ListenTarget {
-//   getBoundingClientRect(): DOMRect;
-//   appendChild<T extends Node>(newChild: T): T;
-//   removeChild<T extends Node>(oldChild: T): T;
-// }
-
 // @dynamic
 @Directive({
   selector: '[mlRipple]',
@@ -128,8 +122,6 @@ export class MlRippleDirective implements OnChanges {
 
       this._needSetPointerdownListener = false;
     }
-
-    console.log('abc');
   }
 
   // インスタンスから起動させるとき用

@@ -3,17 +3,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-// import { MlPopupOutletModule } from '../material-lite/core/popup';
 import { AppRoutingModule } from './app-routing.module';
 import { MlRippleModule } from '@material-lite/angular/core';
 import { MlButtonModule } from '@material-lite/angular/button';
 import { MlPortalModule } from '@material-lite/angular-cdk/portal';
-import { MlPopupModule } from '@material-lite/angular-cdk/popup';
+import { MlStraightTrackerModule } from 'src/material-lite/cdk/straight-tracker/straight-tracker.module';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -22,7 +21,7 @@ import { MlPopupModule } from '@material-lite/angular-cdk/popup';
     MlRippleModule,
     MlButtonModule,
     MlPortalModule,
-    MlPopupModule
+    MlStraightTrackerModule
   ],
   bootstrap: [AppComponent]
 })

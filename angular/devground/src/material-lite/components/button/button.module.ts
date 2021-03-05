@@ -159,7 +159,6 @@ const STYLE: MlThemeStyle = {
 
 
 @NgModule({
-  imports: [MlRippleModule],
   exports: [MlButtonComponent],
   declarations: [MlButtonComponent],
 })

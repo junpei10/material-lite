@@ -1,20 +1,24 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges } from '@angular/core';
-import { createListenTarget, ListenTarget } from '@material-lite/angular-cdk/utils';
+import { DOCUMENT } from '@angular/common';
+import { ChangeDetectionStrategy, Component, ElementRef, Inject, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { createListenedTarget, ListenedTarget, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
+import { MlRippleCore, MlRippleCoreConfig } from '../core/ripple/ripple-core';
 
-export interface MlButtonBinder {
-  mlButton?: boolean | '';
-  theme?: string;
-  variant?: 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
-  hoverAction?: 'enable' | 'disable' | 'auto';
-  wrapAnchor?: boolean;
-  rippleDisabled?: boolean;
-  rippleOverdrive?: {
-    width?: number,
-    height?: number
-  } | boolean;
-}
+// export interface MlButtonBinder {
+//   mlButton?: boolean | '';
+//   theme?: string;
+//   variant?: 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
+//   hoverAction?: 'enable' | 'disable' | 'auto';
+//   wrapAnchor?: boolean;
+//   rippleDisabled?: boolean;
+//   rippleOverdrive?: {
+//     width?: number,
+//     height?: number
+//   } | boolean;
+// }
 
-type Binder = MlButtonBinder;
+// type Binder = MlButtonBinder;
+export type MlButtonVariant = 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
+export type MlButtonHoverAction = 'enable' | 'disable' | 'auto';
 
 // @dynamic
 @Component({
@@ -23,35 +27,40 @@ type Binder = MlButtonBinder;
   templateUrl: './button.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MlButtonComponent implements OnChanges {
-  hostElementListenTarget: ListenTarget;
+export class MlButtonComponent implements OnInit, OnChanges {
+  private _hostElementListenedTarget: ListenedTarget;
   private _hostElementClassList: DOMTokenList;
 
   private _needSetVariant: boolean = true;
 
   private _currClassList: string[] = [];
 
-  @Input() private set mlButton(_enable: Binder['mlButton']) {
-    const enable = this.isEnabled = _enable === '' || _enable;
-    (enable)
+  @Input('mlButton') set setEnabled(isEnabled: boolean | '') {
+    // @ts-ignore assign readonly variable
+    const result = this.isEnabled =
+      isEnabled === '' || isEnabled;
+
+    (result)
       ? this._hostElementClassList.remove('ml-disabled-button')
       : this._hostElementClassList.add('ml-disabled-button');
   }
-  isEnabled: boolean | undefined;
+  readonly isEnabled: boolean | undefined;
 
-  @Input('variant') private set setVariant(variant: Binder['variant']) {
+  @Input('variant') set setVariant(variant: MlButtonVariant) {
+    // @ts-ignore assign readonly variable
     this.variant = variant;
     this._needSetVariant = true;
   }
-  variant: Binder['variant'];
+  readonly variant: MlButtonVariant;
 
-  @Input('hoverAction') private set setHoverAction(type: Binder['hoverAction']) {
+  @Input('hoverAction') set setHoverAction(type: MlButtonHoverAction) {
+    // @ts-ignore assign readonly variable
     this.hoverAction = type;
     this._needSetVariant = true;
   }
-  hoverAction: Binder['hoverAction'];
+  readonly hoverAction: MlButtonHoverAction;
 
-  @Input('theme') private set setTheme(nextTheme: Binder['theme']) {
+  @Input('theme') set setTheme(nextTheme: string) {
     const hostClassList = this._hostElementClassList;
 
     if (this.theme) {
@@ -61,27 +70,72 @@ export class MlButtonComponent implements OnChanges {
       hostClassList.add('ml-button-' + nextTheme);
     }
 
+    // @ts-ignore assign readonly variable
     this.theme = nextTheme;
   }
-  theme: Binder['theme'];
+  readonly theme: string;
 
-  @Input('wrapAnchor') private set setWrapAnchor(enable: Binder['wrapAnchor']) {
-    this.wrapAnchor = enable;
-    enable
+  @Input('wrapAnchor') set setAnchorToWrapped(isEnabled: boolean | '') {
+    // @ts-ignore assign readonly variable
+    const result = this.wrapAnchor =
+      isEnabled === '' || isEnabled;
+
+    result
       ? this._hostElementClassList.add('ml-anchor-button')
       : this._hostElementClassList.remove('ml-anchor-button');
   }
-  wrapAnchor?: boolean;
+  readonly anchorIsWrapped: boolean;
 
-  @Input() rippleDisabled: Binder['rippleDisabled'];
-  @Input() rippleOverdrive: Binder['rippleOverdrive'];
-  public rippleCentered: boolean;
+  rippleCore: MlRippleCore;
 
-  constructor(elementRef: ElementRef<HTMLElement>) {
+  @ViewChild('mlRippleOutlet', { static: true })
+  private set _setRippleCore(outletElementRef: ElementRef) {
+    this.rippleCore = new MlRippleCore(
+      {
+        fadeOutEventNames: ['pointerup', 'pointerout'],
+        overdrive: this.rippleOverdrive,
+        centered: this.rippleCentered
+      },
+      outletElementRef.nativeElement,
+      this._runOutsideNgZone, this._createElement
+    );
+  }
+
+  @Input('disableRipple') set setRippleToDisabled(disable: boolean | '') {
+    // @ts-ignore: assign readonly variable
+    const _disable = this.rippleIsDisabled =
+      disable === '' || disable;
+
+    _disable
+      ? this.rippleCore.setTrigger(false)
+      : this.rippleCore.setTrigger(this._hostElementListenedTarget);
+  }
+  readonly rippleIsDisabled: boolean;
+
+  @Input() rippleOverdrive?: MlRippleCoreConfig['overdrive'];
+  rippleCentered: boolean;
+
+  private _createElement: Document['createElement'];
+
+  constructor(
+    elementRef: ElementRef<HTMLElement>,
+    @Inject(RUN_OUTSIDE_NG_ZONE) private _runOutsideNgZone: RunOutsideNgZone,
+    @Inject(DOCUMENT) _document: Document,
+  ) {
+    this._createElement = _document.createElement.bind(_document);
+
     const hostElement = elementRef.nativeElement;
-    this.hostElementListenTarget = createListenTarget(hostElement);
+
+    this._hostElementListenedTarget = createListenedTarget(hostElement);
+
     const hostClassList = this._hostElementClassList = hostElement.classList;
     hostClassList.add('ml-button');
+  }
+
+  ngOnInit(): void {
+    if (this.rippleIsDisabled === undefined) {
+      this.rippleCore.setTrigger(this._hostElementListenedTarget);
+    }
   }
 
   ngOnChanges(): void {
