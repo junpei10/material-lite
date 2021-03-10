@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MlPortalConfig, MlPortalContent, MlPortalAttachedRef, MlPortalOutlet } from '@material-lite/angular-cdk/portal';
+import { MlPortalAttachConfig, MlPortalContent, MlPortalAttachedRef, MlPortalOutlet } from '@material-lite/angular-cdk/portal';
 
 @Component({
   selector: 'app-overview',
@@ -25,15 +25,15 @@ export class OverviewComponent {
 
   privateCodeViewer: 0 | 1 = 0;
   privatePortalContent: MlPortalContent | false;
-  privatePortalConfig: MlPortalConfig = {};
+  privatePortalConfig: MlPortalAttachConfig = {};
 
   publicCodeViewer: 0 | 1 = 0;
   publicPortalContent: MlPortalContent | false;
-  publicPortalConfig: MlPortalConfig = {};
+  publicPortalConfig: MlPortalAttachConfig = {};
 
   animationCodeViewer: 0 | 1 | 2 = 0;
   animationPortalContent: MlPortalContent | false;
-  animationPortalConfig: MlPortalConfig = {
+  animationPortalConfig: MlPortalAttachConfig = {
     animation: {
       className: 'example',
       enter: 500,

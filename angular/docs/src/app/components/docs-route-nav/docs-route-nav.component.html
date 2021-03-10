@@ -1,0 +1,15 @@
+<div
+  class="docs-route-nav-tracker ml-primary-bg"
+  *mlStraightTracker="true"
+  [mlStraightTrackerTargetIndex]="docs.activeRouteIndex"
+></div>
+
+<button
+  mlButton
+  class="docs-route-nav-button"
+  *ngFor="let route of docs.routes; let i = index"
+  [theme]="route === docs.activeRoute ? 'primary' : ''"
+  (click)="goToLink(route)"
+>
+  {{ docs.routeNames[i] }}
+</button>

@@ -1,21 +1,46 @@
-<section class='docs-codeblock'>
-  <nav class='docs-codeblock-tab'>
-    <button mlButton [theme]='type === 0 ? "accent" : ""' (click)='type = 0'>HTML</button>
-    <button mlButton [theme]='type === 1 ? "accent" : ""' (click)='type = 1'>TS</button>
-    <button mlButton [theme]='type === 2 ? "accent" : ""' (click)='type = 2'>CSS</button>
+<section class="docs-codeblock">
+  <nav class="docs-codeblock-tab">
+    <button mlButton [theme]="type === 0 ? 'accent' : ''" (click)="type = 0">
+      HTML
+    </button>
+    <button mlButton [theme]="type === 1 ? 'accent' : ''" (click)="type = 1">
+      TS
+    </button>
+    <button mlButton [theme]="type === 2 ? 'accent' : ''" (click)="type = 2">
+      CSS
+    </button>
   </nav>
 
   <!-- <button mlButton (click)='portalContent = domPortalContent'>Attach DOM</button> -->
   <div class="docs-codeblock-form">
-    <button mlButton (click)='portalContent = componentPortalContent'>Attach component</button>
-    <button mlButton (click)='portalContent = templatePortalContent'>Attach template</button>
-    <button mlButton (click)='portalContent = domPortalContent; portalConfig.cloneDOM = false'>Attach DOM</button>
-    <button mlButton (click)='portalContent = clonedDomPortalContent; portalConfig.cloneDOM = true'>Attach Clone DOM</button>
+    <button mlButton (click)="portalContent = componentPortalContent">
+      Attach component
+    </button>
+    <button mlButton (click)="portalContent = templatePortalContent">
+      Attach template
+    </button>
+    <button
+      mlButton
+      (click)="portalContent = domPortalContent; portalConfig.cloneDOM = false"
+    >
+      Attach DOM
+    </button>
+    <button
+      mlButton
+      (click)="
+        portalContent = clonedDomPortalContent; portalConfig.cloneDOM = true
+      "
+    >
+      Attach Clone DOM
+    </button>
   </div>
 
   <div class="docs-codeblock-prod">
     <div class="portal-outlet">
-      <ng-template [mlPortalOutlet]='portalContent' [mlPortalOutletConfig]='portalConfig'></ng-template>
+      <ng-template
+        [mlPortalOutlet]="portalContent"
+        [mlPortalOutletAttachConfig]="portalConfig"
+      ></ng-template>
     </div>
 
     <ng-template #templatePortalContent><h1>Template</h1></ng-template>
@@ -23,7 +48,7 @@
     <div #clonedDomPortalContent><h1>Cloned DOM</h1></div>
   </div>
 
-  <pre class='docs-codeblock-pre'>
+  <pre class="docs-codeblock-pre">
     <!-- HTML -->
     <ng-template [ngIf]='type === 0'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"docs-codeblock-form"</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> (<span class="hljs-attr">click</span>)=<span class="hljs-string">"portalContent <span class='hljs-keyword'>=</span> componentPortalContent"</span>&gt;</span>Attach component<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>

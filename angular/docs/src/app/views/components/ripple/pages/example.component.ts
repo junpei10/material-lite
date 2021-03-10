@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MlRippleBinder } from '@material-lite/angular/core';
+import { DocsService } from 'src/app/services/docs';
 
 @Component({
   selector: 'app-example',
@@ -19,8 +19,12 @@ export class ExampleComponent {
   radius: number;
   opacity: number;
 
-  animationDuration: {
+  animation: {
     enter?: number;
     leave?: number;
   } = {};
+
+  constructor(
+    docs: DocsService
+  ) { docs.setActiveRoute('example'); }
 }

@@ -122,7 +122,7 @@ export class MlButtonComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    if (this.rippleIsDisabled === undefined) {
+    if (this.rippleIsDisabled === void 0) {
       this.rippleCore.setTrigger(this._hostElementListenedTarget);
     }
   }

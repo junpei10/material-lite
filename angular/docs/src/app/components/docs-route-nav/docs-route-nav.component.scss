@@ -1,0 +1,17 @@
+app-docs-route-nav {
+  position: relative;
+  display: flex;
+  margin-bottom: 32px;
+}
+
+.docs-route-nav {
+  &-tracker {
+    height: 2px;
+    will-change: left;
+    transition-property: left;
+  }
+
+  &-button {
+    width: 100%;
+  }
+}

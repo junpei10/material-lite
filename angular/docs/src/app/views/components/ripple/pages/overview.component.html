@@ -1,14 +1,18 @@
-<h2 class='docs-h2'>Color</h2>
-<p class='docs-h2-desc'><code>theme</code>と<code>color</code>で配色を設定できます。</p>
-<section class='docs-codeblock'>
-  <div class='docs-codeblock-prod first-prod'>
+<h2 class="docs-h2">Color</h2>
+<p class="docs-h2-desc">
+  <code>theme</code>と<code>color</code>で配色を設定できます。
+</p>
+<section class="docs-codeblock">
+  <div class="docs-codeblock-prod first-prod">
     <div mlRipple mlRippleTheme="primary">Primary</div>
     <div mlRipple mlRippleTheme="accent">Accent</div>
     <div mlRipple mlRippleTheme="warn">Warn</div>
     <div mlRipple mlRippleColor="#8BC34A">#8BC34A</div>
     <div mlRipple mlRippleColor="#03A9F4">#03A9F4</div>
   </div>
-  <pre class='docs-codeblock-pre'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+  <pre
+    class="docs-codeblock-pre"
+  ><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> <span class="hljs-attr">theme</span>=<span class="hljs-string">"primary"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> <span class="hljs-attr">theme</span>=<span class="hljs-string">"accent"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> <span class="hljs-attr">theme</span>=<span class="hljs-string">"warn"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
@@ -18,74 +22,144 @@
 <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
 </section>
 
-
-<h2 class='docs-h2' id='type'>Type</h2>
-<p class='docs-h2-desc'>
-  Rippleには、通常の <code>Ripple</code> と <code>OverdriveRipple</code> の２種類が存在します。<br>
+<h2 class="docs-h2" id="type">Type</h2>
+<p class="docs-h2-desc">
+  Rippleには、通常の <code>Ripple</code> と
+  <code>OverdriveRipple</code> の２種類が存在します。<br />
   主なOverdriveRippleの用途としては、コンテナのサイズが大きすぎる場合のアニメーションが窮屈になる、速くなりすぎるのを防ぐためです。
 </p>
-<section class='docs-codeblock'>
-  <div class='docs-codeblock-prod second-prod'>
+<section class="docs-codeblock">
+  <div class="docs-codeblock-prod second-prod">
     <div mlRipple>Default</div>
-    <div mlRipple [mlRippleOverdrive]=true>Overdrive</div>
+    <div mlRipple [mlRippleOverdrive]="true">Overdrive</div>
     <button mlButton></button>
   </div>
-  <pre class='docs-codeblock-pre'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+  <pre
+    class="docs-codeblock-pre"
+  ><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span>&gt;</span>Default<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> [<span class="hljs-attr">mlRippleOverdrive</span>]=<span class="hljs-string">true</span>&gt;</span>Overdrive<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
 </section>
 
-
-<h2 class='docs-h2'>Type Breakpoint</h2>
-<p class='docs-h2-desc'>
-  コンテナのサイズからRippleのTypeを変更することができます。<br>
-  クリック時、コンテナのサイズが設定したサイズより<span class='bold'>小さい場合は通常の"Ripple"を表示し</span>、<span class='bold'>同じか大きい場合は"Overdrive"を表示する</span>ようになる。
+<h2 class="docs-h2">Type Breakpoint</h2>
+<p class="docs-h2-desc">
+  コンテナのサイズからRippleのTypeを変更することができます。<br />
+  クリック時、コンテナのサイズが設定したサイズより<span class="bold"
+    >小さい場合は通常の"Ripple"を表示し</span
+  >、<span class="bold">同じか大きい場合は"Overdrive"を表示する</span
+  >ようになる。
 </p>
-<section class='docs-codeblock'>
-  <div class='docs-codeblock-form third-form' style='flex-direction: column;'>
+<section class="docs-codeblock">
+  <div class="docs-codeblock-form third-form" style="flex-direction: column">
     <div>
-      <button mlButton variant='raised' (click)='typeBpRippleWidth === 250 ? typeBpRippleWidth = 500 : typeBpRippleWidth = 250'>Change Width</button>
-      <button mlButton variant='raised' (click)='typeBpRippleHeight === 250 ? typeBpRippleHeight = 500 : typeBpRippleHeight = 250'>Change Height</button>
+      <button
+        mlButton
+        variant="raised"
+        (click)="
+          typeBpRippleWidth === 250
+            ? (typeBpRippleWidth = 500)
+            : (typeBpRippleWidth = 250)
+        "
+      >
+        Change Width
+      </button>
+      <button
+        mlButton
+        variant="raised"
+        (click)="
+          typeBpRippleHeight === 250
+            ? (typeBpRippleHeight = 500)
+            : (typeBpRippleHeight = 250)
+        "
+      >
+        Change Height
+      </button>
     </div>
 
-    <div style='display: flex; justify-content: center; margin: 8px 0; align-items: center'>
-      <span>Width： <code>{{ typeBpRippleWidth }}</code> px</span>
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        margin: 8px 0;
+        align-items: center;
+      "
+    >
+      <span
+        >Width： <code>{{ typeBpRippleWidth }}</code> px</span
+      >
       <span>・</span>
-      <span>Height: <code>{{ typeBpRippleHeight }}</code>px</span>
+      <span
+        >Height: <code>{{ typeBpRippleHeight }}</code
+        >px</span
+      >
     </div>
 
-    <span>Ripple type： <code>{{ typeBpRippleHeight === 500 || typeBpRippleWidth === 500 ? "Overdrive" : "Ripple" }}</code></span>
-
+    <span
+      >Ripple type：
+      <code>{{
+        typeBpRippleHeight === 500 || typeBpRippleWidth === 500
+          ? "Overdrive"
+          : "Ripple"
+      }}</code></span
+    >
   </div>
-  <div class='docs-codeblock-prod third-prod'>
-    <div [style]='{ width: typeBpRippleWidth + "px", height: typeBpRippleHeight + "px" }' mlRipple [mlRippleOverdrive]='{ width: 500, height: 500 }'></div>
+  <div class="docs-codeblock-prod third-prod">
+    <div
+      [style]="{
+        width: typeBpRippleWidth + 'px',
+        height: typeBpRippleHeight + 'px'
+      }"
+      mlRipple
+      [mlRippleOverdrive]="{ width: 500, height: 500 }"
+    ></div>
   </div>
-  <pre class='docs-codeblock-pre'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> [<span class="hljs-attr">mlRippleOverdrive</span>]=<span class="hljs-string">"{{ "{" }} width: <span class='hljs-literal'>500</span>; height: <span class='hljs-literal'>500</span>; {{ "}" }}"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+  <pre
+    class="docs-codeblock-pre"
+  ><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> [<span class="hljs-attr">mlRippleOverdrive</span>]=<span class="hljs-string">"{{ "{" }} width: <span class='hljs-literal'>500</span>; height: <span class='hljs-literal'>500</span>; {{ "}" }}"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
 </section>
 
-
-<h2 class='docs-h2'>Trigger</h2>
-<p class='docs-h2-desc'>
-Rippleを呼び出せるElementを追加できます。<br>
-<code class='js'>[mlRippleTriggerIsOutside]=<span class='hljs-literal'>true</span></code> に設定することで、Triggerが外側にあるときに発生する遅延を無くす事ができます。
+<h2 class="docs-h2">Trigger</h2>
+<p class="docs-h2-desc">
+  Rippleを呼び出せるElementを追加できます。<br />
+  <code class="js"
+    >[mlRippleTriggerIsOutside]=<span class="hljs-literal">true</span></code
+  >
+  に設定することで、Triggerが外側にあるときに発生する遅延を無くす事ができます。
 </p>
-<section class='docs-codeblock'>
-  <div class='docs-codeblock-form'>
-    <button mlButton variant='raised' (click)='triggerVisualizeRipple = !triggerVisualizeRipple'>{{ triggerVisualizeRipple ? "Invisualize" : "Visualize" }} Ripple</button>
+<section class="docs-codeblock">
+  <div class="docs-codeblock-form">
+    <button
+      mlButton
+      variant="raised"
+      (click)="triggerVisualizeRipple = !triggerVisualizeRipple"
+    >
+      {{ triggerVisualizeRipple ? "Invisualize" : "Visualize" }} Ripple
+    </button>
   </div>
-  <div class='docs-codeblock-prod fourth-prod'>
-    <div class='forth-prod-wrapper'>
-      <div mlRipple [mlRippleTrigger]='listenerTarget' [style]='triggerVisualizeRipple ? "overflow: visible" : ""'></div>
-      <div #listenerTarget class='ml-ripple'>Trigger</div>
+  <div class="docs-codeblock-prod fourth-prod">
+    <div class="forth-prod-wrapper">
+      <div
+        mlRipple
+        [mlRippleTrigger]="listenerTarget"
+        [style]="triggerVisualizeRipple ? 'overflow: visible' : ''"
+      ></div>
+      <div #listenerTarget class="ml-ripple">Trigger</div>
     </div>
 
-    <div class='forth-prod-wrapper'>
-      <div mlRipple [mlRippleTrigger]='listenerTarget2' [mlRippleTriggerIsOutside]=true [style]='triggerVisualizeRipple ? "overflow: visible" : ""'></div>
-      <div #listenerTarget2 class='ml-ripple'>Trigger2</div>
+    <div class="forth-prod-wrapper">
+      <div
+        mlRipple
+        [mlRippleTrigger]="listenerTarget2"
+        [mlRippleTriggerIsOutside]="true"
+        [style]="triggerVisualizeRipple ? 'overflow: visible' : ''"
+      ></div>
+      <div #listenerTarget2 class="ml-ripple">Trigger2</div>
     </div>
   </div>
-  <pre class='docs-codeblock-pre'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+  <pre
+    class="docs-codeblock-pre"
+  ><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">mlRipple</span> [<span class="hljs-attr">mlRippleTrigger</span>]=<span class="hljs-string">'listenerTarget'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">div</span> #<span class="hljs-attr">listenerTarget</span>&gt;</span>Trigger<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>

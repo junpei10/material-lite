@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { DocsService } from 'src/app/services/docs';
 
 @Component({
   selector: 'app-overview',
@@ -11,12 +12,16 @@ import { Component } from '@angular/core';
     .ml-fab {
       width: 36px;
     }
-    .docs-codeblock-prod {
+    .docs-viewer-content [product] {
       width: 100%;
       padding-top: 8px;
       padding-bottom: 8px;
     }
-  `]
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OverviewComponent {
+  constructor(docs: DocsService) {
+    docs.setActiveRoute('overview', 0);
+  }
 }

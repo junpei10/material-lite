@@ -14,7 +14,7 @@
     "module": "es2020",
     "lib": ["es2018", "dom"],
     "paths": {
-      "@material-lite/angular": ["./src/material-lite"],
+      "@material-lite/angular": ["./src/material-lite/components"],
       "@material-lite/angular/core": ["./src/material-lite/components/core"],
       "@material-lite/angular/button": [
         "./src/material-lite/components/button"

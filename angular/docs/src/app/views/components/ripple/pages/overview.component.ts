@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DocsService } from 'src/app/services/docs';
 
 @Component({
   selector: 'app-overview',
@@ -50,4 +51,8 @@ export class OverviewComponent {
   typeBpRippleHeight: 250 | 500 = 250;
 
   triggerVisualizeRipple: boolean;
+
+  constructor(
+    docs: DocsService
+  ) { docs.setActiveRoute('overview'); }
 }

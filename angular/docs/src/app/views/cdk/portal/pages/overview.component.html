@@ -1,16 +1,22 @@
-<h2 class='docs-h2'>Overview</h2>
-<p class='docs-h2-desc'>Attach可能な要素は４つあります。</p>
-<pre style='margin-top: 8px' class='docs-codeblock-pre'><code class='js'><span class='hljs-type'>type</span> MlPortalContent <span class='hljs-keyword'>=</span> Class<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> <span class='hljs-keyword'>|</span> TemplateRef<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> <span class='hljs-keyword'>|</span> HTMLElement <span class='hljs-keyword'>|</span> ElementRef<span class="hljs-tag">&lt;HTMLElement&gt;</span>;</code></pre>
+<h2 class="docs-h2">Overview</h2>
+<p class="docs-h2-desc">Attach可能な要素は４つあります。</p>
+<pre
+  style="margin-top: 8px"
+  class="docs-codeblock-pre"
+><code class='js'><span class='hljs-type'>type</span> MlPortalContent <span class='hljs-keyword'>=</span> Class<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> <span class='hljs-keyword'>|</span> TemplateRef<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> <span class='hljs-keyword'>|</span> HTMLElement <span class='hljs-keyword'>|</span> ElementRef<span class="hljs-tag">&lt;HTMLElement&gt;</span>;</code></pre>
 
-<h2 class='docs-h2'>Private or Public</h2>
-<p class='docs-h2-desc'>
-  Directiveから１つのみ出力できる "Private Outlet" と、DIを通じて、どこからでも何個でも出力できる "Public outlet" があります。<br>
-  通常は "Private outlet" ですが、<code>key</code> (attribute) を設定することで、"Public outlet" になります。併用可能です。
+<h2 class="docs-h2">Private or Public</h2>
+<p class="docs-h2-desc">
+  Directiveから１つのみ出力できる "Private Outlet"
+  と、DIを通じて、どこからでも何個でも出力できる "Public outlet" があります。<br />
+  通常は "Private outlet" ですが、<code>key</code> (attribute)
+  を設定することで、"Public outlet" になります。併用可能です。
 </p>
 <div>
-
-<section class='docs-codeblock'>
-  <pre class='docs-codeblock-pre'><code class='html'><span class="hljs-comment">&lt;!-- Private outlet --&gt;</span>
+  <section class="docs-codeblock">
+    <pre
+      class="docs-codeblock-pre"
+    ><code class='html'><span class="hljs-comment">&lt;!-- Private outlet --&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">ng-template</span> [<span class="hljs-attr">mlPortalOutlet</span>]=<span class="hljs-string">"anyContent"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ng-template</span>&gt;</span>
 
 <span class="hljs-comment">&lt;!-- Public outlet --&gt;</span>
@@ -18,28 +24,39 @@
 
 <span class="hljs-comment">&lt;!-- No problem (Public outlet) --&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">ng-template</span> [<span class="hljs-attr">mlPortalOutlet</span>]=<span class="hljs-string">"anyContent"</span> <span class="hljs-attr">key</span>=<span class="hljs-string">"root"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ng-template</span>&gt;</span></code></pre>
-</section>
+  </section>
 
+  <h3 class="docs-h3">Private outlet</h3>
+  <section class="docs-codeblock">
+    <nav class="docs-codeblock-tab">
+      <button
+        mlButton
+        [theme]="privateCodeViewer === 0 ? 'accent' : ''"
+        (click)="privateCodeViewer = 0"
+      >
+        HTML
+      </button>
+      <button
+        mlButton
+        [theme]="privateCodeViewer === 1 ? 'accent' : ''"
+        (click)="privateCodeViewer = 1"
+      >
+        TS
+      </button>
+    </nav>
 
-<h3 class='docs-h3'>Private outlet</h3>
-<section class='docs-codeblock'>
-  <nav class='docs-codeblock-tab'>
-    <button mlButton [theme]='privateCodeViewer === 0 ? "accent" : ""' (click)='privateCodeViewer = 0'>HTML</button>
-    <button mlButton [theme]='privateCodeViewer === 1 ? "accent" : ""' (click)='privateCodeViewer = 1'>TS</button>
-  </nav>
-
-  <div class='docs-codeblock-prod' style='flex-direction: column;'>
-    <button mlButton (click)='privateAttachPortal()'>Attach</button>
-    <div class="portal-outlet">
-      <ng-template
-        [mlPortalOutlet]='privatePortalContent'
-        [mlPortalOutletConfig]='privatePortalConfig'
-        (mlPortalOutletAttached)='privateOnAttachPortal($event)'
-      ></ng-template>
+    <div class="docs-codeblock-prod" style="flex-direction: column">
+      <button mlButton (click)="privateAttachPortal()">Attach</button>
+      <div class="portal-outlet">
+        <ng-template
+          [mlPortalOutlet]="privatePortalContent"
+          [mlPortalOutletAttachConfig]="privatePortalConfig"
+          (mlPortalOutletAttached)="privateOnAttachPortal($event)"
+        ></ng-template>
+      </div>
     </div>
-  </div>
 
-  <pre class='docs-codeblock-pre'>
+    <pre class="docs-codeblock-pre">
     <!-- HTML -->
     <ng-template [ngIf]='privateCodeViewer === 0'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> (<span class="hljs-attr">click</span>)=<span class="hljs-string">"attachPortal<span class='hljs-method'>()</span>"</span>&gt;</span>Attach<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
 
@@ -87,25 +104,35 @@
 <span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-name">class</span> <span class="hljs-title">PortalAttachedComponent</span> {{ "{" }}</span>{{ "}" }}</code></ng-template>
 
   </pre>
-</section>
+  </section>
 
+  <h3 class="docs-h3">Public outlet</h3>
+  <section class="docs-codeblock">
+    <nav class="docs-codeblock-tab">
+      <button
+        mlButton
+        [theme]="publicCodeViewer === 0 ? 'accent' : ''"
+        (click)="publicCodeViewer = 0"
+      >
+        HTML
+      </button>
+      <button
+        mlButton
+        [theme]="publicCodeViewer === 1 ? 'accent' : ''"
+        (click)="publicCodeViewer = 1"
+      >
+        TS
+      </button>
+    </nav>
 
-
-<h3 class='docs-h3'>Public outlet</h3>
-<section class='docs-codeblock'>
-  <nav class='docs-codeblock-tab'>
-    <button mlButton [theme]='publicCodeViewer === 0 ? "accent" : ""' (click)='publicCodeViewer = 0'>HTML</button>
-    <button mlButton [theme]='publicCodeViewer === 1 ? "accent" : ""' (click)='publicCodeViewer = 1'>TS</button>
-  </nav>
-
-  <div class="docs-codeblock-prod" style='flex-direction: column;'>
-    <button mlButton (click)="publicAttachPortal()">Attach</button>
-    <div class='portal-outlet'>
-      <ng-template mlPortalOutlet key="example"></ng-template>
+    <div class="docs-codeblock-prod" style="flex-direction: column">
+      <button mlButton (click)="publicAttachPortal()">Attach</button>
+      <div class="portal-outlet">
+        <ng-template mlPortalOutlet key="example"></ng-template>
+      </div>
     </div>
-  </div>
 
-  <pre class='docs-codeblock-pre'>
+    <pre class="docs-codeblock-pre">
     <ng-template [ngIf]='publicCodeViewer === 0'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> (<span class="hljs-attr">click</span>)=<span class="hljs-string">"attachPortal<span class='hljs-method'>()</span>"</span>&gt;</span>Attach<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"portal-outlet"</span>&gt;</span>
@@ -147,35 +174,61 @@
 {{ "}" }})
 <span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-name">class</span> <span class="hljs-title">PortalAttachedComponent</span> {{ "{" }}</span>{{ "}" }}</code></ng-template>
   </pre>
-</section>
+  </section>
 
+  <h2 class="docs-h2">Animation</h2>
+  <p class="docs-h2-desc">
+    Vue.jsの<a
+      href="https://vuejs.org/v2/guide/transitions.html#Transition-Classes"
+      target="_blank"
+      rel="noopener noreferrer"
+      ><code>Transition Classes</code></a
+    >を参考に作成した機能です。<br />
+    現在、本家のような自動的にアニメーションの期間を割り当てるシステムはありません。<br />
+    <code>className</code
+    >を指定しない場合、アニメーション用のクラスが付与されることはありませんが、<code
+      >enter, leave</code
+    >で指定した秒数分、それらに対応する処理を待機させます。この操作は基本的に、<code
+      >Angular animations</code
+    >を組み合わせる際に使用します。
+  </p>
+  <section class="docs-codeblock">
+    <nav class="docs-codeblock-tab">
+      <button
+        mlButton
+        [theme]="animationCodeViewer === 0 ? 'accent' : ''"
+        (click)="animationCodeViewer = 0"
+      >
+        HTML
+      </button>
+      <button
+        mlButton
+        [theme]="animationCodeViewer === 1 ? 'accent' : ''"
+        (click)="animationCodeViewer = 1"
+      >
+        TS
+      </button>
+      <button
+        mlButton
+        [theme]="animationCodeViewer === 2 ? 'accent' : ''"
+        (click)="animationCodeViewer = 2"
+      >
+        CSS
+      </button>
+    </nav>
 
-
-<h2 class='docs-h2'>Animation</h2>
-<p class='docs-h2-desc'>
-  Vue.jsの<a href='https://vuejs.org/v2/guide/transitions.html#Transition-Classes' target='_blank' rel='noopener noreferrer'><code>Transition Classes</code></a>を参考に作成した機能です。<br>
-  現在、本家のような自動的にアニメーションの期間を割り当てるシステムはありません。<br>
-  <code>className</code>を指定しない場合、アニメーション用のクラスが付与されることはありませんが、<code>enter, leave</code>で指定した秒数分、それらに対応する処理を待機させます。この操作は基本的に、<code>Angular animations</code>を組み合わせる際に使用します。
-</p>
-<section class='docs-codeblock'>
-  <nav class='docs-codeblock-tab'>
-    <button mlButton [theme]='animationCodeViewer === 0 ? "accent" : ""' (click)='animationCodeViewer = 0'>HTML</button>
-    <button mlButton [theme]='animationCodeViewer === 1 ? "accent" : ""' (click)='animationCodeViewer = 1'>TS</button>
-    <button mlButton [theme]='animationCodeViewer === 2 ? "accent" : ""' (click)='animationCodeViewer = 2'>CSS</button>
-  </nav>
-
-  <div class="docs-codeblock-prod" style='flex-direction: column;'>
-    <button mlButton (click)='animationAttachPortal()'>Attach</button>
-    <div class="portal-outlet">
-      <ng-template
-        [mlPortalOutlet]='animationPortalContent'
-        [mlPortalOutletConfig]='animationPortalConfig'
-        (mlPortalOutletAttached)='animationOnAttachPortal($event)'
-      ></ng-template>
+    <div class="docs-codeblock-prod" style="flex-direction: column">
+      <button mlButton (click)="animationAttachPortal()">Attach</button>
+      <div class="portal-outlet">
+        <ng-template
+          [mlPortalOutlet]="animationPortalContent"
+          [mlPortalOutletConfig]="animationPortalConfig"
+          (mlPortalOutletAttached)="animationOnAttachPortal($event)"
+        ></ng-template>
+      </div>
     </div>
-  </div>
 
-  <pre class='docs-codeblock-pre'>
+    <pre class="docs-codeblock-pre">
 <!-- HTML -->
     <ng-template [ngIf]='animationCodeViewer === 0'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> (<span class="hljs-attr">click</span>)=<span class="hljs-string">"attachPortal<span class='hljs-method'>()</span>"</span>&gt;</span>Attach<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
 
@@ -238,12 +291,15 @@
   <span class="hljs-attribute">text-align</span>: center;
 {{ "}" }}</code></ng-template>
   </pre>
-</section>
-<p class='docs-h2-desc'>直感的で実装が簡単ですが、カプセル化されていないclassを用いる必要があるため、管理に十分気をつける必要があります。</p>
+  </section>
+  <p class="docs-h2-desc">
+    直感的で実装が簡単ですが、カプセル化されていないclassを用いる必要があるため、管理に十分気をつける必要があります。
+  </p>
 
-
-<h2 class='docs-h2'>DOM</h2>
-<p class='docs-h2-desc'>
-  レンダリング済みのDOMをポータルから出力する際、レンダリング済みのDOMを一旦削除してからDOMを出力します。<br>
-  レンダリング済みのDOMを削除したくない場合は、<code>cloneDOM: true</code> を設定してください。
-</p>
+  <h2 class="docs-h2">DOM</h2>
+  <p class="docs-h2-desc">
+    レンダリング済みのDOMをポータルから出力する際、レンダリング済みのDOMを一旦削除してからDOMを出力します。<br />
+    レンダリング済みのDOMを削除したくない場合は、<code>cloneDOM: true</code>
+    を設定してください。
+  </p>
+</div>

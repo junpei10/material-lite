@@ -17,7 +17,6 @@ const routes: Routes = [
     path: 'cdk', component: CdkComponent, children: [
       { path: '', loadChildren: () => import('./views/cdk/root').then(m => m.RootModule) },
       { path: 'portal', loadChildren: () => import('./views/cdk/portal').then(m => m.PortalModule) },
-      { path: 'popup', loadChildren: () => import('./views/cdk/popup').then(m => m.PopupModule) }
     ]
   },
   {

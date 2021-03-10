@@ -1,28 +1,44 @@
-<header class='root-header'>
-  <nav class='ml-primary'>
-    <div class='content content-left'>
-      <button mlButton routerLink='home'>Home</button>
-      <button mlButton routerLink='components'>Components</button>
-      <button mlButton routerLink='cdk'>CDK</button>
-      <button mlButton routerLink='guide/theming'>Theming</button>
+<header class="root-header">
+  <nav class="ml-primary">
+    <div class="content content-left">
+      <button mlButton routerLink="home">Home</button>
+      <button mlButton routerLink="components">Components</button>
+      <button mlButton routerLink="cdk">CDK</button>
+      <button mlButton routerLink="guide/theming">Theming</button>
     </div>
-    <div class='content content-right'>
-      <button mlButton routerLink='guide/changelog'>Changelog</button>
+    <div class="content content-right">
+      <button mlButton routerLink="guide/changelog">Changelog</button>
       <button mlButton>v0.2.0</button>
-      <a mlButton href='https://github.com/junpei10/material-lite' target='_blank' rel='noopener noreferrer'>
-        <img src='../assets/images/github-circle-white-transparent.svg' width='24' height='24'>
+      <a
+        mlButton
+        href="https://github.com/junpei10/material-lite"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          src="../assets/images/github-circle-white-transparent.svg"
+          width="24"
+          height="24"
+        />
         <span>Github</span>
       </a>
     </div>
   </nav>
 </header>
 
-<main class='root-main'>
+<main class="root-main">
   <router-outlet></router-outlet>
 </main>
 
-<footer class='root-footer ml-primary'>
+<footer class="root-footer ml-primary">
   <!-- <div><a href='#' target='_blank' rel='noopener noreferrer'>React版</a></div> -->
   <div><a>React版</a></div>
-  <div><a href='https://material.angular.io/' target='_blank' rel='noopener noreferrer'>Angular Material</a></div>
+  <div>
+    <a
+      href="https://material.angular.io/"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Angular Material</a
+    >
+  </div>
 </footer>

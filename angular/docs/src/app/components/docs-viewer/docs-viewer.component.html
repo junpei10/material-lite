@@ -1,0 +1,53 @@
+<div class="docs-viewer-content">
+  <ng-content></ng-content>
+</div>
+
+<ng-template [ngIf]="codeblockName || codeData">
+  <section class="docs-viewer-codeblock-container">
+    <nav
+      *ngIf="!(actionsIsDisabled === '' || actionsIsDisabled)"
+      class="docs-viewer-codeblock-nav"
+    >
+      <div class="docs-viewer-codeblock-routes">
+        <button
+          mlButton
+          class="docs-viewer-codeblock-route-button"
+          *ngFor="let key of codeKeys; let i = index"
+          [theme]="key === selectedCodeKey ? 'primary' : ''"
+          variant="flat"
+          hoverAction="enabled"
+          (click)="selectCode(key, i)"
+        >
+          {{ codeNames[i] || key }}
+        </button>
+      </div>
+
+      <div class="docs-viewer-codeblock-actions">
+        <button
+          mlButton
+          (click)="toggleCodeState()"
+          [theme]="hasShownCodeblock ? 'primary' : ''"
+          variant="icon"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="18px"
+            height="18px"
+          >
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path
+              d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"
+            />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <div *ngIf="hasShownCodeblock" class="docs-viewer-codeblock">
+      <pre
+        class="docs-viewer-codeblock-content"
+      ><code *ngIf="selectedCode" class='docs-viewer-code' [class]='selectedCodeKey' [innerHTML]='selectedCode'></code></pre>
+    </div>
+  </section>
+</ng-template>

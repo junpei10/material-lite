@@ -1,15 +1,15 @@
-<h2 class='docs-ref-h2'>Directives</h2>
-<h3 class='docs-ref-h3 first'>
-  <span>selector：</span><code>[mlButton]</code><br>
+<h2 class="docs-ref-h2">Directives</h2>
+<h3 class="docs-ref-h3 first">
+  <span>selector：</span><code>[mlButton]</code><br />
   <span>exportAs：</span><code>mlButton</code>
 </h3>
-<h4 class='docs-ref-h4'><code>@Input</code></h4>
-<table class='docs-ref-table'>
+<h4 class="docs-ref-h4"><code>@Input</code></h4>
+<table class="docs-ref-table">
   <thead>
     <tr>
       <th>Selector</th>
-      <th>Name</th>
-      <th class='grow'>Description</th>
+      <th>Variable</th>
+      <th class="grow">Description</th>
     </tr>
   </thead>
   <tbody>
@@ -26,7 +26,7 @@
     <tr>
       <td><code>variant</code></td>
       <td><code>variant</code></td>
-      <td>ボタンのスタイルを設定する。<br></td>
+      <td>ボタンのスタイルを設定する。<br /></td>
     </tr>
     <tr>
       <td><code>hoverAction</code></td>
@@ -35,32 +35,29 @@
     </tr>
     <tr>
       <td><code>wrapAnchor</code></td>
-      <td><code>wrapAnchor</code></td>
+      <td><code>hasWrappedAnchor</code></td>
       <td>ボタンの内部に&lt;a&gt;を設置する場合のスタイルを設定する。</td>
     </tr>
     <tr>
-      <td><code>rippleDisabled</code></td>
-      <td><code>rippleDisabled</code></td>
+      <td><code>disableRipple</code></td>
+      <td><code>rippleIsDisabled</code></td>
       <td>Rippleを無効化する。</td>
     </tr>
     <tr>
-      <td><code>rippleOverdrive</code></td>
-      <td><code>rippleOverdrive</code></td>
+      <td><code>rippleConfig</code></td>
+      <td><code>rippleConfig</code></td>
       <td>
-        RippleをのタイプをOverdriveにする。<br>
+        RippleをのタイプをOverdriveにする。<br />
         クリック時、ボタンのサイズが設定したサイズより小さい場合は通常の"Ripple"を表示し、同じか大きい場合は"Overdrive"を表示するようになる。
       </td>
       <td></td>
     </tr>
   </tbody>
 </table>
-<pre class='docs-codeblock-pre'><code class='js'>@<span class='hljs-decorator'>Input</span>(<span class='hljs-string'>'mlButton'</span>) <span class='hljs-prop'>isEnabled</span><span class='hljs-keyword'>?:</span> <span class='hljs-type'>boolean</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>''</span>;
-@<span class='hljs-decorator'>Input</span>() <span class='hljs-prop'>theme</span><span class='hljs-keyword'>?:</span> <span class='hljs-type'>string</span>;
-@<span class='hljs-decorator'>Input</span>() <span class='hljs-prop'>variant</span><span class='hljs-keyword'>?:</span> <span class='hljs-string'>'basic'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'raised'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'stroked'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'flat'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'fab'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'icon'</span>;
-@<span class='hljs-decorator'>Input</span>() <span class='hljs-prop'>hoverAction</span><span class='hljs-keyword'>?:</span> <span class='hljs-string'>'auto'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'enable'</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>'disable'</span>;
-@<span class='hljs-decorator'>Input</span>() <span class='hljs-prop'>wrapAnchor</span><span class='hljs-keyword'>?:</span> <span class='hljs-type'>boolean</span>;
-@<span class='hljs-decorator'>Input</span>() <span class='hljs-prop'>rippleDisabled</span><span class='hljs-keyword'>?:</span> <span class='hljs-type'>boolean</span>;
-@<span class='hljs-decorator'>Input</span>() <span class='hljs-prop'>rippleOverdrive</span><span class='hljs-keyword'>?:</span> <span class='hljs-type'>boolean</span> <span class='hljs-keyword'>|</span> {{ "{" }}
-  width<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>,
-  height<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>
-{{ "}" }};</code></pre>
+
+<app-docs-viewer
+  codeblockName="directiveRef"
+  [codeKeys]="['ts']"
+  showCodeblock="true"
+  disableActions
+></app-docs-viewer>
