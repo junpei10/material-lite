@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { MlStraightTrackerDirective } from './straight-tracker.directive';
+import { MlStraightTrackerComponent } from './straight-tracker.component';
 
 @NgModule({
-  declarations: [MlStraightTrackerDirective],
-  exports: [MlStraightTrackerDirective],
+  declarations: [MlStraightTrackerComponent],
+  exports: [MlStraightTrackerComponent],
 })
-export class MlStraightTrackerModule { }
+export class MlStraightTrackerModule {}

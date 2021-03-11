@@ -1,7 +1,4 @@
-import { ElementRef } from '@angular/core';
-import { RunOutsideNgZone, ContainerResizeObserver, noop, insertStyleElement, CoreConfig, setCoreConfig } from '@material-lite/angular-cdk/utils';
-
-insertStyleElement('.ml-straight-tracker{position:absolute;transition-timing-function:cubic-bezier(0.35, 0, 0.25, 1);transition-duration: 400ms}');
+import { RunOutsideNgZone, noop, CoreConfig, setCoreConfig } from '@material-lite/angular-cdk/utils';
 
 interface WH {
   width: number;
@@ -16,7 +13,11 @@ interface XY {
 export interface MlStraightTrackerCoreConfig {
   position?: 'before' | 'after';
   orientation?: 'horizontal' | 'vertical';
-  brothersIsFixed?: boolean;
+  transitionClasses?: {
+    initializing?: boolean;
+    starting?: boolean;
+    finalize?: boolean;
+  };
 }
 
 export type MlStraightTrackerSizingMode = 'loose' | 'strict' | 'strict-origin' | 'strict-target-point';
@@ -27,21 +28,16 @@ const ZERO_ORIGIN = {
 };
 
 export class MlStraightTrackerCore {
-  private _brothersCollection: HTMLCollection;
-
-  private _brotherElements: HTMLElement[] = [];
-  private _prevBrotherElementCount: number;
-
-  private _onFirstUpdate: (() => number) | null = (() => 0);
+  private _onFirstUpdate: (() => void) | null = noop;
 
   readonly targetElement: HTMLElement;
   readonly targetIndex: number;
 
+  private _resizeObserver?: ResizeObserver;
+
+  readonly hasObservedContainer: boolean = false;
   readonly hasObservedTarget: boolean = true;
   private _unobserveTargetObserver: () => void = noop;
-
-  private _resizeObserver?: ResizeObserver;
-  containerResizeObserver?: ContainerResizeObserver;
 
   private _originFactory: () => XY;
   private _targetPointFactory: () => XY;
@@ -59,18 +55,11 @@ export class MlStraightTrackerCore {
   ) {
     setCoreConfig(this, config);
 
-    this._brothersCollection = this._containerElement.children;
-
     _trackerElement.classList.add('ml-straight-tracker', 'ml-bottom-0');
 
     if (ResizeObserver) {
-      const resizeObs = this._resizeObserver =
+      this._resizeObserver =
         new ResizeObserver(this._onResize.bind(this));
-
-      this.containerResizeObserver =
-        new ContainerResizeObserver(
-          resizeObs, _trackerElement.append.bind(_trackerElement), _createElement
-        );
     }
 
     this.setSizingMode('loose');
@@ -115,11 +104,9 @@ export class MlStraightTrackerCore {
    * - `"ml-straight-tracker-initializing" class`を一瞬だけ要素に付与
    */
   initialize(): void {
-    const trackerClasslist = this._trackerElement.classList;
-    trackerClasslist.add('ml-straight-tracker-initializing');
-    this._runOutsideNgZone(() =>
-      setTimeout(() => trackerClasslist.remove('ml-straight-tracker-initializing'), 16)
-    );
+    if (this._config.transitionClasses?.initializing) {
+      this._oneFrameTransitionClasses('initializing');
+    }
   }
 
   /**
@@ -127,48 +114,90 @@ export class MlStraightTrackerCore {
    * - `"ml-straight-tracker-finalizing" class`を一瞬だけ要素に付与
    */
   finalize(): void {
-    const contResizeObs = this.containerResizeObserver;
-    if (contResizeObs) {
-      contResizeObs.unobserve();
-      this._resizeObserver!.disconnect();
+    const resizeObs = this._resizeObserver;
+    if (resizeObs) {
+      resizeObs.disconnect();
     }
 
-    const trackerClasslist = this._trackerElement.classList;
-    trackerClasslist.add('ml-straight-tracker-finalizing');
-    this.trackTarget(this.targetIndex);
-    this._runOutsideNgZone(() =>
-      setTimeout(() => trackerClasslist.remove('ml-straight-tracker-finalizing'), 16)
-    );
+    if (this._config.transitionClasses?.finalize) {
+      this._oneFrameTransitionClasses('finalizing');
+    }
+  }
+
+  trackTargetByIndex(index: number): void {
+    if (this._onFirstUpdate) {
+      this._onFirstUpdate = () => {
+        this._onFirstUpdate = null;
+        this.trackTargetByIndex(index);
+      };
+      return;
+    }
+
+    const brothers = this._containerElement.parentElement!.children;
+
+    const containerEl = this._containerElement;
+
+    let targetIndex = index;
+    for (let i = 0; i <= index; i++) {
+        if (brothers.item(i) === containerEl) {
+        targetIndex++;
+        break;
+      }
+    }
+
+    const targetEl = brothers[targetIndex] as HTMLElement;
+
+    if (!targetEl || this.targetElement === targetEl) {
+      return; // 抽出されたターゲットが既に選択されている場合
+    }
+
+    this._trackTarget(targetEl, targetIndex);
   }
 
 
-  /**
-   * 第一引数に代入した番号を追跡する。追跡済みの場合や、追跡したい要素が見つからなかった場合は処理を行わない。
-   *
-   * - `targetElement`変数と`targetIndex`変数の更新
-   * - `ResizeObserver`で監視する要素の更新
-   * - `setTrackStyle`関数の呼び出し
-   * - 追跡が始まったときに一瞬、`"ml-straight-tracker-starting" class`を付与
-   */
-  trackTarget(targetIndex: number): void {
-    // `ignoreBrock`=true かつ 現在選択されているインデックスと引数のインデックスが同じ場合中断
-    if (targetIndex === this.targetIndex) { return; }
+  trackTargetByElement(target: HTMLElement): void {
+    if (this._onFirstUpdate) {
+      this._onFirstUpdate = () => {
+        this._onFirstUpdate = null;
+        this.trackTargetByElement(target);
+      };
+      return;
+    }
 
-    const currTargetEl = this._brotherElements[targetIndex];
-    if (!currTargetEl) { return; } // ターゲットがない場合は中断
+    const brothers = this._containerElement.parentElement!.children;
+    const broLen = brothers.length;
 
+    const targetIndex = -1;
+    for (let i = 0; i < broLen; i++) {
+      if (brothers[i] === target) {
+        // @ts-ignore
+        targetIndex = i;
+        return;
+      }
+    }
+
+    if (targetIndex === -1 || this.targetElement === target) {
+      return; // targetがbrothersに存在しない場合 または 存在したターゲットが既に選択されている場合
+    }
+
+    this._trackTarget(target, targetIndex);
+  }
+
+
+  private _trackTarget(targetEl: HTMLElement, targetIndex: number): void {
     // @ts-ignore: assign the readonly variable
-    this.targetIndex = targetIndex; this.targetElement = currTargetEl;
+    this.targetElement = targetEl; // @ts-ignore
+    this.targetIndex = targetIndex;
 
-    const targetResizeObs = this._resizeObserver;
-    if (targetResizeObs && this.hasObservedTarget) {
+    const resizeObs = this._resizeObserver;
+    if (resizeObs && this.hasObservedTarget) {
       this._unobserveTargetObserver();
-      this._unobserveTargetObserver = () => targetResizeObs.unobserve(currTargetEl);
+      this._unobserveTargetObserver = () => resizeObs.unobserve(targetEl);
 
-      targetResizeObs.observe(currTargetEl, { box: 'border-box' });
+      resizeObs.observe(targetEl, { box: 'border-box' });
 
     } else {
-      const targetPoint = currTargetEl.getBoundingClientRect();
+      const targetPoint = targetEl.getBoundingClientRect();
 
       this.setTrackerStyle(
         this._originFactory(),
@@ -176,55 +205,8 @@ export class MlStraightTrackerCore {
       );
     }
 
-    // １フレームクラスを追加
-    const trackerClassList = this._trackerElement.classList;
-    trackerClassList.add('ml-straight-tracker-starting');
-    this._runOutsideNgZone(() => {
-      setTimeout(() => trackerClassList.remove('ml-straight-tracker-starting'), 16);
-    });
-  }
-
-  trackTargetByIndex(index: number): void {
-    // const bros = trackerEl.parentElement!.children;
-
-    // const containerObsEl = this.containerResizeObserver.element;
-
-    // let skipCount: number;
-    // for (let i = 0; i < index; i++) {
-    //   const el = bros[i];
-    //   if (el === trackerEl || el === containerObsEl) {
-    //     skipCount++;
-    //   }
-    // }
-
-    // const targetIndex = index + skipCount;
-    // const target = bros[targetIndex];
-  }
-
-  trackTargetByElement(element: Element): void {
-    // const bros = this._trackerElementRef.nativeElement.parentElement!.childNodes;
-
-    // const containerObsEl = this.containerResizeObserver.element;
-  }
-
-
-  /**
-   * 兄弟要素が取得されているかどうかを判定する。
-   *
-   * また、兄弟要素が取得される前に`trackTarget(...)`関数を呼び出す場合、この関数を呼ぶことで引数の値を保存し、
-   * 兄弟要素が取得されたタイミングで`trackTarget(保存した値)`関数を呼び出すように設定できる。
-   */
-  shouldTrackTarget(target: HTMLElement | number): boolean {
-    if (this._onFirstUpdate) {
-      this._onFirstUpdate =
-        (typeof target === 'number')
-          ? () => target
-          : () => this.indexOfBrotherElements(target);
-
-      return false;
-    } else {
-
-      return true;
+    if (this._config.transitionClasses?.starting) {
+      this._oneFrameTransitionClasses('starting');
     }
   }
 
@@ -257,25 +239,41 @@ export class MlStraightTrackerCore {
     }
   }
 
-  setTargetObserverState(isEnabled: boolean): void {
-    // @ts-ignore: assign readonly variable
-    const result = this.hasObservedTarget = isEnabled;
+  switchTargetObserverState(isEnabled: boolean): void {
+    const resizeObs = this._resizeObserver;
 
-    const targetResizeObs = this._resizeObserver;
+    if (this.hasObservedTarget === isEnabled || !resizeObs) { return; }
+
+    // @ts-ignore: assign readonly variable
+    this.hasObservedTarget = isEnabled;
+
     const targetEl = this.targetElement;
 
-    if (!(targetResizeObs && targetEl)) { return; }
-
-    if (result) {
+    if (isEnabled && targetEl) {
       this._unobserveTargetObserver();
-      this._unobserveTargetObserver = () => targetResizeObs.unobserve(targetEl);
+      this._unobserveTargetObserver = () => resizeObs.unobserve(targetEl);
 
-      targetResizeObs.observe(targetEl);
+      resizeObs.observe(targetEl, { box: 'border-box' });
 
     } else {
       this._unobserveTargetObserver();
       this._unobserveTargetObserver = noop;
     }
+  }
+
+  switchContainerObserverState(isEnabled: boolean): void {
+    const resizeObs = this._resizeObserver;
+
+    if (this.hasObservedContainer === isEnabled || !resizeObs) { return; }
+
+    // @ts-ignore assign the readonly variable
+    this.hasObservedContainer = isEnabled;
+
+    const containerEl = this._containerElement;
+
+    isEnabled
+      ? resizeObs.observe(containerEl, { box: 'border-box' })
+      : resizeObs.unobserve(containerEl);
   }
 
   /**
@@ -347,90 +345,22 @@ export class MlStraightTrackerCore {
     }
   }
 
-
-  /**
-   * 以前この関数を呼び出したときに保存してある兄弟要素の数と比較し、要素の数に変更があった場合`_ouUpdateBrotherElements`関数を呼び出す。
-   * `ngAfterContentInit`関数などで呼び出す。
-   */
-  checkBrotherElement(): void {
-    const count = this.targetElement.childElementCount;
-
-    if (this._prevBrotherElementCount !== count) {
-      this._prevBrotherElementCount = count;
-      this.onUpdateBrotherElements();
+  onUpdateBrothers(): void {
+    const onFirstUpdate = this._onFirstUpdate;
+    if (onFirstUpdate) {
+      onFirstUpdate();
     }
   }
 
-  /**
-   * 親要素にアクセスし、兄弟要素の一覧を取得。その後、`tracker`と`親要素のサイズ監視用の要素`を除いた配列を作成し、
-   * 最後に`trackerTarget(...)`関数を呼び出すことで、スタイルのアップデートを行う。
-   */
-  onUpdateBrotherElements(): void {
-    // `_firstUpdateData`が存在するということは、初めて`BrotherElement`を取得したということ
-    const _onFirstUpdate = this._onFirstUpdate;
-    if (_onFirstUpdate) {
-      // @ts-ignore: assign readonly variable
-      this.targetIndex = _onFirstUpdate();
-      this._onFirstUpdate = null;
-    }
-
-    const trackerEl = this._trackerElement;
-
-    const brothersCollection = trackerEl.parentElement!.children;
-    const brothersCollectionLen = brothersCollection.length;
-
-    const currBrothers: HTMLElement[] = [];
-    let currBrotherLen: number = brothersCollectionLen;
-
-    const contResizeObsEl = this.containerResizeObserver?.element;
-
-    for (let i = 0; brothersCollectionLen > i; i++) {
-      const value = brothersCollection[i] as HTMLElement;
-      (trackerEl === value || contResizeObsEl === value)
-        ? currBrotherLen--
-        : currBrothers.push(value);
-    }
-
-    const prevBrotherLen = this._brotherElements.length;
-    this._brotherElements = currBrothers;
-
-    const targetIndex = this.targetIndex;
-    if ((prevBrotherLen - 1 === targetIndex) && (prevBrotherLen > currBrotherLen)) {
-      // 最後のタブを選択していたとき & 兄弟要素の数が減った
-      this.trackTarget(currBrotherLen - 1);
-
-    } else {
-      const currIndex = this.targetIndex;
-
-      // @ts-ignore: 重複追跡を回避
-      this.targetIndex = null;
-      this.trackTarget(currIndex);
-    }
-  }
-
-
-  /**
-   * 引数に代入した要素のインデックスを求め、戻り地として返す。
-   *
-   * 存在しない場合は`-1`が返る。
-   */
-  indexOfBrotherElements(element: Element): number {
-    const broEls = this._brotherElements;
-    const len = broEls.length;
-
-    let result: number = -1;
-
-    for (let i = 0; i < len; i++) {
-      if (element === broEls[i]) {
-        result = i;
-        break;
-      }
-    }
-
-    return result;
+  private _oneFrameTransitionClasses(state: string): void {
+    const name = 'ml-straight-tracker-' + state;
+    const trackerClassList = this._trackerElement.classList;
+    trackerClassList.add(name);
+    this._runOutsideNgZone(() =>
+      setTimeout(() => trackerClassList.remove(name), 16)
+    );
   }
 }
-
 
 function createLoosePoint(element: HTMLElement): XY {
   return {
