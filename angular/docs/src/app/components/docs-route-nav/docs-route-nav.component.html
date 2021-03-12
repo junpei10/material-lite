@@ -1,9 +1,4 @@
-<!-- <div
-  class="docs-route-nav-tracker ml-primary-bg"
-  *mlStraightTracker="true"
-  [mlStraightTrackerTargetIndex]="docs.activeRouteIndex"
-></div> -->
-<ml-straight-tracker [targetIndex]="docs.activeRouteIndex">
+<ml-straight-tracker [targetIndex]="docs.activeRouteIndex" [transitionClasses]="{ initializing: true }">
   <div class="docs-route-nav-tracker ml-primary-bg"></div>
 </ml-straight-tracker>
 

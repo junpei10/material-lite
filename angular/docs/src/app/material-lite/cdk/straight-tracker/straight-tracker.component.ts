@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, Inject, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Falsy, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '../utils';
-import { MlStraightTrackerCore, MlStraightTrackerSizingMode } from './straight-tracker-core';
+import { MlStraightTrackerCore, MlStraightTrackerSizingMode, MlStraightTrackerTransitionClasses } from './straight-tracker-core';
 
 @Component({
   selector: 'ml-straight-tracker',
@@ -49,8 +49,9 @@ export class MlStraightTrackerComponent {
   }
   readonly sizingMode: MlStraightTrackerCore;
 
-  @Input() orientation: 'horizontal' | 'vertical';
-  @Input() position: 'before' | 'after';
+  @Input() orientation?: 'horizontal' | 'vertical';
+  @Input() position?: 'before' | 'after';
+  @Input() transitionClasses?: MlStraightTrackerTransitionClasses;
 
   @Input('unobserveTarget')
   set setTargetToUnobserved(isEnabled: true | Falsy) {
@@ -86,8 +87,14 @@ export class MlStraightTrackerComponent {
     );
   }
 
+  ngOnInit(): void {
+    if (this.isDisabled === void 0) {
+      this.core.initialize();
+    }
+  }
+
   ngAfterViewInit(): void {
-    this.core.onUpdateBrothers();
+    this.core.onFirstUpdateBrothers();
   }
 }
 

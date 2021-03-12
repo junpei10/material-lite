@@ -9,6 +9,10 @@ app-docs-route-nav {
     height: 2px;
     will-change: left;
     transition-property: left;
+
+    &.ml-straight-tracker-initializing {
+      transition: none;
+    }
   }
 
   &-button {

@@ -13,11 +13,13 @@ interface XY {
 export interface MlStraightTrackerCoreConfig {
   position?: 'before' | 'after';
   orientation?: 'horizontal' | 'vertical';
-  transitionClasses?: {
-    initializing?: boolean;
-    starting?: boolean;
-    finalize?: boolean;
-  };
+  transitionClasses?: MlStraightTrackerTransitionClasses;
+}
+
+export interface MlStraightTrackerTransitionClasses {
+  initializing?: boolean;
+  starting?: boolean;
+  finalizing?: boolean;
 }
 
 export type MlStraightTrackerSizingMode = 'loose' | 'strict' | 'strict-origin' | 'strict-target-point';
@@ -28,7 +30,7 @@ const ZERO_ORIGIN = {
 };
 
 export class MlStraightTrackerCore {
-  private _onFirstUpdate: (() => void) | null = noop;
+  readonly onFirstUpdateBrothers: (() => void) = noop;
 
   readonly targetElement: HTMLElement;
   readonly targetIndex: number;
@@ -46,9 +48,13 @@ export class MlStraightTrackerCore {
 
   private _config: MlStraightTrackerCoreConfig;
 
+  get brothersCollection(): HTMLCollection {
+    return this._hostElement.parentElement!.children;
+  }
+
   constructor(
     config: CoreConfig<MlStraightTrackerCoreConfig>,
-    private _containerElement: HTMLElement,
+    private _hostElement: HTMLElement,
     private _trackerElement: HTMLElement,
     private _runOutsideNgZone: RunOutsideNgZone,
     _createElement: (tagName: string, ...arg: any[]) => HTMLElement,
@@ -57,17 +63,12 @@ export class MlStraightTrackerCore {
 
     _trackerElement.classList.add('ml-straight-tracker', 'ml-bottom-0');
 
-    if (ResizeObserver) {
-      this._resizeObserver =
-        new ResizeObserver(this._onResize.bind(this));
-    }
-
     this.setSizingMode('loose');
   }
 
   /**
    * `resizeObserver`が変更を感知したときに呼び出される関数。
-   * 引数に渡される値から、ターゲットのサイズの情報だけをくり抜き、`setTrackerStyle`関数を呼び出す。
+   * 引数に渡される値から、`target`のサイズの情報だけをくり抜き、`setTrackerStyle`関数を呼び出す。
    */
   private _onResize(entries: ResizeObserverEntry[]): void {
     const targetEl = this.targetElement;
@@ -100,46 +101,56 @@ export class MlStraightTrackerCore {
   }
 
   /**
-   * - `setSizingMode`関数が呼び出されていないとき、デフォルトとして`loose`を設定
-   * - `"ml-straight-tracker-initializing" class`を一瞬だけ要素に付与
+   * - `ResizeObserver`が存在する場合は、インスタンスを作成。
+   * - 'initializing'の`Transition classes`を付与。
    */
   initialize(): void {
+    if (ResizeObserver) {
+      this._resizeObserver =
+        new ResizeObserver(this._onResize.bind(this));
+    }
+
     if (this._config.transitionClasses?.initializing) {
       this._oneFrameTransitionClasses('initializing');
     }
   }
 
   /**
-   * - `ResizeObserver`に接続されている要素をすべて`unsubscribe`
-   * - `"ml-straight-tracker-finalizing" class`を一瞬だけ要素に付与
+   * - `ResizeObserver`のインスタンスが存在した場合、をクリアする。
+   * - 'finalizing'の`Transition classes`を付与。
    */
   finalize(): void {
     const resizeObs = this._resizeObserver;
     if (resizeObs) {
       resizeObs.disconnect();
+      this._resizeObserver = null;
     }
 
-    if (this._config.transitionClasses?.finalize) {
+    if (this._config.transitionClasses?.finalizing) {
       this._oneFrameTransitionClasses('finalizing');
     }
   }
 
+
+  /**
+   * 引数に代入された数から`target`を見つけ、追跡する。
+   */
   trackTargetByIndex(index: number): void {
-    if (this._onFirstUpdate) {
-      this._onFirstUpdate = () => {
-        this._onFirstUpdate = null;
+    if (this.onFirstUpdateBrothers) { // @ts-ignore: assign the readonly variable
+      this.onFirstUpdateBrothers = () => { // @ts-ignore
+        this.onFirstUpdateBrothers = null;
         this.trackTargetByIndex(index);
       };
       return;
     }
 
-    const brothers = this._containerElement.parentElement!.children;
+    const brothers = this._hostElement.parentElement!.children;
 
-    const containerEl = this._containerElement;
+    const hostElement = this._hostElement;
 
     let targetIndex = index;
     for (let i = 0; i <= index; i++) {
-        if (brothers.item(i) === containerEl) {
+        if (brothers.item(i) === hostElement) {
         targetIndex++;
         break;
       }
@@ -155,16 +166,19 @@ export class MlStraightTrackerCore {
   }
 
 
+  /**
+   * 引数に代入された要素が兄弟に存在しているかを確認し、存在した場合、追跡する。
+   */
   trackTargetByElement(target: HTMLElement): void {
-    if (this._onFirstUpdate) {
-      this._onFirstUpdate = () => {
-        this._onFirstUpdate = null;
+    if (this.onFirstUpdateBrothers) { // @ts-ignore: assign the readonly variable
+      this.onFirstUpdateBrothers = () => { // @ts-ignore
+        this.onFirstUpdateBrothers = null;
         this.trackTargetByElement(target);
       };
       return;
     }
 
-    const brothers = this._containerElement.parentElement!.children;
+    const brothers = this._hostElement.parentElement!.children;
     const broLen = brothers.length;
 
     const targetIndex = -1;
@@ -183,7 +197,14 @@ export class MlStraightTrackerCore {
     this._trackTarget(target, targetIndex);
   }
 
-
+  /**
+   * `trackTargetByIndex`と`trackTargetByElement`の共通処理。
+   * 
+   * - メンバ変数を更新
+   * - `追跡される要素(`target`)に対して、`ResizeObserver`で監視できる場合は`observer`を追加し、
+   *    できない場合は`target`のサイズを取得してトラッカーを動かす。
+   * - 'starting'の`Transition classes`を付与。
+   */
   private _trackTarget(targetEl: HTMLElement, targetIndex: number): void {
     // @ts-ignore: assign the readonly variable
     this.targetElement = targetEl; // @ts-ignore
@@ -214,10 +235,8 @@ export class MlStraightTrackerCore {
   /**
    * 引数で代入された座標をもとに、trackerのstyleを変更する。
    *
-   * - `orientation="vertical"`時
-   *  - `height` and `top`
-   * - `orientation="horizontal"`時
-   *  - `width` and `left`
+   * - `orientation="vertical"`のとき => `height`, `top` のスタイルが付与。
+   * - `orientation="horizontal"`のとき => `width`, `left` のスタイルが付与。
    */
   setTrackerStyle(origin: XY, targetPoint: XY, targetSize?: WH | undefined): void {
     const el = this._trackerElement;
@@ -239,6 +258,9 @@ export class MlStraightTrackerCore {
     }
   }
 
+  /**
+   * 追跡される要素(`target`)を監視するか否かを切り替える
+   */
   switchTargetObserverState(isEnabled: boolean): void {
     const resizeObs = this._resizeObserver;
 
@@ -261,6 +283,9 @@ export class MlStraightTrackerCore {
     }
   }
 
+  /**
+   * コンテナを監視するか否かを切り替える
+   */
   switchContainerObserverState(isEnabled: boolean): void {
     const resizeObs = this._resizeObserver;
 
@@ -269,7 +294,7 @@ export class MlStraightTrackerCore {
     // @ts-ignore assign the readonly variable
     this.hasObservedContainer = isEnabled;
 
-    const containerEl = this._containerElement;
+    const containerEl = this._hostElement.parentElement!;
 
     isEnabled
       ? resizeObs.observe(containerEl, { box: 'border-box' })
@@ -330,25 +355,18 @@ export class MlStraightTrackerCore {
         break;
 
       case 'strict':
-        this._originFactory = () => this._trackerElement.parentElement.getBoundingClientRect();
+        this._originFactory = () => this._hostElement.parentElement.getBoundingClientRect();
         this._targetPointFactory = () => this.targetElement.getBoundingClientRect();
         break;
 
       case 'strict-origin':
-        this._originFactory = () => this._trackerElement.parentElement.getBoundingClientRect();
+        this._originFactory = () => this._hostElement.parentElement.getBoundingClientRect();
         this._targetPointFactory = () => createLoosePoint(this.targetElement);
         break;
 
       case 'strict-target-point':
-        this._originFactory = () => createLoosePoint(this._trackerElement.parentElement);
+        this._originFactory = () => createLoosePoint(this._hostElement.parentElement);
         this._targetPointFactory = () => this.targetElement.getBoundingClientRect();
-    }
-  }
-
-  onUpdateBrothers(): void {
-    const onFirstUpdate = this._onFirstUpdate;
-    if (onFirstUpdate) {
-      onFirstUpdate();
     }
   }
 
