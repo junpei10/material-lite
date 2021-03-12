@@ -33,8 +33,9 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes, {
     scrollOffset: [0, 56],
-    anchorScrolling: 'enabled'
-  })],
+    anchorScrolling: 'enabled',
+    relativeLinkResolution: 'legacy'
+})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
