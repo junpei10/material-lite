@@ -30,7 +30,7 @@ const ZERO_ORIGIN = {
 };
 
 export class MlStraightTrackerCore {
-  readonly onFirstUpdateBrothers: (() => void) = noop;
+  private _onFirstUpdateBrothers: (() => void) | null | undefined;
 
   readonly targetElement: HTMLElement;
   readonly targetIndex: number;
@@ -136,11 +136,9 @@ export class MlStraightTrackerCore {
    * 引数に代入された数から`target`を見つけ、追跡する。
    */
   trackTargetByIndex(index: number): void {
-    if (this.onFirstUpdateBrothers) { // @ts-ignore: assign the readonly variable
-      this.onFirstUpdateBrothers = () => { // @ts-ignore
-        this.onFirstUpdateBrothers = null;
-        this.trackTargetByIndex(index);
-      };
+    if (this._onFirstUpdateBrothers !== null) {
+      this._onFirstUpdateBrothers =
+        () => this.trackTargetByIndex(index);
       return;
     }
 
@@ -170,11 +168,9 @@ export class MlStraightTrackerCore {
    * 引数に代入された要素が兄弟に存在しているかを確認し、存在した場合、追跡する。
    */
   trackTargetByElement(target: HTMLElement): void {
-    if (this.onFirstUpdateBrothers) { // @ts-ignore: assign the readonly variable
-      this.onFirstUpdateBrothers = () => { // @ts-ignore
-        this.onFirstUpdateBrothers = null;
-        this.trackTargetByElement(target);
-      };
+    if (this._onFirstUpdateBrothers !== null) {
+      this._onFirstUpdateBrothers =
+        () => this.trackTargetByElement(target);
       return;
     }
 
@@ -199,7 +195,7 @@ export class MlStraightTrackerCore {
 
   /**
    * `trackTargetByIndex`と`trackTargetByElement`の共通処理。
-   * 
+   *
    * - メンバ変数を更新
    * - `追跡される要素(`target`)に対して、`ResizeObserver`で監視できる場合は`observer`を追加し、
    *    できない場合は`target`のサイズを取得してトラッカーを動かす。
@@ -227,6 +223,7 @@ export class MlStraightTrackerCore {
     }
 
     if (this._config.transitionClasses?.starting) {
+      console.log('starting tc');
       this._oneFrameTransitionClasses('starting');
     }
   }
@@ -257,6 +254,16 @@ export class MlStraightTrackerCore {
       }
     }
   }
+
+  onFirstUpdateBrothers(): void {
+    const method = this._onFirstUpdateBrothers;
+    this._onFirstUpdateBrothers = null;
+
+    method
+      ? method()
+      : this.trackTargetByIndex(0);
+  }
+
 
   /**
    * 追跡される要素(`target`)を監視するか否かを切り替える

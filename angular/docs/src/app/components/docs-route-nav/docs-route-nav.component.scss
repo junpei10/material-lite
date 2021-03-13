@@ -2,17 +2,16 @@ app-docs-route-nav {
   position: relative;
   display: flex;
   margin-bottom: 32px;
+
+  .ml-straight-tracker {
+    will-change: left;
+    transition-property: left;
+  }
 }
 
 .docs-route-nav {
   &-tracker {
     height: 2px;
-    will-change: left;
-    transition-property: left;
-
-    &.ml-straight-tracker-initializing {
-      transition: none;
-    }
   }
 
   &-button {

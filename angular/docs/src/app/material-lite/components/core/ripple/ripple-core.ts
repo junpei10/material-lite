@@ -34,11 +34,15 @@ insertStyleElement(`
 
 export type MlRippleTrigger = ListenedTarget | 'host' | Falsy;
 
+export type MlRippleOverdrive = {
+  width: number;
+  height: number;
+} | true | Falsy;
+
+export type MlRippleEntrance = 'center' | 'resonance' | 'default' | Falsy;
+
 export interface MlRippleCoreConfig {
-  overdrive?: {
-    width?: number,
-    height?: number
-  } | boolean;
+  overdrive?: MlRippleOverdrive;
 
   color?: string;
   theme?: string;
@@ -46,9 +50,7 @@ export interface MlRippleCoreConfig {
   radius?: number;
   opacity?: number;
 
-  centered?: boolean;
-
-  triggerIsOutside?: boolean;
+  entrance?: MlRippleEntrance;
 
   animation?: {
     enter?: number;
@@ -117,11 +119,11 @@ export class MlRippleCore {
 
     const conf = this._config;
 
-    if (conf.centered) {
+    if (conf.entrance === 'center') {
         x = containerRect.left + containerRect.width * 0.5;
         y = containerRect.top + containerRect.height * 0.5;
 
-    } else if (conf.triggerIsOutside) {
+    } else if (conf.entrance === 'resonance') {
       const left = containerRect.left;
       const right = containerRect.right;
       x =
@@ -336,7 +338,7 @@ export class MlRippleCore {
   private _addPointerdownListenerCallback(event: PointerEvent, trigger: ListenedTarget): void {
     const conf = this._config;
 
-    let overdrive = conf.overdrive;
+    let overdrive = conf.overdrive === '' || conf.overdrive;
 
     if (overdrive && overdrive !== true) {
       const rect = this._hostElementRect =

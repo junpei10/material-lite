@@ -1,7 +1,7 @@
 import { Directive, ElementRef, Inject, Input, OnChanges } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Falsy, ListenedTarget, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
-import { MlRippleCore, MlRippleTrigger } from './ripple-core';
+import { MlRippleCore, MlRippleEntrance, MlRippleOverdrive, MlRippleTrigger } from './ripple-core';
 
 // @dynamic
 @Directive({
@@ -24,10 +24,7 @@ export class MlRippleDirective implements OnChanges {
 
   private _needInitialize: boolean;
 
-  @Input('mlRippleOverdrive') overdrive?: {
-    width: number;
-    height: number;
-  } & boolean;
+  @Input('mlRippleOverdrive') overdrive?: MlRippleOverdrive;
 
   @Input('mlRippleColor') color?: string;
 
@@ -52,9 +49,7 @@ export class MlRippleDirective implements OnChanges {
   }
   private _triggerBinder: MlRippleTrigger = 'host';
 
-  @Input('mlRippleTriggerIsOutside') triggerIsOutside?: boolean;
-
-  @Input('mlRippleCentered') centered?: boolean;
+  @Input('mlRippleEntrance') entrance?: MlRippleEntrance;
 
   @Input('mlRippleFadeOutEventNames') fadeOutEventNames?: string[] = [
     'pointerup', 'pointerout'

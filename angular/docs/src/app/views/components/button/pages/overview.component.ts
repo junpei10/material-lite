@@ -9,10 +9,10 @@ import { DocsService } from 'src/app/services/docs';
       height: 36px;
       margin: 8px;
     }
-    .ml-fab {
+    .ml-fab, .ml-icon-button {
       width: 36px;
     }
-    .docs-viewer-content [product] {
+    [product] {
       width: 100%;
       padding-top: 8px;
       padding-bottom: 8px;

@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, Inject, Input, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, ElementRef, Inject, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Falsy, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '../utils';
 import { MlStraightTrackerCore, MlStraightTrackerSizingMode, MlStraightTrackerTransitionClasses } from './straight-tracker-core';
 
@@ -11,12 +11,12 @@ import { MlStraightTrackerCore, MlStraightTrackerSizingMode, MlStraightTrackerTr
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
-export class MlStraightTrackerComponent {
+export class MlStraightTrackerComponent implements OnInit, AfterContentInit {
   core: MlStraightTrackerCore;
   private _coreFactory: ((trackerEl: HTMLElement) => MlStraightTrackerCore) | null;
 
   @ViewChild('trackerElement', { static: true })
-  private set _onInit(elementRef: ElementRef<HTMLElement>) {
+  private set _setCore(elementRef: ElementRef<HTMLElement>) {
     this.core = this._coreFactory(elementRef.nativeElement);
     this._coreFactory = null;
   }
@@ -40,6 +40,10 @@ export class MlStraightTrackerComponent {
     this.core.trackTargetByIndex(targetIndex);
   }
 
+  @Input() orientation?: 'horizontal' | 'vertical';
+  @Input() position?: 'before' | 'after';
+  @Input() transitionClasses?: MlStraightTrackerTransitionClasses;
+
   @Input('sizingMode')
   set setSizingMode(mode: MlStraightTrackerSizingMode) {
     this.core.setSizingMode(mode);
@@ -48,10 +52,6 @@ export class MlStraightTrackerComponent {
     this.sizingMode = mode;
   }
   readonly sizingMode: MlStraightTrackerCore;
-
-  @Input() orientation?: 'horizontal' | 'vertical';
-  @Input() position?: 'before' | 'after';
-  @Input() transitionClasses?: MlStraightTrackerTransitionClasses;
 
   @Input('unobserveTarget')
   set setTargetToUnobserved(isEnabled: true | Falsy) {
@@ -93,7 +93,7 @@ export class MlStraightTrackerComponent {
     }
   }
 
-  ngAfterViewInit(): void {
+  ngAfterContentInit(): void {
     this.core.onFirstUpdateBrothers();
   }
 }

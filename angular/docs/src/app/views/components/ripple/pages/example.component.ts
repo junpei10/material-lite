@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MlRippleEntrance } from 'src/app/material-lite/components/core/ripple/ripple-core';
 import { DocsService } from 'src/app/services/docs';
 
 @Component({
@@ -11,7 +12,6 @@ export class ExampleComponent {
 
   disabled: boolean;
   overdrive: boolean;
-  centered: boolean;
 
   theme: string;
   color: string;
@@ -23,6 +23,8 @@ export class ExampleComponent {
     enter?: number;
     leave?: number;
   } = {};
+
+  entrance: MlRippleEntrance;
 
   constructor(
     docs: DocsService

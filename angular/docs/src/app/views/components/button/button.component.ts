@@ -15,14 +15,5 @@ export class ButtonComponent {
     public docs: DocsService
   ) {
     docs.init('components', 'button');
-    // docs.routeDataChanges.subscribe((v) => console.log(v));
   }
-
-  // onRouteChange(event): void {
-  //   this.pageName = event instanceof OverviewComponent
-  //     ? 'overview'
-  //     : event instanceof ReferenceComponent
-  //       ? 'reference'
-  //       : 'example';
-  // }
 }

@@ -5,9 +5,10 @@ import { DocsService } from 'src/app/services/docs';
   selector: 'app-overview',
   templateUrl: './overview.component.html',
   styles: [`
-    .docs-codeblock-prod {
+    [product] {
       padding: 8px;
     }
+
     .ml-ripple {
       display: flex;
       justify-content: center;
@@ -16,22 +17,19 @@ import { DocsService } from 'src/app/services/docs';
       box-sizing: border-box;
       margin: 8px 16px;
     }
-    .first-prod .ml-ripple {
+
+    .first-product .ml-ripple {
       width: 80px;
       height: 80px;
     }
-    .second-prod .ml-ripple, .fourth-prod .ml-ripple {
+
+    .second-product .ml-ripple, .fourth-product .ml-ripple {
       width: 160px;
       height: 80px;
     }
-    .fourth-prod {
-      display: flex;
+
+    .third-form {
       flex-direction: column;
-    }
-    .forth-prod-wrapper {
-      display: flex;
-      width: 100%;
-      justify-content: space-around;
     }
     .third-form button {
       margin: 0 8px;
@@ -43,6 +41,24 @@ import { DocsService } from 'src/app/services/docs';
       font-size: 16px;
       font-weight: bold;
     }
+
+    .fourth-product {
+      display: flex;
+      flex-direction: column;
+    }
+    .fourth-product-wrapper {
+      display: flex;
+      width: 100%;
+      justify-content: space-evenly;
+    }
+
+    .arrow {
+      display: block;
+      margin: auto 0;
+      font-size: 32px;
+      font-weight: 400;
+    }
+
   `]
 })
 export class OverviewComponent {

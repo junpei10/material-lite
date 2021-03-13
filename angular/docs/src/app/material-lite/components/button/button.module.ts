@@ -8,8 +8,10 @@ const STYLE: MlThemeStyle = {
       display: inline-flex;
       position: relative;
       overflow: visible !important;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      vertical-align: middle;
+
       cursor: pointer;
 
       font-weight: 500;

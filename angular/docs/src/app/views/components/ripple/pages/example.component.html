@@ -15,6 +15,15 @@
     </div>
 
     <div>
+      <span>entrance</span>
+      <select [(ngModel)]="entrance">
+        <option value="default">default</option>
+        <option value="center">center</option>
+        <option value="resonance">resonance</option>
+      </select>
+    </div>
+
+    <div>
       <span>opacity</span>
       <input
         placeholder="opacity"
@@ -72,21 +81,13 @@
         [(ngModel)]="overdrive"
       />overdrive</label
     >
-
-    <label for="centered"
-      ><input
-        type="checkbox"
-        id="centered"
-        [(ngModel)]="centered"
-      />centered</label
-    >
   </div>
 
   <div product>
     <div
       [mlRipple]="!disabled"
       [mlRippleOverdrive]="overdrive"
-      [mlRippleCentered]="centered"
+      [mlRippleEntrance]="entrance"
       [mlRippleTheme]="theme"
       [mlRippleColor]="color"
       [mlRippleOpacity]="opacity"

@@ -64,8 +64,7 @@ export class MlButtonComponent implements OnInit, OnChanges {
   }
   readonly theme: string;
 
-  // entry: @Input('wrappedAnchor')
-  @Input('wrapAnchor') set setAnchorToWrapped(isEnabled: true | Falsy) {
+  @Input('wrappedAnchor') set setAnchorToWrapped(isEnabled: true | Falsy) {
     // @ts-ignore assign readonly variable
     const result = this.hasWrappedAnchor =
       isEnabled || isEnabled === '';
@@ -94,7 +93,7 @@ export class MlButtonComponent implements OnInit, OnChanges {
       isDisabled || isDisabled === '';
 
     result
-      ? this.rippleCore.setTrigger(false)
+      ? this.rippleCore.setTrigger(null)
       : this.rippleCore.setTrigger(this._hostElementRef.nativeElement);
   }
   readonly rippleIsDisabled: boolean;
@@ -122,7 +121,7 @@ export class MlButtonComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     if (this.rippleIsDisabled === void 0) {
-      this.rippleCore.setTrigger(this._hostElementRef.nativeElement);
+      this.rippleCore.setTrigger('host');
     }
   }
 
@@ -139,7 +138,7 @@ export class MlButtonComponent implements OnInit, OnChanges {
           'ml-basic-button',
           'ml-simple-button',
         ];
-        this._rippleConfig.dynamic.centered = false;
+        this._rippleConfig.dynamic.entrance = null;
         this._setHoverActionForEnabledByDefault();
 
       } else if (v === 'raised') {
@@ -147,7 +146,7 @@ export class MlButtonComponent implements OnInit, OnChanges {
           'ml-raised-button',
           'ml-filled-button'
         ];
-        this._rippleConfig.dynamic.centered = false;
+        this._rippleConfig.dynamic.entrance = null;
         this._setHoverActionForDisabledByDefault();
 
       } else if (v === 'icon') {
@@ -155,7 +154,7 @@ export class MlButtonComponent implements OnInit, OnChanges {
           'ml-icon-button',
           'ml-simple-button'
         ];
-        this._rippleConfig.dynamic.centered = true;
+        this._rippleConfig.dynamic.entrance = 'center';
         this._setHoverActionForDisabledByDefault();
 
       } else if (v === 'fab') {
@@ -163,7 +162,7 @@ export class MlButtonComponent implements OnInit, OnChanges {
           'ml-fab',
           'ml-filled-button'
         ];
-        this._rippleConfig.dynamic.centered = false;
+        this._rippleConfig.dynamic.entrance = null;
         this._setHoverActionForDisabledByDefault();
 
       } else if (v === 'flat') {
@@ -171,7 +170,7 @@ export class MlButtonComponent implements OnInit, OnChanges {
           'ml-flat-button',
           'ml-filled-button'
         ];
-        this._rippleConfig.dynamic.centered = false;
+        this._rippleConfig.dynamic.entrance = null;
         this._setHoverActionForDisabledByDefault();
 
       } else if (v === 'stroked') {
@@ -179,7 +178,7 @@ export class MlButtonComponent implements OnInit, OnChanges {
           'ml-stroked-button',
           'ml-simple-button',
         ];
-        this._rippleConfig.dynamic.centered = false;
+        this._rippleConfig.dynamic.entrance = null;
         this._setHoverActionForEnabledByDefault();
 
       } else {
@@ -187,7 +186,7 @@ export class MlButtonComponent implements OnInit, OnChanges {
           'ml-basic-button',
           'ml-simple-button',
         ];
-        this._rippleConfig.dynamic.centered = false;
+        this._rippleConfig.dynamic.entrance = null;
         this._setHoverActionForEnabledByDefault();
       }
 
