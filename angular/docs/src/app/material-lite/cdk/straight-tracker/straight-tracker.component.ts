@@ -59,9 +59,6 @@ export class MlStraightTrackerComponent implements OnInit, AfterContentInit {
 
     this.core.switchTargetObserverState(!result);
   }
-  get hasObservedTarget(): boolean {
-    return this.core.hasObservedTarget;
-  }
 
   /**
    * コンテナ(親)要素に`ResizeObserver`を追加するかどうか。
@@ -71,9 +68,6 @@ export class MlStraightTrackerComponent implements OnInit, AfterContentInit {
     const result = isEnabled || isEnabled === '';
 
     this.core.switchContainerObserverState(result);
-  }
-  get hasObservedContainer(): boolean {
-    return !this.core.hasObservedContainer;
   }
 
   constructor(

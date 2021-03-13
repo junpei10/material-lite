@@ -4,7 +4,6 @@ export * from './noop';
 export * from './divided-zone';
 export * from './token.service';
 export * from './animation';
-export * from './container-resize-observer';
 export * from './lifecycle';
 export * from './core';
 

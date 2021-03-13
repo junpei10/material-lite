@@ -62,6 +62,7 @@ export class MlPortalOutletDirective implements OnChanges, OnDestroy {
 
           1. "[mlPortalOutlet](directive) > [mlPortalOutletKey](@Input)"に値が代入されたとき
         `);
+
       } else {
         this._portalOutlet.setPortalData(key, this._portalData);
       }
