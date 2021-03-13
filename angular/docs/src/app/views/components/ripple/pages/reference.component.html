@@ -1,15 +1,15 @@
-<h2 class='docs-ref-h2'>Directives</h2>
-<h3 class='docs-ref-h3 first'>
-  <span>selector：</span><code>[mlRipple]</code><br>
+<h2 class="docs-ref-h2">Directives</h2>
+<h3 class="docs-ref-h3 first">
+  <span>selector：</span><code>[mlRipple]</code><br />
   <span>exportAs：</span><code>mlRipple</code>
 </h3>
-<h4 class='docs-ref-h4'><code>@Input</code></h4>
-<table class='docs-ref-table'>
+<h4 class="docs-ref-h4"><code>@Input</code></h4>
+<table class="docs-ref-table">
   <thead>
     <tr>
       <th>Selector</th>
-      <th>Name</th>
-      <th class='grow'>Description</th>
+      <th>Variable</th>
+      <th class="grow">Description</th>
     </tr>
   </thead>
   <tbody>
@@ -22,7 +22,7 @@
       <td><code>mlRippleOverdrive</code></td>
       <td><code>overdrive</code></td>
       <td>
-        booleanを代入すると、Overdriveを有効にするかどうかを設定する。<br>
+        booleanを代入すると、Overdriveを有効にするかどうかを設定する。<br />
         Objectを代入すると、クリック時、コンテナのサイズが設定したサイズより小さい場合は通常の"Ripple"を表示し、同じか大きい場合は"Overdrive"を表示するようになる。
       </td>
     </tr>
@@ -35,7 +35,7 @@
       <td><code>mlRippleColor</code></td>
       <td><code>color</code></td>
       <td>
-        Rippleの背景色を指定した色に設定する。<br>
+        Rippleの背景色を指定した色に設定する。<br />
         優先度は<code>Theme</code>のほうが上になる。
       </td>
     </tr>
@@ -47,51 +47,33 @@
     <tr>
       <td><code>mlRippleRadius</code></td>
       <td><code>radius</code></td>
-      <td>Rippleの半径を設定する。指定されていない場合、クリックした箇所からの最も遠い角までの距離になる。</td>
+      <td>
+        Rippleの半径を設定する。指定されていない場合、クリックした箇所からの最も遠い角までの距離になる。
+      </td>
     </tr>
     <tr>
-      <td><code>mlRippleAnimationDuration</code></td>
-      <td><code>animationDuration</code></td>
-      <td>波紋が広がる速度(enter)、波紋が消える速度(leave)を設定する。</td>
+      <td><code>mlRippleAnimation</code></td>
+      <td><code>animation</code></td>
+      <td>波紋が広がる速度(enter)と、波紋が消える速度(leave)を設定する。</td>
+    </tr>
+    <tr>
+      <td><code>mlRippleEntrance</code></td>
+      <td><code>entrance</code></td>
+      <td>Rippleが入口を設定。</td>
     </tr>
     <tr>
       <td><code>mlRippleTrigger</code></td>
       <td><code>trigger</code></td>
-      <td>指定したターゲットに<code>Pointerdown</code>のイベントリスナーを追加し、クリックすると出力先からRippleが出力されるようになる。</td>
-    </tr>
-    <tr>
-      <td><code>mlRippleTriggerIsOutside</code></td>
-      <td><code>triggerIsOutside</code></td>
       <td>
-        <code>mlRippleTrigger</code>を使用したとき、TriggerがOutlet(出力先・Rippleが表示される部分)より外側にある場合遅延が生じるが、その遅延を無効にする。<br>
-        デメリットとして、Rippleを出力する毎に計算をする必要があるため処理が遅くなる。<code>mlRippleTrigger</code>を用いてる場合のみ有効。
+        指定したターゲットに<code>Pointerdown</code>のイベントリスナーを追加し、クリックすると出力先からRippleが出力されるようになる。初期値は<code>"host"</code>。
       </td>
-    </tr>
-    <tr>
-      <td><code>mlRippleCentered</code></td>
-      <td><code>centered</code></td>
-      <td>Rippleが出現する場所が中心になる。</td>
-    </tr>
-    <tr>
-      <td><code>mlRippleFixedSize</code></td>
-      <td><code>fixedSize</code></td>
-      <td>コンテナのサイズが変わらない場合、指定することで処理を軽量化できる。</td>
     </tr>
   </tbody>
 </table>
-<pre class='docs-codeblock-pre'><code class='js'>@<span class='hljs-decorator'>Input</span>(<span class='hljs-string'>'mlRipple'</span>) <span class='hljs-prop'>isEnabled</span><span class='hljs-keyword'>?:</span> <span class='hljs-type'>boolean</span> <span class='hljs-keyword'>|</span> <span class='hljs-string'>''</span>;
-@<span class='hljs-decorator'>Input</span>(<span class='hljs-string'>'mlRippleOverdrive'</span>) <span class='hljs-prop'>overdrive</span><span class='hljs-keyword'>?:</span> {{ "{" }}
-  width<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>,
-  height<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>
-{{ "}" }} <span class='hljs-keyword'>|</span> <span class='hljs-type'>boolean</span>;
-@<span class='hljs-decorator'>Input</span>(<span class='hljs-string'>'mlRippleTheme'</span>) <span class='hljs-prop'>theme</span><span class='hljs-keyword'>?:</span> <span class='hljs-type'>string</span>;
-@<span class='hljs-decorator'>Input</span>(<span class='hljs-string'>'mlRippleColor'</span>) <span class='hljs-prop'>color</span><span class='hljs-keyword'>?:</span> <span class='hljs-type'>string</span>;
-@<span class='hljs-decorator'>Input</span>(<span class='hljs-string'>'mlRippleRadius'</span>) <span class='hljs-prop'>radius</span><span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>;
-@<span class='hljs-decorator'>Input</span>(<span class='hljs-string'>'mlRippleAnimationDuration'</span>) <span class='hljs-prop'>animationDuration</span><span class='hljs-keyword'>?:</span> {{ "{" }}
-  enter<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>,
-  leave<span class='hljs-keyword'>?:</span> <span class='hljs-type'>number</span>
-{{ "}" }} <span class='hljs-keyword'>|</span> <span class='hljs-type'>number</span>;
-@<span class='hljs-decorator'>Input</span>(<span class='hljs-string'>'mlRippleTrigger'</span>) <span class='hljs-prop'>trigger</span><span class='hljs-keyword'>?:</span> ListenerTarget;
-@<span class='hljs-decorator'>Input</span>(<span class='hljs-string'>'mlRippleTriggerIsOutside'</span>) <span class='hljs-prop'>triggerIsOutside</span><span class='hljs-keyword'>?:</span> <span class='hljs-type'>boolean</span>;
-@<span class='hljs-decorator'>Input</span>(<span class='hljs-string'>'mlRippleCentered'</span>) <span class='hljs-prop'>centered</span><span class='hljs-keyword'>?:</span> <span class='hljs-type'>boolean</span>;
-@<span class='hljs-decorator'>Input</span>(<span class='hljs-string'>'mlRippleFixedSize'</span>) <span class='hljs-prop'>fixedSize</span><span class='hljs-keyword'>?:</span> <span class='hljs-type'>boolean</span>;</code></pre>
+
+<app-docs-viewer
+  codeblockName="directive-type"
+  [codeKeys]="['ts']"
+  showCodeblock="true"
+  disableActions
+></app-docs-viewer>

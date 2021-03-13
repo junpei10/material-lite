@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { AfterContentInit, ChangeDetectionStrategy, Component, ElementRef, Inject, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Falsy, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '../utils';
+import { Falsy, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
 import { MlStraightTrackerCore, MlStraightTrackerSizingMode, MlStraightTrackerTransitionClasses } from './straight-tracker-core';
 
 @Component({

@@ -1,7 +1,7 @@
 <app-docs-viewer
   codeblockName="example-1"
-  [codeKeys]="['html', 'ts']"
-  [codeNames]="['HTML', 'TS']"
+  [codeKeys]="['html', 'ts', 'css']"
+  [codeNames]="['HTML', 'TS', 'CSS']"
 >
   <div form>
     <div>
@@ -98,42 +98,4 @@
       RIPPLE
     </div>
   </div>
-
-  <!-- <pre class="docs-codeblock-pre">
-
-    <ng-template [ngIf]='type === 1'><code class='js'><span class="hljs-keyword">import</span> {{ "{" }} Component {{ "}" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@angular/core'</span>;
-
-@<span class="hljs-decorator">Component</span>({{ "{" }}
-  selector: <span class="hljs-string">'app-example'</span>,
-  templateUrl: <span class="hljs-string">'./example.component.html'</span>,
-  styleUrls: <span class='hljs-array'>[</span><span class="hljs-string">'./example.component.css'</span><span class='hljs-array'>]</span>
-{{ "}" }})
-<span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-name">class</span> <span class="hljs-title">ExampleComponent</span> {{ "{" }}</span>
-  disabled<span class='hljs-keyword'>:</span> <span class="hljs-type">boolean</span>;
-  overdrive<span class='hljs-keyword'>:</span> <span class="hljs-type">boolean</span>;
-  centered<span class='hljs-keyword'>:</span> <span class="hljs-type">boolean</span>;
-
-  theme<span class='hljs-keyword'>:</span> <span class="hljs-type">string</span>;
-  color<span class='hljs-keyword'>:</span> <span class="hljs-type">string</span>;
-
-  opacity<span class='hljs-keyword'>:</span> <span class="hljs-type">number</span>;
-  radius<span class='hljs-keyword'>:</span> <span class="hljs-type">number</span>;
-
-  animationDuration<span class='hljs-keyword'>:</span> {{ "{" }}
-    enter<span class='hljs-keyword'>?:</span> <span class="hljs-type">number</span>,
-    leave<span class='hljs-keyword'>?:</span><span class="hljs-type">number</span>
-  {{ "}" }};
-{{ "}" }}</code></ng-template>
-
-    <ng-template [ngIf]='type === 2'><code class='css'><span class="hljs-selector-class">.example-ripple</span> {{ "{" }}
-  <span class="hljs-attribute">cursor</span>: pointer;
-  <span class="hljs-attribute">text-align</span>: center;
-
-  <span class="hljs-attribute">width</span>: <span class="hljs-number">300px</span>;
-  <span class="hljs-attribute">height</span>: <span class="hljs-number">300px</span>;
-  <span class="hljs-attribute">line-height</span>: <span class="hljs-number">300px</span>;
-
-  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid <span class="hljs-number">#9E9E9E</span>;
-{{ "}" }}</code></ng-template>
-  </pre> -->
 </app-docs-viewer>

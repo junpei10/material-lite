@@ -1,6 +1,6 @@
-import { Directive, ElementRef, Inject, Input, OnChanges } from '@angular/core';
+import { Directive, ElementRef, Inject, Input, OnInit } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { Falsy, ListenedTarget, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
+import { Falsy, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
 import { MlRippleCore, MlRippleEntrance, MlRippleOverdrive, MlRippleTrigger } from './ripple-core';
 
 // @dynamic
@@ -8,21 +8,23 @@ import { MlRippleCore, MlRippleEntrance, MlRippleOverdrive, MlRippleTrigger } fr
   selector: '[mlRipple]',
   exportAs: 'mlRipple'
 })
-export class MlRippleDirective implements OnChanges {
+export class MlRippleDirective implements OnInit {
   core: MlRippleCore;
+
+  private _hasInitialized: boolean;
 
   @Input('mlRipple') set setEnabled(isEnable: true | Falsy) {
     // @ts-ignore: assign readonly variable
     const result = this.isEnabled =
       isEnable || isEnable === '';
 
-    (result)
-      ? this._needInitialize = true
-      : this.core.finalize();
+    if (this._hasInitialized) {
+      (result)
+        ? this.core.setTrigger(this.trigger)
+        : this.core.finalize();
+    }
   }
   readonly isEnabled: boolean | undefined;
-
-  private _needInitialize: boolean;
 
   @Input('mlRippleOverdrive') overdrive?: MlRippleOverdrive;
 
@@ -39,17 +41,16 @@ export class MlRippleDirective implements OnChanges {
     leave?: number;
   };
 
+  @Input('mlRippleEntrance') entrance?: MlRippleEntrance;
+
   @Input('mlRippleTrigger') set setTrigger(trigger: MlRippleTrigger) {
     // @ts-ignore: assign readonly variable
-    this._triggerBinder = trigger;
-    this._needInitialize = true;
-  }
-  get trigger(): ListenedTarget {
-    return this.core.triggerElement;
-  }
-  private _triggerBinder: MlRippleTrigger = 'host';
+    this.trigger = trigger;
 
-  @Input('mlRippleEntrance') entrance?: MlRippleEntrance;
+    this.core.setTrigger(trigger);
+  }
+  // @ts-ignore: 未代入化を判断するために、初期値は 1
+  readonly trigger: MlRippleTrigger = 1;
 
   @Input('mlRippleFadeOutEventNames') fadeOutEventNames?: string[] = [
     'pointerup', 'pointerout'
@@ -66,11 +67,11 @@ export class MlRippleDirective implements OnChanges {
     );
   }
 
-  ngOnChanges(): void {
-    if (this._needInitialize && this.isEnabled) {
-      this.core.setTrigger(this._triggerBinder);
-
-      this._needInitialize = false;
+  ngOnInit(): void {
+    if (this.isEnabled && this.trigger === 1 as any) {
+      this.setTrigger = 'host';
     }
+
+    this._hasInitialized = true;
   }
 }

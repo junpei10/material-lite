@@ -1,12 +1,12 @@
-```html
-<span class='hljs-function'>method</span>(<span class='hljs-arg'>arg</span><span class='hljs-keyword'>:</span> <span class='hljs-type'>string</span>, <span class='hljs-arg'>config</span><span class='hljs-keyword'>?:</span> <span class='hljs-type'>string</span> <span class='hljs-keyword'>|</span> <span class='hljs-type'>boolean</span>)<span class='hljs-keyword'>:</span> <span class='hljs-type'>any</span>;
+```ht (component class)
+@<span class="decorator">Component</span>({
+  selector: <span class="string">'app-example'</span>,
+  templateUrl: <span class="string">'./example.component.html'</span>
+})
+<span class="keyword">export</span> <span class="class"><span class="name">class</span> <span class="title">ExampleComponent</span> {</span>
+}
 ```
 
-```html
-@<span class="hljs-decorator">Component</span>({{ "{" }}
-  selector: <span class="hljs-string">'app-example'</span>,
-  templateUrl: <span class="hljs-string">'./example.component.html'</span>
-{{ "}" }})
-<span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-name">class</span> <span class="hljs-title">ExampleComponent</span> {{ "{" }}</span>
-{{ "}" }}
+```ht ("Falsy" type)
+ <span class="type">type</span> Falsy <span class="keyword">=</span> <span class="type">false</span> <span class="keyword">|</span> <span class="literal">undefined</span> <span class="keyword">|</span> <span class="literal">null</span> <span class="keyword">|</span> <span class="string">''</span> <span class="keyword">|</span> <span class="literal">0</span>;<br>
 ```

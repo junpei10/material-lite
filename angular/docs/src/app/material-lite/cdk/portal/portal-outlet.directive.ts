@@ -2,7 +2,7 @@ import {
   Directive, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output,
   SimpleChange, SimpleChanges, ViewContainerRef
 } from '@angular/core';
-import { Falsy } from '../utils';
+import { Falsy } from '@material-lite/angular-cdk/utils';
 import { MlPortalAttachedRef } from './portal-attached-ref';
 import { MlPortalAttachConfig, MlPortalContent, MlPortalData, MlPortalOutlet } from './portal-outlet.service';
 

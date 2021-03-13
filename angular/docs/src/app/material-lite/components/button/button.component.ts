@@ -4,7 +4,7 @@ import {
   CoreDynamicConfig,
   RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE, Falsy
 } from '@material-lite/angular-cdk/utils';
-import { MlRippleCore, MlRippleCoreConfig } from '../core/ripple/ripple-core';
+import { MlRippleCore, MlRippleCoreConfig } from '@material-lite/angular/core';
 
 export type MlButtonVariant = 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
 export type MlButtonHoverAction = 'enabled' | 'disabled' | 'auto';
@@ -121,7 +121,8 @@ export class MlButtonComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     if (this.rippleIsDisabled === void 0) {
-      this.rippleCore.setTrigger('host');
+      // ダメ(X) => setTrigger('host');
+      this.rippleCore.setTrigger(this._hostElementRef.nativeElement);
     }
   }
 

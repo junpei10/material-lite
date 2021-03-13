@@ -1,5 +1,4 @@
-import { ElementRef } from '@angular/core';
-import { listen, RunOutsideNgZone, noop, ListenedTarget, insertStyleElement, CoreConfig, setCoreConfig, Falsy } from '@material-lite/angular-cdk/utils';
+import { listen, RunOutsideNgZone, noop, insertStyleElement, CoreConfig, setCoreConfig, Falsy } from '@material-lite/angular-cdk/utils';
 
 insertStyleElement(`
 .ml-ripple {
@@ -32,7 +31,7 @@ insertStyleElement(`
 }
 `);
 
-export type MlRippleTrigger = ListenedTarget | 'host' | Falsy;
+export type MlRippleTrigger = EventTarget | 'host' | Falsy;
 
 export type MlRippleOverdrive = {
   width: number;
@@ -65,7 +64,7 @@ interface RippleElement extends HTMLElement {
 }
 
 export class MlRippleCore {
-  readonly triggerElement: ListenedTarget;
+  readonly triggerElement: EventTarget;
 
   private _removeTriggerListener: () => void = noop;
 
@@ -248,9 +247,9 @@ export class MlRippleCore {
    * Rippleを自動で削除するアクションを追加する。
    *
    * @param rippleElement `fadeInRipple`と`fadeInOverdrive`の戻り値。
-   * @param listenedTarget 自動で
+   * @param eventTarget 自動で
    */
-  autoFadeOutRipple(rippleElement: RippleElement, listenedTarget?: ListenedTarget): void {
+  autoFadeOutRipple(rippleElement: RippleElement, eventTarget?: EventTarget): void {
     let listenerHasRemoved: boolean | undefined;
     let rippleHasEntered: boolean | undefined;
 
@@ -283,7 +282,7 @@ export class MlRippleCore {
           : listenerHasRemoved = true;
       };
 
-      const target = listenedTarget || this._hostElement;
+      const target = eventTarget || this._hostElement;
 
       this._runOutsideNgZone(() => {
         for (let i = 0; i < nameLen; i++) {
@@ -312,7 +311,7 @@ export class MlRippleCore {
 
     } else {
       // @ts-ignore: assign the readonly property
-      const trg = this.triggerElement = trigger === 'host'
+      const trg = this.triggerElement = (trigger === 'host')
         ? this._hostElement
         : trigger;
 
@@ -326,7 +325,7 @@ export class MlRippleCore {
   /**
    * デフォルトというか、
    */
-  addPointerdownListener(trigger: ListenedTarget): () => void {
+  addPointerdownListener(trigger: EventTarget): () => void {
     const removeListener =
       listen(trigger, 'pointerdown', (event) => this._addPointerdownListenerCallback(event, trigger));
 
@@ -335,7 +334,7 @@ export class MlRippleCore {
     return removeListener;
   }
 
-  private _addPointerdownListenerCallback(event: PointerEvent, trigger: ListenedTarget): void {
+  private _addPointerdownListenerCallback(event: PointerEvent, trigger: EventTarget): void {
     const conf = this._config;
 
     let overdrive = conf.overdrive === '' || conf.overdrive;

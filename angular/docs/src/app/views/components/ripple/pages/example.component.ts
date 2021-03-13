@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MlRippleEntrance } from 'src/app/material-lite/components/core/ripple/ripple-core';
+import { MlRippleEntrance } from 'src/app/material-lite/components/core';
 import { DocsService } from 'src/app/services/docs';
 
 @Component({
