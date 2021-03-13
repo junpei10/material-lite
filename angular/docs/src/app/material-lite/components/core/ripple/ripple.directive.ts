@@ -68,9 +68,7 @@ export class MlRippleDirective implements OnChanges {
 
   ngOnChanges(): void {
     if (this._needInitialize && this.isEnabled) {
-      const core = this.core;
-
-      core.setTrigger(this._triggerBinder);
+      this.core.setTrigger(this._triggerBinder);
 
       this._needInitialize = false;
     }
