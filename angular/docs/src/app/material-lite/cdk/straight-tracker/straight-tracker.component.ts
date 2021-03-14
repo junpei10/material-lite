@@ -6,8 +6,8 @@ import { MlStraightTrackerCore, MlStraightTrackerSizingMode, MlStraightTrackerTr
 @Component({
   selector: 'ml-straight-tracker',
   exportAs: 'mlStraightTracker',
-  template: '<div #trackerElement class="ml-straight-tracker"><ng-content></ng-content></div>',
-  styles: ['ml-straight-tracker{width:100%;height:100%;position:absolute;top:0}.ml-straight-tracker{position:absolute;transition-timing-function:cubic-bezier(0.35, 0, 0.25, 1);transition-duration: 400ms}'],
+  template: '<div #trackerElement class="ml-tracker"><ng-content></ng-content></div>',
+  styles: ['ml-straight-tracker{width:100%;height:100%;position:absolute;top:0;pointer-events:none}.ml-tracker{position:absolute;transition-timing-function:cubic-bezier(0.35, 0, 0.25, 1);transition-duration:400ms;pointer-events:auto;}'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })

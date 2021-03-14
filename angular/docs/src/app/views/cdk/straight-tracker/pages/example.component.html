@@ -1,0 +1,25 @@
+<app-docs-viewer>
+  <div form></div>
+  <div form>
+    <button mlButton (click)="toggleItemSize()">Change item size</button>
+    <button mlButton (click)="toggleItemBorder()">Change border size</button>
+  </div>
+  <div product>
+    <div class="item-wrapper" [class]="itemWrapperClassList">
+      <ml-straight-tracker
+        class="straight-tracker"
+        [targetIndex]="selectedIndex"
+      >
+        <div class="ink-bar ml-accent-bg"></div>
+      </ml-straight-tracker>
+      <div
+        *ngFor="let i of [1, 2, 3]"
+        mlRipple
+        class="item"
+        (click)="selectedIndex = i - 1"
+      >
+        Item {{ i }}
+      </div>
+    </div>
+  </div>
+</app-docs-viewer>
