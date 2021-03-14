@@ -23,7 +23,7 @@ export class MlButtonComponent implements OnInit, OnChanges {
   private _currClassList: string[] = [];
 
   @Input('mlButton') set setEnabled(isEnabled: true | Falsy) {
-    // @ts-ignore assign readonly variable
+    // @ts-ignore assign the readonly variable
     const result = this.isEnabled =
       isEnabled || isEnabled === '';
 
@@ -36,14 +36,14 @@ export class MlButtonComponent implements OnInit, OnChanges {
   readonly isEnabled: boolean;
 
   @Input('variant') set setVariant(variant: MlButtonVariant) {
-    // @ts-ignore assign readonly variable
+    // @ts-ignore assign the readonly variable
     this.variant = variant;
     this._needSetVariant = true;
   }
   readonly variant: MlButtonVariant;
 
   @Input('hoverAction') set setHoverAction(type: MlButtonHoverAction) {
-    // @ts-ignore assign readonly variable
+    // @ts-ignore assign the readonly variable
     this.hoverAction = type;
     this._needSetVariant = true;
   }
@@ -59,13 +59,13 @@ export class MlButtonComponent implements OnInit, OnChanges {
       classList.add('ml-button-' + nextTheme);
     }
 
-    // @ts-ignore assign readonly variable
+    // @ts-ignore assign the readonly variable
     this.theme = nextTheme;
   }
   readonly theme: string;
 
   @Input('wrappedAnchor') set setAnchorToWrapped(isEnabled: true | Falsy) {
-    // @ts-ignore assign readonly variable
+    // @ts-ignore assign the readonly variable
     const result = this.hasWrappedAnchor =
       isEnabled || isEnabled === '';
 
@@ -88,7 +88,7 @@ export class MlButtonComponent implements OnInit, OnChanges {
   }
 
   @Input('disableRipple') set setRippleToDisabled(isDisabled: true | Falsy) {
-    // @ts-ignore: assign readonly variable
+    // @ts-ignore: assign the readonly variable
     const result = this.rippleIsDisabled =
       isDisabled || isDisabled === '';
 

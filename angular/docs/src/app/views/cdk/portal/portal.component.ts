@@ -1,20 +1,18 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { OverviewComponent, ReferenceComponent } from './pages';
+import { DocsService } from 'src/app/services/docs';
 
 @Component({
   selector: 'app-portal',
   templateUrl: './portal.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DocsService]
 })
 export class PortalComponent {
   pageName: string;
 
-  onRouteChange(event): void {
-    this.pageName = event instanceof OverviewComponent
-      ? 'overview'
-      : event instanceof ReferenceComponent
-        ? 'reference'
-        : 'example';
+  constructor(
+    docs: DocsService
+  ) {
+    docs.init('cdk', 'portal');
   }
-
 }

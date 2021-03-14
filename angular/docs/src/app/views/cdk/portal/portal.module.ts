@@ -7,6 +7,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MlButtonModule } from '@material-lite/angular/button';
 import { MlPortalModule } from '@material-lite/angular-cdk/portal';
+import { DocsRouteNavModule } from 'src/app/components/docs-route-nav/docs-route-nav.module';
+import { DocsViewerModule } from 'src/app/components/docs-viewer/docs-viewer.module';
 
 @NgModule({
   declarations: [
@@ -18,9 +20,11 @@ import { MlPortalModule } from '@material-lite/angular-cdk/portal';
   imports: [
     CommonModule,
     FormsModule,
+    DocsRouteNavModule,
+    DocsViewerModule,
     PortalRoutingModule,
     MlButtonModule,
-    MlPortalModule
+    MlPortalModule,
   ],
 })
 export class PortalModule { }

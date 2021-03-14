@@ -79,19 +79,19 @@ export class MlPortalAttachedRef {
       const dur = this._portalData.destroyingOutletDuration;
       dur
         ? this._runOutsideNgZone(() =>
-            setTimeout(() => this._animate('leave', () => this._lifecycleNextor.afterDetach()), dur)
+            setTimeout(() => this._animate('leave', () => this._afterDetach()), dur)
           )
-        : this._lifecycleNextor.afterDetach();
+        : this._afterDetach();
 
     } else {
       if (this.animationConfig.cancelOnDetach) {
         this._contentRef.destroy();
-        this._lifecycleNextor.afterDetach();
+        this._afterDetach();
 
       } else {
         this._animate('leave', () => {
           this._contentRef.destroy();
-          this._lifecycleNextor.afterDetach();
+          this._afterDetach();
         });
       }
     }
@@ -99,13 +99,17 @@ export class MlPortalAttachedRef {
     this._portalData.detachEvents
       .splice(this.data.attachedOrder, 1);
 
+    // @ts-ignore: assign the readonly variable
+    this.hasClosed = true;
+  }
+
+  private _afterDetach(): void {
+    this._lifecycleNextor.afterDetach();
+
     const data = this.data;
     if (data.contentType === 'DOM') { // @ts-ignore
-      data.rootContentElement.mlPortalAttachedRef = undefined;
+      data.rootContentElement.mlPortalAttachedRef = void 0;
     }
-
-    // @ts-ignore: assign readonly variable
-    this.hasClosed = true;
   }
 
   private _animate(type: TransitionType, onFinalize: () => void): void {

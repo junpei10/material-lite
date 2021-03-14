@@ -8,7 +8,7 @@ import { MlPortalAttachedRef } from './portal-attached-ref';
 
 
 export type MlPortalContent = Class<any> | TemplateRef<any> | HTMLElement;
-export type MlPortalContentType = 'component' | 'template' | 'DOM';
+export type MlPortalContentType = 'component' | 'template' | 'DOM' | 'cloneDOM';
 
 export interface MlPortalAttachConfig {
   dataStorageRef?: MlPortalDataStorage;
@@ -63,7 +63,7 @@ export class MlPortalOutlet {
     @Inject(RUN_OUTSIDE_NG_ZONE) private _runOutsideNgZone: RunOutsideNgZone,
     private _injector: Injector,
   ) {
-    this._createComment = _document.createElement.bind(_document);
+    this._createComment = _document.createComment.bind(_document);
   }
 
   hasPortalData(key: string): boolean {
@@ -171,44 +171,60 @@ export class MlPortalOutlet {
       // content = "DOM"
       let contentRef: MlPortalContentRef;
 
-      const prevMlPortalAttachedRef = // @ts-ignore
-        content.mlPortalAttachedRef as MlPortalAttachedRef | undefined;
-
-      if (prevMlPortalAttachedRef) {
-        // @ts-ignore: assign readonly variable
-        prevMlPortalAttachedRef.data.isFirstAttached = false;
-        return prevMlPortalAttachedRef;
-      }
+      let contentType: 'DOM' | 'cloneDOM';
 
       if (config.cloneDOM) {
         const clone = content.cloneNode(true) as HTMLElement;
+
+        contentType = 'cloneDOM';
 
         const outletEl = portalData.outletElement;
 
         contentRef = {
           rootElement: clone,
-          destroy: () => outletEl.removeChild(clone) // cloneしたDOMを削除
+          destroy: () => clone.remove() // cloneしたDOMを削除
         };
 
         outletEl.appendChild(clone);
 
+
       } else {
+        const prevMlPortalAttachedRef = // @ts-ignore
+          content.mlPortalAttachedRef as MlPortalAttachedRef | undefined;
+
+        if (prevMlPortalAttachedRef) {
+          // @ts-ignore: assign the readonly variable
+          prevMlPortalAttachedRef.data.isFirstAttached = false;
+          return prevMlPortalAttachedRef;
+        }
+
+        contentType = 'DOM';
+
         const shadowWarrior = this._createComment('portal-container');
-        const parentEl = content.parentElement!;
+        const parentEl = content.parentElement;
 
-        // 影武者とコンテンツを入れ替え
-        parentEl.replaceChild(shadowWarrior, content);
+        if (parentEl) {
+          contentRef = {
+            rootElement: content,
+            destroy: () => parentEl.replaceChild(content, shadowWarrior) // 入れ替えたDOMをもとの場所に戻す
+          };
 
-        contentRef = {
-          rootElement: content,
-          destroy: () => parentEl.replaceChild(content, shadowWarrior) // 入れ替えたDOMをもとに戻す
-        };
+          // 影武者とコンテンツを入れ替え
+          parentEl.replaceChild(shadowWarrior, content);
+          portalData.outletElement.appendChild(content);
 
-        portalData.outletElement.appendChild(content);
+        } else {
+          contentRef = {
+            rootElement: content,
+            destroy: () => content.remove()
+          };
+
+          portalData.outletElement.appendChild(content);
+        }
       }
 
       const currMlPortalAttachedRef =  new MlPortalAttachedRef(
-        'DOM', key, attachedOrder, config.animation, contentRef,
+        contentType, key, attachedOrder, config.animation, contentRef,
         portalData, this._runOutsideNgZone // @ts-ignore
       )._initialize();
 

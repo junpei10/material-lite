@@ -273,7 +273,7 @@ export class MlStraightTrackerCore {
 
     if (this.hasObservedTarget === isEnabled || !resizeObs) { return; }
 
-    // @ts-ignore: assign readonly variable
+    // @ts-ignore: assign the readonly variable
     this.hasObservedTarget = isEnabled;
 
     const targetEl = this.targetElement;

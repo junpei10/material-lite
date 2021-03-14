@@ -168,7 +168,7 @@ export class MlRippleCore {
     rippleEl.setAttribute('style', rippleStyle);
     containerEl.appendChild(rippleEl);
 
-    // @ts-ignore: assign readonly variable
+    // @ts-ignore: assign the readonly variable
     this.existingRippleCount++;
 
     this._runOutsideNgZone(() =>
@@ -205,7 +205,7 @@ export class MlRippleCore {
     rippleEl.setAttribute('style', rippleStyle);
     this._hostElement.appendChild(rippleEl);
 
-    // @ts-ignore: assign readonly variable
+    // @ts-ignore: assign the readonly variable
     this.existingRippleCount++;
 
     this._runOutsideNgZone(() =>
@@ -234,7 +234,7 @@ export class MlRippleCore {
       setTimeout(() => {
         this._hostElement.removeChild(rippleElement);
 
-        // @ts-ignore: assign readonly variable
+        // @ts-ignore: assign the readonly variable
         const count = this.existingRippleCount -= 1;
         if (count === 0) {
           this._hostElementRect = null;

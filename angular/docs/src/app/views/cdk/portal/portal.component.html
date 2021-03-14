@@ -1,9 +1,5 @@
-<nav class='docs-page-tab'>
-  <button mlButton [theme]='pageName === "overview" ? "primary" : ""' routerLink='overview'>Overview</button>
-  <button mlButton [theme]='pageName === "reference" ? "primary" : ""' routerLink='reference'>Reference</button>
-  <button mlButton [theme]='pageName === "example" ? "primary" : ""' routerLink='example'>Example</button>
-</nav>
+<app-docs-route-nav></app-docs-route-nav>
 
-<h1 class='docs-h1'>Portal<code>- [mlPortalOutlet]</code></h1>
+<h1 class="docs-h1">Portal<code>- [mlPortalOutlet]</code></h1>
 
-<router-outlet (activate)='onRouteChange($event)'></router-outlet>
+<router-outlet></router-outlet>

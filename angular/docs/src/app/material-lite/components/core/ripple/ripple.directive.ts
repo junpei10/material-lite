@@ -14,7 +14,7 @@ export class MlRippleDirective implements OnInit {
   private _hasInitialized: boolean;
 
   @Input('mlRipple') set setEnabled(isEnable: true | Falsy) {
-    // @ts-ignore: assign readonly variable
+    // @ts-ignore: assign the readonly variable
     const result = this.isEnabled =
       isEnable || isEnable === '';
 
@@ -44,7 +44,7 @@ export class MlRippleDirective implements OnInit {
   @Input('mlRippleEntrance') entrance?: MlRippleEntrance;
 
   @Input('mlRippleTrigger') set setTrigger(trigger: MlRippleTrigger) {
-    // @ts-ignore: assign readonly variable
+    // @ts-ignore: assign the readonly variable
     this.trigger = trigger;
 
     this.core.setTrigger(trigger);

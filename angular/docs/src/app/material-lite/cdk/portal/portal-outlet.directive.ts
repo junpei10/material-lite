@@ -12,7 +12,7 @@ interface Changes extends SimpleChanges {
 }
 
 @Directive({
-  selector: '[mlPortalOutlet]',
+  selector: 'ng-template[mlPortalOutlet]',
   exportAs: 'mlPortalOutlet'
 })
 export class MlPortalOutletDirective implements OnChanges, OnDestroy {
@@ -64,6 +64,7 @@ export class MlPortalOutletDirective implements OnChanges, OnDestroy {
         `);
 
       } else {
+
         this._portalOutlet.setPortalData(key, this._portalData);
       }
     }
@@ -97,7 +98,7 @@ export class MlPortalOutletDirective implements OnChanges, OnDestroy {
 
         const keyOrData = this.key || this._portalData;
 
-        // @ts-ignore: assign readonly property
+        // @ts-ignore: assign the readonly property
         const attachedRef = this.attachedRef =
           this._portalOutlet.attach(content, keyOrData, this.config);
 

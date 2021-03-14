@@ -1,305 +1,103 @@
 <h2 class="docs-h2">Overview</h2>
-<p class="docs-h2-desc">Attach可能な要素は４つあります。</p>
-<pre
-  style="margin-top: 8px"
-  class="docs-codeblock-pre"
-><code class='js'><span class='hljs-type'>type</span> MlPortalContent <span class='hljs-keyword'>=</span> Class<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> <span class='hljs-keyword'>|</span> TemplateRef<span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span> <span class='hljs-keyword'>|</span> HTMLElement <span class='hljs-keyword'>|</span> ElementRef<span class="hljs-tag">&lt;HTMLElement&gt;</span>;</code></pre>
+<p class="docs-h2-desc">Attach可能な要素は３つあります。</p>
+<app-docs-viewer
+  codeblockName="overview"
+  [codeKeys]="['ts']"
+  showCodeblock="true"
+  disableActions
+></app-docs-viewer>
 
 <h2 class="docs-h2">Private or Public</h2>
 <p class="docs-h2-desc">
   Directiveから１つのみ出力できる "Private Outlet"
   と、DIを通じて、どこからでも何個でも出力できる "Public outlet" があります。<br />
-  通常は "Private outlet" ですが、<code>key</code> (attribute)
-  を設定することで、"Public outlet" になります。併用可能です。
+  通常は "Private outlet" ですが、<code>[mlPortalOutletKey]</code>
+  を設定することで、"Public outlet" になります。
 </p>
 <div>
-  <section class="docs-codeblock">
-    <pre
-      class="docs-codeblock-pre"
-    ><code class='html'><span class="hljs-comment">&lt;!-- Private outlet --&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">ng-template</span> [<span class="hljs-attr">mlPortalOutlet</span>]=<span class="hljs-string">"anyContent"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ng-template</span>&gt;</span>
-
-<span class="hljs-comment">&lt;!-- Public outlet --&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">ng-template</span> <span class="hljs-attr">mlPortalOutlet</span> <span class="hljs-attr">key</span>=<span class="hljs-string">"root"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ng-template</span>&gt;</span>
-
-<span class="hljs-comment">&lt;!-- No problem (Public outlet) --&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">ng-template</span> [<span class="hljs-attr">mlPortalOutlet</span>]=<span class="hljs-string">"anyContent"</span> <span class="hljs-attr">key</span>=<span class="hljs-string">"root"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ng-template</span>&gt;</span></code></pre>
-  </section>
+  <app-docs-viewer
+    codeblockName="type-1"
+    [codeKeys]="['html']"
+    [showCodeblock]="true"
+    disableActions
+  >
+  </app-docs-viewer>
 
   <h3 class="docs-h3">Private outlet</h3>
-  <section class="docs-codeblock">
-    <nav class="docs-codeblock-tab">
-      <button
-        mlButton
-        [theme]="privateCodeViewer === 0 ? 'accent' : ''"
-        (click)="privateCodeViewer = 0"
-      >
-        HTML
-      </button>
-      <button
-        mlButton
-        [theme]="privateCodeViewer === 1 ? 'accent' : ''"
-        (click)="privateCodeViewer = 1"
-      >
-        TS
-      </button>
-    </nav>
-
-    <div class="docs-codeblock-prod" style="flex-direction: column">
+  <app-docs-viewer
+    codeblockName="type-2"
+    [codeKeys]="['html', 'ts']"
+    [codeNames]="['HTML', 'TS']"
+    style="margin-top: 4px"
+  >
+    <div product>
       <button mlButton (click)="privateAttachPortal()">Attach</button>
       <div class="portal-outlet">
         <ng-template
           [mlPortalOutlet]="privatePortalContent"
-          [mlPortalOutletAttachConfig]="privatePortalConfig"
           (mlPortalOutletAttached)="privateOnAttachPortal($event)"
         ></ng-template>
       </div>
     </div>
-
-    <pre class="docs-codeblock-pre">
-    <!-- HTML -->
-    <ng-template [ngIf]='privateCodeViewer === 0'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> (<span class="hljs-attr">click</span>)=<span class="hljs-string">"attachPortal<span class='hljs-method'>()</span>"</span>&gt;</span>Attach<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-
-<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"portal-outlet"</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">ng-template</span>
-    [<span class="hljs-attr">mlPortalOutlet</span>]=<span class="hljs-string">"portalContent"</span>
-    [<span class="hljs-attr">mlPortalOutletConfig</span>]=<span class="hljs-string">"portalConfig"</span>
-    (<span class="hljs-attr">mlPortalOutletAttached</span>)=<span class="hljs-string">"onAttachPortal<span class='hljs-method'>($event)</span>"</span>
-  &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ng-template</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></ng-template>
-
-    <!-- JS -->
-    <ng-template [ngIf]='privateCodeViewer === 1'><code class='js'><span class="hljs-keyword">import</span> {{ "{ Component }" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@angular/core'</span>;
-<span class="hljs-keyword">import</span> {{ "{ MlPortalContent, MlPortalConfig, MlPortalAttachedRef }" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@material-lite/angular/button'</span>;
-
-@<span class="hljs-decorator">Component</span>({{ "{" }}
-  selector: <span class="hljs-string">'app-example'</span>,
-  templateUrl: <span class="hljs-string">'./example.component.html'</span>,
-  styles: <span class='hljs-array'>[</span>`
-    <code class='css'><span class="hljs-selector-class">.portal-outlet</span> {{ "{" }}
-      <span class="hljs-attribute">min-width</span>: <span class="hljs-number">300px</span>; <span class="hljs-attribute">min-height</span>: <span class="hljs-number">42px</span>;
-      <span class="hljs-attribute">padding</span>: <span class="hljs-number">8px</span>; <span class="hljs-attribute">margin-top</span>: <span class="hljs-number">16px</span>;
-      <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid black;
-      <span class="hljs-attribute">text-align</span>: center;
-    {{ "}" }}</code>
-  `<span class='hljs-array'>]</span>
-{{ "}" }})
-<span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-name">class</span> <span class="hljs-title">ExampleComponent</span> {{ "{" }}</span>
-  portalContent<span class='hljs-keyword'>:</span> MlPortalContent <span class='hljs-keyword'>|</span> <span class='hljs-type'>false</span>;
-  portalConfig<span class='hljs-keyword'>:</span> MlPortalConfig <span class='hljs-keyword'>=</span> {{ "{" }}{{ "}" }};
-
-  <span class='hljs-method'>attachPortal</span>() {{ "{" }}
-    <span class='hljs-name'>this</span>.portalContent <span class='hljs-keyword'>=</span> PortalAttachedComponent;
-  {{ "}" }}
-
-  <span class='hljs-method'>onAttachPortal</span>(<span class='hljs-arg'>ref</span><span class='hljs-keyword'>:</span> MlPortalAttachedRef) {{ "{" }}
-    <span class='hljs-name'>setTimeout</span>(<span class='hljs-keyword'>()</span> => <span class='hljs-name'>this</span>.portalContent <span class='hljs-keyword'>=</span> <span class='hljs-literal'>false</span>, <span class='hljs-literal'>3000</span>);
-  {{ "}" }}
-{{ "}" }}
-
-@<span class="hljs-decorator">Component</span>({{ "{" }}
-  selector: <span class="hljs-string">'app-portal-attached-component'</span>,
-  template: <code class='html'><span class="hljs-tag">'&lt;<span class="hljs-name">h1</span>&gt;</span>Portal Attached Component<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;'</span></code>
-{{ "}" }})
-<span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-name">class</span> <span class="hljs-title">PortalAttachedComponent</span> {{ "{" }}</span>{{ "}" }}</code></ng-template>
-
-  </pre>
-  </section>
+  </app-docs-viewer>
 
   <h3 class="docs-h3">Public outlet</h3>
-  <section class="docs-codeblock">
-    <nav class="docs-codeblock-tab">
-      <button
-        mlButton
-        [theme]="publicCodeViewer === 0 ? 'accent' : ''"
-        (click)="publicCodeViewer = 0"
-      >
-        HTML
-      </button>
-      <button
-        mlButton
-        [theme]="publicCodeViewer === 1 ? 'accent' : ''"
-        (click)="publicCodeViewer = 1"
-      >
-        TS
-      </button>
-    </nav>
-
-    <div class="docs-codeblock-prod" style="flex-direction: column">
+  <app-docs-viewer
+    codeblockName="type-3"
+    [codeKeys]="['html', 'ts']"
+    [codeNames]="['HTML', 'TS']"
+    style="margin-top: 4px"
+  >
+    <div product>
       <button mlButton (click)="publicAttachPortal()">Attach</button>
       <div class="portal-outlet">
-        <ng-template mlPortalOutlet key="example"></ng-template>
+        <ng-template mlPortalOutlet mlPortalOutletKey="example"></ng-template>
       </div>
     </div>
-
-    <pre class="docs-codeblock-pre">
-    <ng-template [ngIf]='publicCodeViewer === 0'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> (<span class="hljs-attr">click</span>)=<span class="hljs-string">"attachPortal<span class='hljs-method'>()</span>"</span>&gt;</span>Attach<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-
-<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"portal-outlet"</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">ng-template</span> <span class="hljs-attr">mlPortalOutlet</span> <span class="hljs-attr">key</span>=<span class="hljs-string">"example"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ng-template</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></ng-template>
-
-    <ng-template [ngIf]='publicCodeViewer === 1'><code class='js'><span class="hljs-keyword">import</span> {{ "{ Component }" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@angular/core'</span>;
-<span class="hljs-keyword">import</span> {{ "{ MlPortalOutlet, MlPortalContent, MlPortalConfig, MlPortalAttachedRef }" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@material-lite/angular/button'</span>;
-
-@<span class="hljs-decorator">Component</span>({{ "{" }}
-  selector: <span class="hljs-string">'app-example'</span>,
-  templateUrl: <span class="hljs-string">'./example.component.html'</span>,
-  styles: <span class='hljs-array'>[</span>`
-    <code class='css'><span class="hljs-selector-class">.portal-outlet</span> {{ "{" }}
-      <span class="hljs-attribute">min-width</span>: <span class="hljs-number">300px</span>; <span class="hljs-attribute">min-height</span>: <span class="hljs-number">42px</span>;
-      <span class="hljs-attribute">padding</span>: <span class="hljs-number">8px</span>; <span class="hljs-attribute">margin-top</span>: <span class="hljs-number">16px</span>;
-      <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid black;
-      <span class="hljs-attribute">text-align</span>: center;
-    {{ "}" }}</code>
-  `<span class='hljs-array'>]</span>
-{{ "}" }})
-<span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-name">class</span> <span class="hljs-title">ExampleComponent</span> {{ "{" }}</span>
-  portalContent<span class='hljs-keyword'>:</span> MlPortalContent;
-  portalConfig<span class='hljs-keyword'>:</span> MlPortalConfig <span class='hljs-keyword'>=</span> {{ "{" }}{{ "}" }};
-
-  <span class='hljs-name'>constructor</span>(
-    <span class='hljs-keyword'>private</span> <span class='hljs-prop'>_mlPortalOutlet</span><span class='hljs-keyword'>:</span> MlPortalOutlet
-  ) {{ "{" }}{{ "}" }}
-
-  <span class='hljs-method'>attachPortal</span>() {{ "{" }}
-    <span class='hljs-name'>const</span> ref <span class='hljs-keyword'>=</span> <span class='hljs-name'>this</span>._mlPortalOutlet.<span class='hljs-method'>attach</span>(PortalAttachedComponent, <span class='hljs-string'>'example'</span>);
-    <span class='hljs-name'>setTimeout</span>(<span class='hljs-keyword'>()</span> => ref.<span class='hljs-method'>detach</span>(), <span class='hljs-literal'>3000</span>);
-  {{ "}" }}
-{{ "}" }}
-
-@<span class="hljs-decorator">Component</span>({{ "{" }}
-  selector: <span class="hljs-string">'app-portal-attached-component'</span>,
-  template: <code class='html'><span class="hljs-tag">'&lt;<span class="hljs-name">h1</span>&gt;</span>Portal Attached Component<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;'</span></code>
-{{ "}" }})
-<span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-name">class</span> <span class="hljs-title">PortalAttachedComponent</span> {{ "{" }}</span>{{ "}" }}</code></ng-template>
-  </pre>
-  </section>
-
-  <h2 class="docs-h2">Animation</h2>
-  <p class="docs-h2-desc">
-    Vue.jsの<a
-      href="https://vuejs.org/v2/guide/transitions.html#Transition-Classes"
-      target="_blank"
-      rel="noopener noreferrer"
-      ><code>Transition Classes</code></a
-    >を参考に作成した機能です。<br />
-    現在、本家のような自動的にアニメーションの期間を割り当てるシステムはありません。<br />
-    <code>className</code
-    >を指定しない場合、アニメーション用のクラスが付与されることはありませんが、<code
-      >enter, leave</code
-    >で指定した秒数分、それらに対応する処理を待機させます。この操作は基本的に、<code
-      >Angular animations</code
-    >を組み合わせる際に使用します。
-  </p>
-  <section class="docs-codeblock">
-    <nav class="docs-codeblock-tab">
-      <button
-        mlButton
-        [theme]="animationCodeViewer === 0 ? 'accent' : ''"
-        (click)="animationCodeViewer = 0"
-      >
-        HTML
-      </button>
-      <button
-        mlButton
-        [theme]="animationCodeViewer === 1 ? 'accent' : ''"
-        (click)="animationCodeViewer = 1"
-      >
-        TS
-      </button>
-      <button
-        mlButton
-        [theme]="animationCodeViewer === 2 ? 'accent' : ''"
-        (click)="animationCodeViewer = 2"
-      >
-        CSS
-      </button>
-    </nav>
-
-    <div class="docs-codeblock-prod" style="flex-direction: column">
-      <button mlButton (click)="animationAttachPortal()">Attach</button>
-      <div class="portal-outlet">
-        <ng-template
-          [mlPortalOutlet]="animationPortalContent"
-          [mlPortalOutletConfig]="animationPortalConfig"
-          (mlPortalOutletAttached)="animationOnAttachPortal($event)"
-        ></ng-template>
-      </div>
-    </div>
-
-    <pre class="docs-codeblock-pre">
-<!-- HTML -->
-    <ng-template [ngIf]='animationCodeViewer === 0'><code class='html'><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">mlButton</span> (<span class="hljs-attr">click</span>)=<span class="hljs-string">"attachPortal<span class='hljs-method'>()</span>"</span>&gt;</span>Attach<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-
-<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"portal-outlet"</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">ng-template</span>
-    [<span class="hljs-attr">mlPortalOutlet</span>]=<span class="hljs-string">"portalContent"</span>
-    [<span class="hljs-attr">mlPortalOutletConfig</span>]=<span class="hljs-string">"portalConfig"</span>
-    (<span class="hljs-attr">mlPortalOutletAttached</span>)=<span class="hljs-string">"onAttachPortal<span class='hljs-method'>()</span>"</span>
-  &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ng-template</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></ng-template>
-
-<!-- JS -->
-    <ng-template [ngIf]='animationCodeViewer === 1'><code class='js'><span class="hljs-keyword">import</span> {{ "{ Component }" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@angular/core'</span>;
-<span class="hljs-keyword">import</span> {{ "{ MlPortalContent, MlPortalConfig, MlPortalAttachedRef }" }} <span class="hljs-keyword">from</span> <span class="hljs-string">'@material-lite/angular/button'</span>;
-
-@<span class="hljs-decorator">Component</span>({{ "{" }}
-  selector: <span class="hljs-string">'app-example'</span>,
-  templateUrl: <span class="hljs-string">'./example.component.html'</span>,
-  styleUrls: <span class='hljs-array'>[</span><span class="hljs-string">'./example.component.scss'</span><span class='hljs-array'>]</span>
-{{ "}" }})
-<span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-name">class</span> <span class="hljs-title">ExampleComponent</span> {{ "{" }}</span>
-  portalContent<span class='hljs-keyword'>:</span> MlPortalContent <span class='hljs-keyword'>|</span> <span class='hljs-type'>false</span>;
-
-  portalConfig<span class='hljs-keyword'>:</span> MlPortalConfig <span class='hljs-keyword'>=</span> {{ "{" }}
-    className: <span class='hljs-string'>'example'</span>,
-    enter: <span class='hljs-literal'>500</span>,
-    leave: <span class='hljs-literal'>500</span>,
-  {{ "}" }};
-
-  <span class='hljs-method'>attachPortal</span>() {{ "{" }}
-    <span class='hljs-name'>this</span>.portalContent <span class='hljs-keyword'>=</span> PortalAttachedComponent;
-  {{ "}" }}
-
-  <span class='hljs-method'>onAttachPortal</span>() {{ "{" }}
-    <span class='hljs-name'>setTimeout</span>(<span class='hljs-keyword'>()</span> => <span class='hljs-name'>this</span>.portalContent <span class='hljs-keyword'>=</span> <span class='hljs-literal'>false</span>, <span class='hljs-literal'>3000</span>);
-  {{ "}" }}
-{{ "}" }}
-
-@<span class="hljs-decorator">Component</span>({{ "{" }}
-  selector: <span class="hljs-string">'app-portal-attached-component'</span>,
-  template: <code class='html'><span class="hljs-tag">'&lt;<span class="hljs-name">h1</span>&gt;</span>Portal Attached Component<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;'</span></code>
-{{ "}" }})
-<span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-name">class</span> <span class="hljs-title">PortalAttachedComponent</span> {{ "{" }}</span>{{ "}" }}</code></ng-template>
-
-<!-- CSS -->
-    <ng-template [ngIf]='animationCodeViewer === 2'><code class='css'><span class="hljs-selector-pseudo">::ng-deep</span> <span class="hljs-selector-class">.example-enter-active</span>,
-<span class="hljs-selector-pseudo">::ng-deep</span> <span class="hljs-selector-class">.example-leave-active</span> {{ "{" }}
-  <span class="hljs-attribute">transition</span>: opacity .<span class="hljs-number">5s</span>;
-{{ "}" }}
-
-<span class="hljs-selector-pseudo">::ng-deep</span> <span class="hljs-selector-class">.example-enter</span>,
-<span class="hljs-selector-pseudo">::ng-deep</span> <span class="hljs-selector-class">.example-leave-to</span> {{ "{" }}
-  <span class="hljs-attribute">opacity</span>: <span class="hljs-number">0</span>;
-{{ "}" }}
-
-<span class="hljs-selector-class">.portal-outlet</span> {{ "{" }}
-  <span class="hljs-attribute">min-width</span>: <span class="hljs-number">300px</span>; <span class="hljs-attribute">min-height</span>: <span class="hljs-number">42px</span>;
-  <span class="hljs-attribute">padding</span>: <span class="hljs-number">8px</span>; <span class="hljs-attribute">margin-top</span>: <span class="hljs-number">16px</span>;
-  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid black;
-  <span class="hljs-attribute">text-align</span>: center;
-{{ "}" }}</code></ng-template>
-  </pre>
-  </section>
-  <p class="docs-h2-desc">
-    直感的で実装が簡単ですが、カプセル化されていないclassを用いる必要があるため、管理に十分気をつける必要があります。
-  </p>
-
-  <h2 class="docs-h2">DOM</h2>
-  <p class="docs-h2-desc">
-    レンダリング済みのDOMをポータルから出力する際、レンダリング済みのDOMを一旦削除してからDOMを出力します。<br />
-    レンダリング済みのDOMを削除したくない場合は、<code>cloneDOM: true</code>
-    を設定してください。
-  </p>
+  </app-docs-viewer>
 </div>
+
+<h2 class="docs-h2">Animation</h2>
+<p class="docs-h2-desc">
+  Vue.jsの<a
+    href="https://vuejs.org/v2/guide/transitions.html#Transition-Classes"
+    target="_blank"
+    rel="noopener noreferrer"
+    ><code>Transition Classes</code></a
+  >を参考に作成した機能です。<br />
+  現在、本家のような自動的にアニメーションの期間を割り当てるシステムはありません。<br />
+  <code>className</code
+  >を指定しない場合、アニメーション用のクラスが付与されることはありませんが、<code
+    >enter, leave</code
+  >で指定した秒数分、それらに対応する処理を待機させます。この操作は基本的に、<code
+    >Angular animations</code
+  >を組み合わせる際に使用します。
+</p>
+<app-docs-viewer
+  codeblockName="animation"
+  [codeKeys]="['html', 'ts', 'css']"
+  [codeNames]="['HTML', 'TS', 'CSS']"
+  [showCodeblock]="true"
+>
+  <div product>
+    <button mlButton (click)="animationAttachPortal()">Attach</button>
+    <div class="portal-outlet">
+      <ng-template
+        [mlPortalOutlet]="animationPortalContent"
+        [mlPortalOutletAttachConfig]="animationPortalConfig"
+        (mlPortalOutletAttached)="animationOnAttachPortal($event)"
+      ></ng-template>
+    </div>
+  </div>
+</app-docs-viewer>
+
+<p class="docs-h2-desc">
+  直感的で実装が簡単ですが、カプセル化されていないclassを用いる必要があるため、管理に十分気をつける必要があります。
+</p>
+
+<h2 class="docs-h2">DOM</h2>
+<p class="docs-h2-desc">
+  レンダリング済みのDOMをポータルから出力する際、レンダリング済みのDOMを一旦削除してからDOMを出力します。<br />
+  レンダリング済みのDOMを削除したくない場合は、<code>cloneDOM: true</code>
+  を設定してください。
+</p>

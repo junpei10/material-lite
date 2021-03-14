@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { MlPortalAttachConfig, MlPortalContent, MlPortalAttachedRef, MlPortalOutlet } from '@material-lite/angular-cdk/portal';
+import { DocsService } from 'src/app/services/docs';
 
 @Component({
   selector: 'app-overview',
@@ -14,25 +15,21 @@ import { MlPortalAttachConfig, MlPortalContent, MlPortalAttachedRef, MlPortalOut
       opacity: 0;
     }
     .portal-outlet {
-      min-width: 300px; min-height: 42px;
+      min-width: 300px; min-height: 48px;
       padding: 8px; margin-top: 16px;
       border: 1px solid black;
       text-align: center;
     }
+
+    [product] {
+      flex-direction: column;
+    }
   `]
 })
 export class OverviewComponent {
+  privatePortalContent: MlPortalContent | null;
 
-  privateCodeViewer: 0 | 1 = 0;
-  privatePortalContent: MlPortalContent | false;
-  privatePortalConfig: MlPortalAttachConfig = {};
-
-  publicCodeViewer: 0 | 1 = 0;
-  publicPortalContent: MlPortalContent | false;
-  publicPortalConfig: MlPortalAttachConfig = {};
-
-  animationCodeViewer: 0 | 1 | 2 = 0;
-  animationPortalContent: MlPortalContent | false;
+  animationPortalContent: MlPortalContent | null;
   animationPortalConfig: MlPortalAttachConfig = {
     animation: {
       className: 'example',
@@ -42,16 +39,20 @@ export class OverviewComponent {
   };
 
   constructor(
-    private _portalOutlet: MlPortalOutlet
-  ) { }
+    docs: DocsService,
+    private _portalOutlet: MlPortalOutlet,
+    private _changeDetectorRef: ChangeDetectorRef
+  ) {
+    docs.setActiveRoute('overview');
+  }
 
   privateAttachPortal(): void {
     this.privatePortalContent = PortalAttachedComponent;
   }
   privateOnAttachPortal(ref: MlPortalAttachedRef): void {
     setTimeout(() => {
-      ref.detach();
-      this.privatePortalContent = false;
+      this.privatePortalContent = null;
+      this._changeDetectorRef.markForCheck();
     }, 3000);
   }
 
@@ -66,8 +67,8 @@ export class OverviewComponent {
   }
   animationOnAttachPortal(ref: MlPortalAttachedRef): void {
     setTimeout(() => {
-      ref.detach();
-      this.animationPortalContent = false;
+      this.animationPortalContent = null;
+      this._changeDetectorRef.markForCheck();
     }, 3000);
   }
 }
@@ -75,7 +76,7 @@ export class OverviewComponent {
 
 @Component({
   selector: 'app-portal-attached-component',
-  template: '<h1 style="margin: auto;">Portal Attached Component</h1>',
+  template: '<h1 style="margin: auto;">Component</h1>',
   styles: [':host { display: block; } ']
 })
 class PortalAttachedComponent {

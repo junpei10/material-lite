@@ -22,7 +22,7 @@ export class MlStraightTrackerComponent implements OnInit, AfterContentInit {
   }
 
   @Input('disabled') set setEnabled(isDisabled: true | Falsy) {
-    // @ts-ignore: assign readonly variable
+    // @ts-ignore: assign the readonly variable
     const result = this.isDisabled =
     isDisabled || isDisabled === '';
 
@@ -48,7 +48,7 @@ export class MlStraightTrackerComponent implements OnInit, AfterContentInit {
   set setSizingMode(mode: MlStraightTrackerSizingMode) {
     this.core.setSizingMode(mode);
 
-    // @ts-ignore: assign readonly variable
+    // @ts-ignore: assign the readonly variable
     this.sizingMode = mode;
   }
   readonly sizingMode: MlStraightTrackerCore;
