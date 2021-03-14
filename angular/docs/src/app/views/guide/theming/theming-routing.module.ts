@@ -6,9 +6,9 @@ import { ThemingComponent } from './theming.component';
 const routes: Routes = [
   {
     path: '', component: ThemingComponent, children: [
-      { path: 'setting', component: SettingComponent },
+      { path: 'settings', component: SettingComponent },
       { path: 'scss', component: ScssComponent },
-      { path: '', redirectTo: 'setting', pathMatch: 'full' }
+      { path: '', redirectTo: 'settings', pathMatch: 'full' }
     ]
   }
 ];

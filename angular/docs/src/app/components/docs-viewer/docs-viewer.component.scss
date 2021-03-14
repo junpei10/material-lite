@@ -133,10 +133,20 @@ code.css {
     color: #9ee34f;
   }
   .selector-pseudo,
-  .selector-tag {
+  .selector-tag,
+  .keyword {
     color: #f44336;
+  }
+  .string {
+    color: #ffeb3b;
+  }
+  .method {
+    color: #9ee34f;
   }
   .number {
     color: #f48fb1;
+  }
+  .comment {
+    color: #9e9e9e;
   }
 }

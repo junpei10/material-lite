@@ -27,11 +27,13 @@ export class DocsService {
     @Inject(RUN_OUTSIDE_NG_ZONE) private _runOutsideNgZone: RunOutsideNgZone
   ) {}
 
-  init(type: 'components' | 'cdk', docPath: string, docRoutes?: string[], docRouteNames?: string[]): void {
+  init(type: 'components' | 'cdk' | 'guide', docPath: string, docRoutes?: string[], docRouteNames?: string[]): void {
 
     const collectionPath = type === 'components'
       ? 'component-docs'
-      : 'cdk-docs';
+      : type === 'cdk'
+        ? 'cdk-docs'
+        : 'guide-docs';
 
     this._docRef = this._firestore
       .collection(collectionPath)
@@ -41,7 +43,7 @@ export class DocsService {
     this.routes = docRoutes || ['overview', 'reference', 'example'];
 
     // @ts-ignore: assign the readonly variable
-    this.routeNames = docRoutes || ['Overview', 'Reference', 'Example'];
+    this.routeNames = docRouteNames || ['Overview', 'Reference', 'Example'];
   }
 
   getCode(subCollectionPath: string): Promise<DocsCodeData> {

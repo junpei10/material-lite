@@ -23,17 +23,19 @@ export interface MlPortalAttachConfig {
 
   component?: {
     injectionData?: any;
-    provider?: StaticProvider[];
+    providers?: StaticProvider[];
     index?: number;
     ngContent?: any[][];
     // ngModuleFactory?: NgModuleFactory<any>
   };
+
   template?: {
     context?: {
       [key: string]: any
     };
     index?: number;
   };
+
   cloneDOM?: boolean;
 }
 
@@ -121,8 +123,8 @@ export class MlPortalOutlet {
         { provide: ML_DATA, useValue: compConf.injectionData }
       ];
 
-      if (compConf.provider) {
-        providers.push(...compConf.provider);
+      if (compConf.providers) {
+        providers.push(...compConf.providers);
       }
 
       const elInjector = Injector.create({ providers, parent: this._injector });
@@ -257,7 +259,7 @@ export class MlPortalOutlet {
 
 
   /**
-   * PortalData内をすべて削除する。
+   * PortalData内をすべてすべて削除する。
    */
   detachAllOfPortalData(portalData: MlPortalData): void {
     const detaches = portalData.detachEvents;

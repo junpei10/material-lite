@@ -1,7 +1,48 @@
-<h2 class='docs-h2' id='overview'>Overview</h2>
-<p class='docs-h2-desc'>Javascriptを使わず、Scssでテーマを設定することができます。</p>
-<section class='docs-codeblock'>
-  <pre class='docs-codeblock-pre'><code class='css'>@<span class="hljs-keyword">import</span> <span class="hljs-string">'@material-lite/angular/theming'</span>;
+<h2 class="docs-h2" id="overview">Overview</h2>
+<p class="docs-h2-desc">
+  Javascriptを使わず、Scssでテーマを設定することができます。
+</p>
+<app-docs-viewer
+  codeblockName="scss-overview"
+  [codeKeys]="['css']"
+  [showCodeblock]="true"
+  disableActions
+>
+</app-docs-viewer>
 
-@<span class="hljs-keyword">include</span> ml-theme(light, indigo-pink);</code></pre>
-</section>
+<h3>Template</h3>
+<p class="docs-h3-desc">
+  上記の例でも使用していますが、引数に文字列をいれることでスタイルのテンプレートを呼び出すことができます。
+</p>
+<app-docs-viewer
+  codeblockName="scss-overview-template"
+  [codeKeys]="['css']"
+  [showCodeblock]="true"
+  disableActions
+>
+</app-docs-viewer>
+
+<h3>Narrow down</h3>
+<p class="docs-h3-desc">
+  第３引数に値を代入することで、無駄なCSSクラスを作らないように制限することができます。
+</p>
+<app-docs-viewer
+  codeblockName="scss-overview-narrow-down"
+  [codeKeys]="['css']"
+  [showCodeblock]="true"
+  disableActions
+>
+</app-docs-viewer>
+
+<h2 class="docs-h2" id="scss-variables">Scss variables</h2>
+<p class="docs-h2-desc">
+  themeの色をまとめた<code>scss-variable</code>を作成することによって、コンポーネントでもthemeの色を用いることができます。<br />
+  また、その変数を<code>ml-theme-init</code>で用いることができます。
+</p>
+<app-docs-viewer
+  codeblockName="scss-variables"
+  [codeKeys]="['css']"
+  [showCodeblock]="true"
+  disableActions
+>
+</app-docs-viewer>

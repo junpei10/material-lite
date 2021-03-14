@@ -18,7 +18,7 @@ interface Changes extends SimpleChanges {
 export class MlPortalOutletDirective implements OnChanges, OnDestroy {
   @Input('mlPortalOutlet') content: MlPortalContent | Falsy;
 
-  @Input('mlPortalOutletAttachConfig') config: MlPortalAttachConfig;
+  @Input('mlPortalOutletAttachConfig') attachConfig: MlPortalAttachConfig;
 
   @Input('mlPortalOutletKey') key: string | null = null;
   get isPrivate(): boolean {
@@ -100,7 +100,7 @@ export class MlPortalOutletDirective implements OnChanges, OnDestroy {
 
         // @ts-ignore: assign the readonly property
         const attachedRef = this.attachedRef =
-          this._portalOutlet.attach(content, keyOrData, this.config);
+          this._portalOutlet.attach(content, keyOrData, this.attachConfig);
 
         if (this._attachedEmitter) {
           this._attachedEmitter.emit(attachedRef);
