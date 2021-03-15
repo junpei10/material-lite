@@ -9,9 +9,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 export class AppComponent {
   title = 'Material lite';
 
-  doCount: number = 0;
+  // doCount: number = 0;
 
-  ngDoCheck(): void {
-    console.log(this.doCount++);
-  }
+  // ngDoCheck(): void {
+  //   console.log(this.doCount++);
+  // }
 }
