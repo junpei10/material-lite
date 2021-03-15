@@ -1,0 +1,20 @@
+$ml-animation-duration: (
+  veryFast: 160ms,
+  faster: 200ms,
+  fast: 240ms,
+  normal: 280ms,
+  slow: 320ms,
+  slower: 360ms,
+  very-slow: 400ms,
+);
+
+$ml-animation-function: (
+  // ease => fast-in
+  angular: cubic-bezier(0.25, 0.8, 0.25, 1),
+  // fast-out => slow-in
+  standard: cubic-bezier(0.4, 0, 0.2, 1),
+  // linear-out => slow-in
+  deceleration: cubic-bezier(0, 0, 0.2, 1),
+  // fast-out   => liner-in
+  acceleration: cubic-bezier(0.4, 0, 1, 1)
+);

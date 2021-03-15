@@ -1,8 +1,133 @@
 <h2 class="docs-h2">Overview</h2>
-<p class="docs-h2-desc">Attach可能な要素は３つあります。</p>
+<p class="docs-h2-desc">
+  兄弟要素の上下左右を、追跡するようなスタイルを付与します。
+</p>
 <app-docs-viewer
   codeblockName="overview"
-  [codeKeys]="['html']"
+  [codeKeys]="['html', 'css']"
+  [codeNames]="['HTML', 'CSS']"
   [showCodeblock]="true"
-  disableActions
-></app-docs-viewer>
+>
+  <div product>
+    <div class="wrapper-1">
+      <ml-straight-tracker [targetIndex]="selectedIndex1">
+        <div class="ink-bar-1 ml-primary-bg"></div>
+      </ml-straight-tracker>
+      <div
+        *ngFor="let char of ['A', 'B', 'C']; let i = index"
+        (click)="selectedIndex1 = i"
+        class="item-1"
+      >
+        item {{ char }}
+      </div>
+    </div>
+  </div>
+</app-docs-viewer>
+<p class="docs-h2-desc">
+  注意点として、ラッパー要素が
+  <code>position: static</code> であると、機能しないので注意が必要です。
+</p>
+
+<h2 class="docs-h2">Horizontal or Vertical</h2>
+<p class="docs-h2-desc">
+  通常では横並びのコンテナ専用ですが、<code>orientation="vertical"</code>を設定することで、縦並びのコンテナにも対応できます。
+</p>
+<app-docs-viewer
+  codeblockName="orientation"
+  [codeKeys]="['html', 'css']"
+  [codeNames]="['HTML', 'CSS']"
+>
+  <div product>
+    <div class="wrapper-2">
+      <ml-straight-tracker
+        [targetIndex]="selectedIndex2"
+        orientation="vertical"
+      >
+        <div class="ink-bar-2 ml-accent-bg"></div>
+      </ml-straight-tracker>
+      <div
+        *ngFor="let char of ['A', 'B', 'C']; let i = index"
+        (click)="selectedIndex2 = i"
+        class="item-2"
+      >
+        item {{ char }}
+      </div>
+    </div>
+  </div>
+</app-docs-viewer>
+
+<h2 class="docs-h2">Position</h2>
+<p>
+  <code>before, after</code
+  >を選択できます。デフォルト値は<code>after</code>です。
+</p>
+<app-docs-viewer
+  codeblockName="position"
+  [codeKeys]="['html', 'css']"
+  [codeNames]="['HTML', 'CSS']"
+>
+  <div product style="justify-content: space-between">
+    <div class="wrapper-1" style="width: 40%">
+      <ml-straight-tracker [targetIndex]="selectedIndex3" position="before">
+        <div class="ink-bar-1 ml-primary-bg"></div>
+      </ml-straight-tracker>
+      <div
+        *ngFor="let char of ['A', 'B']; let i = index"
+        (click)="selectedIndex3 = i"
+        class="item-1"
+      >
+        item {{ char }}
+      </div>
+    </div>
+
+    <div class="wrapper-2" style="width: 40%">
+      <ml-straight-tracker
+        [targetIndex]="selectedIndex4"
+        orientation="vertical"
+        position="before"
+      >
+        <div class="ink-bar-2 ml-accent-bg"></div>
+      </ml-straight-tracker>
+      <div
+        *ngFor="let char of ['C', 'D']; let i = index"
+        (click)="selectedIndex4 = i"
+        class="item-2"
+      >
+        item {{ char }}
+      </div>
+    </div>
+  </div>
+</app-docs-viewer>
+
+<h2 class="docs-h2">Animation</h2>
+<p class="docs-h2-desc">
+  アニメーションを設定する方法は、クラスから付与する形になりますが、Angularはスタイルのカプセル化があるため、多少ややこしくなります。<br />
+  <code>transition-timing-function</code
+  >は、デフォルト値として指定されています。
+</p>
+<app-docs-viewer
+  codeblockName="animation"
+  firstCodeKey="css"
+  [codeKeys]="['html', 'css']"
+  [codeNames]="['HTML', 'CSS']"
+  [showCodeblock]="true"
+>
+  <div product>
+    <div class="wrapper-1">
+      <ml-straight-tracker
+        class="straight-tracker"
+        [targetIndex]="selectedIndex5"
+      >
+        <div class="ink-bar-1 ml-warn-bg"></div>
+      </ml-straight-tracker>
+
+      <div
+        *ngFor="let char of ['A', 'B', 'C']; let i = index"
+        (click)="selectedIndex5 = i"
+        class="item-1"
+      >
+        item {{ char }}
+      </div>
+    </div>
+  </div>
+</app-docs-viewer>

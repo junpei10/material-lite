@@ -15,9 +15,11 @@ export class DocsViewerComponent implements OnInit {
   // ex) ['html', 'ts', 'css']
   @Input() codeKeys: string[] = [];
   @Input() codeNames: string[] = [];
+  @Input() codeClasses: (string | null)[] = [];
 
   selectedCode: string;
   selectedCodeKey: string;
+  selectedCodeClass: string;
   selectedCodeKeyIndex: number;
 
   @Input() codeData?: DocsCodeData;
@@ -27,14 +29,21 @@ export class DocsViewerComponent implements OnInit {
 
   constructor(
     @Attribute('codeblockName') public codeblockName: string,
+    @Attribute('firstCodeKey') firstCodeKey: string,
     @SkipSelf() private _docs: DocsService,
     private _changeDetectorRef: ChangeDetectorRef,
-  ) {}
+  ) {
+    if (firstCodeKey) {
+      this.selectCode(firstCodeKey);
+    }
+  }
 
   ngOnInit(): void {
-    if (!this.selectedCodeKey) {
-      this.selectedCodeKey = this.codeKeys[0];
+    let codeKey = this.selectedCodeKey;
+    if (!codeKey) {
+      codeKey = this.selectedCodeKey = this.codeKeys[0];
       this.selectedCodeKeyIndex = 0;
+      this.selectedCodeClass = this.codeClasses[0] || codeKey;
     }
 
     if (this.hasShownCodeblock) {
@@ -66,7 +75,11 @@ export class DocsViewerComponent implements OnInit {
     if (this.hasShownCodeblock && this.selectedCodeKey === codeKey) { return; }
 
     this.selectedCodeKey = codeKey;
-    this.selectedCodeKeyIndex = codeKeyIndex || this.codeKeys.indexOf(codeKey);
+
+    this.selectedCodeKeyIndex = codeKeyIndex
+      = codeKeyIndex || this.codeKeys.indexOf(codeKey);
+
+    this.selectedCodeClass = this.codeClasses[codeKeyIndex] || codeKey;
 
     this.hasShownCodeblock = true;
 

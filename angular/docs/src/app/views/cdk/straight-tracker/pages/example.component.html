@@ -1,24 +1,114 @@
-<app-docs-viewer>
-  <div form></div>
+<app-docs-viewer
+  codeblockName="example-1"
+  [codeKeys]="['html', 'ts', 'css', 'scss']"
+  [codeNames]="['HTML', 'TS', 'CSS', 'Scss']"
+  [codeClasses]="[null, null, null, 'css']"
+>
+  <div form>
+    <div>
+      <span>position</span>
+      <select [(ngModel)]="position">
+        <option value="before">before</option>
+        <option value="after">after</option>
+      </select>
+    </div>
+
+    <div>
+      <span>orientation</span>
+      <select
+        [(ngModel)]="orientation"
+        (ngModelChange)="onChangeOrientation($event)"
+      >
+        <option value="horizontal">horizontal</option>
+        <option value="vertical">vertical</option>
+      </select>
+    </div>
+
+    <div>
+      <span>sizingMode</span>
+      <select [(ngModel)]="sizingMode">
+        <option value="loose">loose</option>
+        <option value="strict">strict</option>
+        <option value="strict-origin">strict-origin</option>
+        <option value="strict-target-point">strict-target-point</option>
+      </select>
+    </div>
+
+    <label for="disabled"
+      ><input
+        type="checkbox"
+        id="disabled"
+        [(ngModel)]="disabled"
+      />disabled</label
+    >
+
+    <label for="observeContainer"
+      ><input
+        type="checkbox"
+        id="observeContainer"
+        [(ngModel)]="observeContainer"
+      />observeContainer</label
+    >
+
+    <label for="unobserveTarget"
+      ><input
+        type="checkbox"
+        id="unobserveTarget"
+        [(ngModel)]="unobserveTarget"
+      />unobserveTarget</label
+    >
+
+    <label for="initializing"
+      ><input
+        type="checkbox"
+        id="initializing"
+        [(ngModel)]="transitionClasses.initializing"
+      />transitionClasses.initializing</label
+    >
+
+    <label for="starting"
+      ><input
+        type="checkbox"
+        id="starting"
+        [(ngModel)]="transitionClasses.starting"
+      />transitionClasses.starting</label
+    >
+
+    <label for="finalizing"
+      ><input
+        type="checkbox"
+        id="finalizing"
+        [(ngModel)]="transitionClasses.finalizing"
+      />transitionClasses.finalizing</label
+    >
+  </div>
+
   <div form>
     <button mlButton (click)="toggleItemSize()">Change item size</button>
     <button mlButton (click)="toggleItemBorder()">Change border size</button>
   </div>
+
   <div product>
-    <div class="item-wrapper" [class]="itemWrapperClassList">
+    <div class="wrapper" [class]="wrapperClassList">
       <ml-straight-tracker
         class="straight-tracker"
         [targetIndex]="selectedIndex"
+        [disabled]="disabled"
+        [position]="position"
+        [orientation]="orientation"
+        [observeContainer]="observeContainer"
+        [unobserveTarget]="unobserveTarget"
+        [transitionClasses]="transitionClasses"
       >
         <div class="ink-bar ml-accent-bg"></div>
       </ml-straight-tracker>
       <div
-        *ngFor="let i of [1, 2, 3]"
+        *ngFor="let char of ['A', 'B', 'C']; let i = index"
         mlRipple
         class="item"
-        (click)="selectedIndex = i - 1"
+        (click)="selectedIndex = i"
       >
-        Item {{ i }}
+        Item {{ char }}
       </div>
     </div>
   </div>

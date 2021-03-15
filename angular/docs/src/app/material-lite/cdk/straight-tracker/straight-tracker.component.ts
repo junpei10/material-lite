@@ -1,13 +1,22 @@
 import { DOCUMENT } from '@angular/common';
 import { AfterContentInit, ChangeDetectionStrategy, Component, ElementRef, Inject, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Falsy, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
-import { MlStraightTrackerCore, MlStraightTrackerSizingMode, MlStraightTrackerTransitionClasses } from './straight-tracker-core';
+import {
+  MlStraightTrackerCore, MlStraightTrackerOrientation,
+  MlStraightTrackerPosition, MlStraightTrackerSizingMode,
+  MlStraightTrackerTransitionClasses
+} from './straight-tracker-core';
+
+interface Changes {
+  position: MlStraightTrackerPosition;
+  orientation: MlStraightTrackerOrientation;
+}
 
 @Component({
   selector: 'ml-straight-tracker',
   exportAs: 'mlStraightTracker',
   template: '<div #trackerElement class="ml-tracker"><ng-content></ng-content></div>',
-  styles: ['ml-straight-tracker{width:100%;height:100%;position:absolute;top:0;pointer-events:none}.ml-tracker{position:absolute;transition-timing-function:cubic-bezier(0.35, 0, 0.25, 1);transition-duration:400ms;pointer-events:auto;}'],
+  styles: ['ml-straight-tracker{width:100%;height:100%;position:absolute;top:0;pointer-events:none}.ml-tracker{position:absolute;transition-timing-function:cubic-bezier(0.35, 0, 0.25, 1);pointer-events:auto;z-index:1;}'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
@@ -21,27 +30,33 @@ export class MlStraightTrackerComponent implements OnInit, AfterContentInit {
     this._coreFactory = null;
   }
 
-  @Input('disabled') set setEnabled(isDisabled: true | Falsy) {
+  @Input('disabled') set setDisabled(isDisabled: true | Falsy) {
     // @ts-ignore: assign the readonly variable
     const result = this.isDisabled =
-    isDisabled || isDisabled === '';
+      isDisabled || isDisabled === '';
 
     result
       ? this.core.finalize()
       : this.core.initialize();
   }
-  readonly isDisabled: boolean;
+  // @ts-ignore: 代入されたかどうかを確認するために１を代入
+  readonly isDisabled: boolean = 1;
 
   @Input('target') set setTarget(target: HTMLElement) {
-    this.core.trackTargetByElement(target);
+    if (!this.isDisabled) {
+      this.core.trackTargetByElement(target);
+    }
   }
 
   @Input('targetIndex') set setTargetIndex(targetIndex: number) {
-    this.core.trackTargetByIndex(targetIndex);
+    if (!this.isDisabled) {
+      this.core.trackTargetByIndex(targetIndex);
+    }
   }
 
   @Input() orientation?: 'horizontal' | 'vertical';
   @Input() position?: 'before' | 'after';
+
   @Input() transitionClasses?: MlStraightTrackerTransitionClasses;
 
   @Input('sizingMode')
@@ -82,8 +97,16 @@ export class MlStraightTrackerComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit(): void {
-    if (this.isDisabled === void 0) {
+    if (this.isDisabled === 1 as any) {
       this.core.initialize();
+      // @ts-ignore: assign the readonly variable
+      this.isDisabled = false;
+    }
+  }
+
+  ngOnChanges(changes: Changes): void {
+    if (changes.orientation || changes.position) {
+      this.core.updateTrackerStyle();
     }
   }
 

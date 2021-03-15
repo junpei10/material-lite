@@ -41,7 +41,7 @@
   }
   &-route-card {
     width: 280px;
-    @include mat-elevation(2);
+    @include ml-elevation(2);
     padding: 24px;
     margin: 32px;
     box-sizing: border-box;

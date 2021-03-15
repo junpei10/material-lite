@@ -11,10 +11,13 @@ interface XY {
 }
 
 export interface MlStraightTrackerCoreConfig {
-  position?: 'before' | 'after';
-  orientation?: 'horizontal' | 'vertical';
+  position?: MlStraightTrackerPosition;
+  orientation?: MlStraightTrackerOrientation;
   transitionClasses?: MlStraightTrackerTransitionClasses;
 }
+
+export type MlStraightTrackerPosition = 'before' | 'after';
+export type MlStraightTrackerOrientation = 'horizontal' | 'vertical';
 
 export interface MlStraightTrackerTransitionClasses {
   initializing?: boolean;
@@ -61,7 +64,7 @@ export class MlStraightTrackerCore {
   ) {
     setCoreConfig(this, config);
 
-    _trackerElement.classList.add('ml-straight-tracker', 'ml-bottom-0');
+    _trackerElement.classList.add('ml-bottom-0');
 
     this.setSizingMode('loose');
   }
@@ -82,14 +85,14 @@ export class MlStraightTrackerCore {
       const base = entry0.borderBoxSize[0];
       targetSize = {
         width: base.inlineSize,
-        height: base.inlineSize
+        height: base.blockSize
       };
 
     } else if (entry1 && entry1.target === targetEl) {
       const base = entry1.borderBoxSize[0];
       targetSize = {
         width: base.inlineSize,
-        height: base.inlineSize
+        height: base.blockSize
       };
     }
 
@@ -214,16 +217,15 @@ export class MlStraightTrackerCore {
       resizeObs.observe(targetEl, { box: 'border-box' });
 
     } else {
+      const origin = this._hostElement.parentElement.getBoundingClientRect();
       const targetPoint = targetEl.getBoundingClientRect();
 
       this.setTrackerStyle(
-        this._originFactory(),
-        targetPoint, targetPoint
+        origin, targetPoint, targetPoint
       );
     }
 
     if (this._config.transitionClasses?.starting) {
-      console.log('starting tc');
       this._oneFrameTransitionClasses('starting');
     }
   }
@@ -253,6 +255,43 @@ export class MlStraightTrackerCore {
         el.style.width = `${targetSize.width}px`;
       }
     }
+  }
+
+  /**
+   * 設定してある変数をもとに、`top: 0`, `right: 0`, `left: 0`, `bottom: 0`が付与される`class`を切り替える。
+   *
+   * - `.ml-top-0`, `.ml-left-0` `.ml-right-0`, `.ml-bottom-0`
+   */
+  updateTrackerStyle(): void {
+    const trackerEl = this._trackerElement;
+    const classList = trackerEl.classList;
+
+    const conf = this._config;
+
+    classList.remove(this._prevPositionClass);
+
+    let currPositionClass: string;
+
+    if (conf.orientation === 'vertical') {
+      trackerEl.style.removeProperty('width');
+      trackerEl.style.removeProperty('left');
+
+      this._prevPositionClass = currPositionClass =
+        (conf.position === 'before')
+          ? 'ml-left-0'
+          : 'ml-right-0';
+
+    } else {
+      trackerEl.style.removeProperty('height');
+      trackerEl.style.removeProperty('top');
+
+      this._prevPositionClass = currPositionClass =
+        (conf.position === 'before')
+          ? 'ml-top-0'
+          : 'ml-bottom-0';
+    }
+
+    classList.add(currPositionClass);
   }
 
   onFirstUpdateBrothers(): void {
@@ -308,35 +347,6 @@ export class MlStraightTrackerCore {
       : resizeObs.unobserve(containerEl);
   }
 
-  /**
-   * 設定してある変数をもとに、`top: 0`, `right: 0`, `left: 0`, `bottom: 0`が付与される`class`を切り替える。
-   *
-   * - `.ml-top-0`, `.ml-left-0` `.ml-right-0`, `.ml-bottom-0`
-   */
-  updateTrackerPosition(): void {
-    const classList = this._trackerElement.classList;
-    const conf = this._config;
-
-    classList.remove(this._prevPositionClass);
-
-    let currPositionClass: string;
-
-    if (conf.orientation === 'vertical') {
-      this._prevPositionClass = currPositionClass =
-        (conf.position === 'before')
-          ? 'ml-left-0'
-          : 'ml-right-0';
-
-    } else {
-      this._prevPositionClass = currPositionClass =
-        (conf.position === 'before')
-          ? 'ml-top-0'
-          : 'ml-bottom-0';
-    }
-
-    classList.add(currPositionClass);
-  }
-
 
   /**
    * `setTrackerStyle`のサイズを取得する方法を変え、その関数を呼び出す`trackTarget`関数等に影響を及ぼす。
@@ -378,7 +388,7 @@ export class MlStraightTrackerCore {
   }
 
   private _oneFrameTransitionClasses(state: string): void {
-    const name = 'ml-straight-tracker-' + state;
+    const name = 'ml-tracker-' + state;
     const trackerClassList = this._trackerElement.classList;
     trackerClassList.add(name);
     this._runOutsideNgZone(() =>

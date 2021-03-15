@@ -15,21 +15,55 @@
   @return (null != index($list, $var));
 }
 
-$ml-amt-duration: (
-  faster: 160ms,
-  fast: 200ms,
-  normal: 240ms,
-  slow: 280ms,
-  slower: 320ms,
+$ml-z-index: (
+  standard-side-sheet: 0,
+  resting-app-bar: 0,
+  text-button: 0,
+  switch: 1,
+  resting-card: 1,
+  resting-search-bar: 1,
+  resting-contained-button: 2,
+  scrolled-search-bar: 3,
+  scrolled-app-bar: 4,
+  loading-overlay: 5,
+  resting-fab: 6,
+  pressed-contained-button: 8,
+  picked-up-card: 8,
+  menus: 8,
+  floating-app-bar: 8,
+  bottom-app-bar: 8,
+  bottom-navigation-bar: 8,
+  bottom-nav-bar: 8,
+  standard-bottom-sheet: 8,
+  standard-bottom-side-sheet: 8,
+  pressed-fab: 12,
+  overlay: 15,
+  navigation-drawer: 16,
+  nav-drawer: 16,
+  modal-bottom-sheet: 16,
+  modal-side-sheet: 16,
+  dialog: 24,
 );
 
-$ml-amt-function: (
+$ml-animation-duration: (
+  veryFast: 160ms,
+  faster: 200ms,
+  fast: 240ms,
+  normal: 280ms,
+  slow: 320ms,
+  slower: 360ms,
+  very-slow: 400ms,
+);
+
+$ml-animation-function: (
+  // ease => fast-in
   angular: cubic-bezier(0.25, 0.8, 0.25, 1),
+  // fast-out => slow-in
   standard: cubic-bezier(0.4, 0, 0.2, 1),
-  // fast-out   => slow-in
-  deceleration: cubic-bezier(0, 0, 0.2, 1),
   // linear-out => slow-in
-  acceleration: cubic-bezier(0.4, 0, 1, 1) // fast-out   => liner-in,
+  deceleration: cubic-bezier(0, 0, 0.2, 1),
+  // fast-out   => liner-in
+  acceleration: cubic-bezier(0.4, 0, 1, 1)
 );
 
 $ml-light-theme: (
@@ -267,15 +301,23 @@ $ml-css-variable-palette: (
   );
 }
 
-$ml-elevation-amt-duration: map-get($ml-amt-duration, slow);
-$ml-elevation-amt-function: map-get($ml-amt-function, standard);
+$ml-elevation-animation-duration: map-get($ml-animation-duration, slow);
+$ml-elevation-animation-function: map-get($ml-animation-function, standard);
 $ml-elevation-color: black !default;
+$ml-elevation-opacity: 1 !default;
 
 @mixin ml-elevation(
   $zValue,
   $color: $ml-elevation-color,
   $opacity: $ml-elevation-opacity
 ) {
+  @if type-of($zValue) != number or not unitless($zValue) {
+    @error '$zValue must be a unitless number';
+  }
+  @if $zValue < 0 or $zValue > 24 {
+    @error '$zValue must be between 0 and 24';
+  }
+
   box-shadow: #{map-get(_get-umbra-map($color, $opacity), $zValue)},
     #{map-get(_get-penumbra-map($color, $opacity), $zValue)},
     #{map-get(_get-ambient-map($color, $opacity), $zValue)};
@@ -353,20 +395,20 @@ $ml-theme-component-list: (button);
 }
 
 @function ml-create-theme($theme, $base: light) {
-  $template: _pickTemplateTheme($base);
+  $template: ml-template-theme($base);
   $theme: map-unquote($theme);
   $returns: map-merge($base, $theme);
   @return $returns;
 }
 
 @function ml-create-palette($palette, $base: light) {
-  $template: _pickTemplatePalette($base);
+  $template: ml-template-palette($base);
   $palette: map-unquote($palette);
   $returns: map-merge($base, $palette);
   @return $returns;
 }
 
-@function _pickTemplateTheme($theme) {
+@function ml-template-theme($theme) {
   @if $theme == light {
     @return $ml-light-theme;
   } @else if $theme == dark {
@@ -377,7 +419,7 @@ $ml-theme-component-list: (button);
     @return $theme;
   }
 }
-@function _pickTemplatePalette($palette) {
+@function ml-template-palette($palette) {
   @if $palette == css-variable or $palette == cssVariable {
     @return $ml-css-variable-palette;
   } @else if $palette == indigo-pink {

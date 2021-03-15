@@ -1,15 +1,30 @@
 import { Component } from '@angular/core';
+import { MlStraightTrackerOrientation, MlStraightTrackerPosition, MlStraightTrackerSizingMode, MlStraightTrackerTransitionClasses } from 'src/app/material-lite/cdk/straight-tracker';
 import { DocsService } from 'src/app/services/docs';
 
 @Component({
   selector: 'app-example',
   templateUrl: './example.component.html',
-  styleUrls: ['./example.component.css']
+  styleUrls: [
+    './example.component.css',
+    // './example.component.scss'
+  ]
 })
 export class ExampleComponent {
   selectedIndex: number = 0;
 
-  itemWrapperClassList: string[] = [];
+  disabled: boolean;
+
+  position: MlStraightTrackerPosition;
+  orientation: MlStraightTrackerOrientation;
+  sizingMode: MlStraightTrackerSizingMode;
+
+  observeContainer: boolean;
+  unobserveTarget: boolean;
+
+  transitionClasses: MlStraightTrackerTransitionClasses = {};
+
+  wrapperClassList: string[] = [];
 
   constructor(
     docs: DocsService
@@ -17,8 +32,24 @@ export class ExampleComponent {
     docs.setActiveRoute('example');
   }
 
+  onChangeOrientation(orientation: MlStraightTrackerOrientation): void {
+    const classList = [...this.wrapperClassList];
+
+    if (orientation === 'horizontal') {
+      const index = classList.indexOf('vertical');
+      if (index !== -1) {
+        classList.splice(index, 1);
+      }
+
+    } else {
+      classList.push('vertical');
+    }
+
+    this.wrapperClassList = classList;
+  }
+
   toggleItemSize(): void {
-    this._toggleItemWrapperClass('full-width');
+    this._toggleItemWrapperClass('big-size');
   }
 
   toggleItemBorder(): void {
@@ -26,7 +57,7 @@ export class ExampleComponent {
   }
 
   private _toggleItemWrapperClass(className: string): void {
-    const classList = [...this.itemWrapperClassList];
+    const classList = [...this.wrapperClassList];
 
     const index = classList.indexOf(className);
 
@@ -34,6 +65,6 @@ export class ExampleComponent {
       ? classList.push(className)
       : classList.splice(index, 1);
 
-    this.itemWrapperClassList = classList;
+    this.wrapperClassList = classList;
   }
 }

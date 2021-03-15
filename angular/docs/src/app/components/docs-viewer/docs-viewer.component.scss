@@ -97,11 +97,15 @@ app-docs-viewer {
   .keyword {
     color: #f44336;
   }
-  .literal {
+  .literal,
+  .number {
     color: #f48fb1;
   }
   .comment {
     color: #9e9e9e;
+  }
+  .white {
+    color: white;
   }
 }
 
@@ -122,6 +126,12 @@ code.html {
   }
   .literal {
     color: #f48fb1;
+  }
+  .array {
+    color: #81d4fa;
+  }
+  .white {
+    color: white;
   }
 }
 
@@ -148,5 +158,8 @@ code.css {
   }
   .comment {
     color: #9e9e9e;
+  }
+  .white {
+    color: white;
   }
 }

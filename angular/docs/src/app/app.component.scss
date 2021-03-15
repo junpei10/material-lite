@@ -1,7 +1,7 @@
 // コード整形： https://codepen.io/junpei10/pen/KKgPobR
 // HTMLエスケープ： https://www.freeformatter.com/html-escape.html
 
-@import "../assets/ml-elevation";
+@import "./material-lite/components/theming";
 @import "./views/docs";
 
 .root- {
@@ -23,7 +23,7 @@
       position: fixed;
       top: 0;
       left: 0;
-      @include mat-elevation(4);
+      @include ml-elevation(4);
     }
 
     .content {

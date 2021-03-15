@@ -1,56 +1,60 @@
-@mixin ml-theme($theme, $palette) {
-  $theme: _createTemplateTheme($theme);
-  $palette: _createTemplatePalette($palette);
+$ml-theme-component-list: (button);
 
-  @include ml-button-theme($theme, $palette);
+@mixin ml-theme-init($theme, $palette, $use: $ml-theme-component-list) {
+  $theme: ml-create-theme($theme);
+  $palette: ml-create-palette($palette);
+
+  @if (contains($use, button)) {
+    @include ml-button-theme($theme, $palette);
+  }
 }
 
 @function ml-create-theme($theme, $base: light) {
-  $template: _createTemplatePalette($base);
+  $template: ml-template-theme($base);
   $theme: map-unquote($theme);
   $returns: map-merge($base, $theme);
   @return $returns;
 }
 
 @function ml-create-palette($palette, $base: light) {
-  $template: _createTemplatePalette($base);
+  $template: ml-template-palette($base);
   $palette: map-unquote($palette);
   $returns: map-merge($base, $palette);
   @return $returns;
 }
 
-@function _createTemplateTheme($theme) {
+@function ml-template-theme($theme) {
   @if $theme == light {
     @return $ml-light-theme;
-
   } @else if $theme == dark {
     @return $ml-dark-theme;
-
   } @else if $theme == css-variable or $theme == cssVariable {
     @return $ml-css-variable-theme;
-
   } @else {
     @return $theme;
   }
 }
-
-@function _createTemplatePalette($palette) {
+@function ml-template-palette($palette) {
   @if $palette == css-variable or $palette == cssVariable {
     @return $ml-css-variable-palette;
-
-  } @else if $palette == indigo-pink or $palette == indigoPink {
+  } @else if $palette == indigo-pink {
     @return $ml-indigo-pink-palette;
-
-  } @else if $palette == purple-green or $palette == purpleGreen {
+  } @else if $palette == purple-green {
     @return $ml-purple-green-palette;
-
-  } @else if $palette == deep-purple-amber or $palette == deepPurpleAmber or $palette == deepPurple-amber {
+  } @else if $palette == deep-purple-amber or $palette == deepPurple-amber {
     @return $ml-deepPurple-amber-palette;
-
-  } @else if $palette == pink-blue-grey or $palette == pink-blueGrey or $palette == pinkBlueGrey or $palette == pink-blue-gray or $palette == pink-blueGray or $palette == pinkBlueGray {
+  } @else if
+    $palette ==
+    pink-blue-grey or
+    $palette ==
+    pink-blueGrey or
+    $palette ==
+    pink-blue-gray or
+    $palette ==
+    pink-blueGray
+  {
     @return $ml-pink-blueGrey-palette;
-
-  }@else {
+  } @else {
     @return $palette;
   }
 }
