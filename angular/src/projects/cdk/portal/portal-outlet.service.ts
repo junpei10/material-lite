@@ -8,7 +8,7 @@ import { MlPortalAttachedRef } from './portal-attached-ref';
 
 
 export type MlPortalContent = Class<any> | TemplateRef<any> | HTMLElement;
-export type MlPortalContentType = 'component' | 'template' | 'DOM';
+export type MlPortalContentType = 'component' | 'template' | 'DOM' | 'cloneDOM';
 
 export interface MlPortalAttachConfig {
   dataStorageRef?: MlPortalDataStorage;
@@ -22,18 +22,20 @@ export interface MlPortalAttachConfig {
   };
 
   component?: {
-    injectData?: any;
-    provider?: StaticProvider[];
+    injectionData?: any;
+    providers?: StaticProvider[];
     index?: number;
     ngContent?: any[][];
     // ngModuleFactory?: NgModuleFactory<any>
   };
+
   template?: {
     context?: {
       [key: string]: any
     };
     index?: number;
   };
+
   cloneDOM?: boolean;
 }
 
@@ -51,7 +53,6 @@ export interface MlPortalContentRef {
 
 export type MlPortalDataStorage = Map<string, MlPortalData>;
 
-// @dynamic
 @Injectable({
   providedIn: 'root'
 })
@@ -64,7 +65,7 @@ export class MlPortalOutlet {
     @Inject(RUN_OUTSIDE_NG_ZONE) private _runOutsideNgZone: RunOutsideNgZone,
     private _injector: Injector,
   ) {
-    this._createComment = _document.createElement.bind(_document);
+    this._createComment = _document.createComment.bind(_document);
   }
 
   hasPortalData(key: string): boolean {
@@ -119,11 +120,11 @@ export class MlPortalOutlet {
 
       const providers: StaticProvider[] = [
         { provide: ML_REF, useValue: attachedRef },
-        { provide: ML_DATA, useValue: compConf.injectData }
+        { provide: ML_DATA, useValue: compConf.injectionData }
       ];
 
-      if (compConf.provider) {
-        providers.push(...compConf.provider);
+      if (compConf.providers) {
+        providers.push(...compConf.providers);
       }
 
       const elInjector = Injector.create({ providers, parent: this._injector });
@@ -172,37 +173,67 @@ export class MlPortalOutlet {
       // content = "DOM"
       let contentRef: MlPortalContentRef;
 
+      let contentType: 'DOM' | 'cloneDOM';
+
       if (config.cloneDOM) {
         const clone = content.cloneNode(true) as HTMLElement;
+
+        contentType = 'cloneDOM';
 
         const outletEl = portalData.outletElement;
 
         contentRef = {
           rootElement: clone,
-          destroy: () => outletEl.removeChild(clone) // cloneしたDOMを削除
+          destroy: () => clone.remove() // cloneしたDOMを削除
         };
 
         outletEl.appendChild(clone);
 
+
       } else {
+        const prevMlPortalAttachedRef = // @ts-ignore
+          content.mlPortalAttachedRef as MlPortalAttachedRef | undefined;
+
+        if (prevMlPortalAttachedRef) {
+          // @ts-ignore: assign the readonly variable
+          prevMlPortalAttachedRef.data.isFirstAttached = false;
+          return prevMlPortalAttachedRef;
+        }
+
+        contentType = 'DOM';
+
         const shadowWarrior = this._createComment('portal-container');
-        const parentElement = content.parentElement!;
+        const parentEl = content.parentElement;
 
-        // 影武者とコンテンツを入れ替え
-        parentElement.replaceChild(shadowWarrior, content);
+        if (parentEl) {
+          contentRef = {
+            rootElement: content,
+            destroy: () => parentEl.replaceChild(content, shadowWarrior) // 入れ替えたDOMをもとの場所に戻す
+          };
 
-        contentRef = {
-          rootElement: content,
-          destroy: () => parentElement.replaceChild(content, shadowWarrior) // 入れ替えたDOMをもとに戻す
-        };
+          // 影武者とコンテンツを入れ替え
+          parentEl.replaceChild(shadowWarrior, content);
+          portalData.outletElement.appendChild(content);
 
-        portalData.outletElement.appendChild(content);
+        } else {
+          contentRef = {
+            rootElement: content,
+            destroy: () => content.remove()
+          };
+
+          portalData.outletElement.appendChild(content);
+        }
       }
 
-      return new MlPortalAttachedRef(
-        'DOM', key, attachedOrder, config.animation, contentRef,
+      const currMlPortalAttachedRef =  new MlPortalAttachedRef(
+        contentType, key, attachedOrder, config.animation, contentRef,
         portalData, this._runOutsideNgZone // @ts-ignore
       )._initialize();
+
+      // @ts-ignore
+      content.mlPortalAttachedRef = currMlPortalAttachedRef;
+
+      return currMlPortalAttachedRef;
     }
   }
 
@@ -228,7 +259,7 @@ export class MlPortalOutlet {
 
 
   /**
-   * PortalData内をすべて削除する。
+   * PortalData内をすべてすべて削除する。
    */
   detachAllOfPortalData(portalData: MlPortalData): void {
     const detaches = portalData.detachEvents;

@@ -2,6 +2,7 @@ import {
   Directive, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output,
   SimpleChange, SimpleChanges, ViewContainerRef
 } from '@angular/core';
+import { Falsy } from '@material-lite/angular-cdk/utils';
 import { MlPortalAttachedRef } from './portal-attached-ref';
 import { MlPortalAttachConfig, MlPortalContent, MlPortalData, MlPortalOutlet } from './portal-outlet.service';
 
@@ -11,13 +12,13 @@ interface Changes extends SimpleChanges {
 }
 
 @Directive({
-  selector: '[mlPortalOutlet]',
+  selector: 'ng-template[mlPortalOutlet]',
   exportAs: 'mlPortalOutlet'
 })
 export class MlPortalOutletDirective implements OnChanges, OnDestroy {
-  @Input('mlPortalOutletContent') content: MlPortalContent | null | undefined;
+  @Input('mlPortalOutlet') content: MlPortalContent | Falsy;
 
-  @Input('mlPortalOutletAttachConfig') config: MlPortalAttachConfig;
+  @Input('mlPortalOutletAttachConfig') attachConfig: MlPortalAttachConfig;
 
   @Input('mlPortalOutletKey') key: string | null = null;
   get isPrivate(): boolean {
@@ -25,7 +26,7 @@ export class MlPortalOutletDirective implements OnChanges, OnDestroy {
   }
 
   @Input('mlPortalOutletDestroyingDuration')
-  set outletDestroyingDuration(duration: number) {
+  set setOutletDestroyingDuration(duration: number) {
     this._portalData.destroyingOutletDuration = duration;
   }
 
@@ -34,7 +35,7 @@ export class MlPortalOutletDirective implements OnChanges, OnDestroy {
     return this._attachedEmitter || (this._attachedEmitter = new EventEmitter());
   }
 
-  attachedRef: MlPortalAttachedRef | undefined;
+  readonly attachedRef: MlPortalAttachedRef | undefined;
 
   private _portalData: MlPortalData;
 
@@ -61,7 +62,9 @@ export class MlPortalOutletDirective implements OnChanges, OnDestroy {
 
           1. "[mlPortalOutlet](directive) > [mlPortalOutletKey](@Input)"に値が代入されたとき
         `);
+
       } else {
+
         this._portalOutlet.setPortalData(key, this._portalData);
       }
     }
@@ -95,8 +98,9 @@ export class MlPortalOutletDirective implements OnChanges, OnDestroy {
 
         const keyOrData = this.key || this._portalData;
 
+        // @ts-ignore: assign the readonly property
         const attachedRef = this.attachedRef =
-          this._portalOutlet.attach(content, keyOrData, this.config);
+          this._portalOutlet.attach(content, keyOrData, this.attachConfig);
 
         if (this._attachedEmitter) {
           this._attachedEmitter.emit(attachedRef);

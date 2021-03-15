@@ -41,7 +41,7 @@ export class TransitionClasses {
     const toClass = baseClass + '-to';
     const activeClass = baseClass + '-active';
 
-    // @ts-ignore assign readonly variable
+    // @ts-ignore assign the readonly variable
     this.previousBaseClassName = baseClass;
 
     // add [.ex] & [.ex-active]

@@ -1,6 +1,6 @@
 {
   "name": "@material-lite/angular-cdk",
-  "version": "0.3.5",
+  "version": "1.0.0",
   "license": "MIT",
   "description": "Material Lite CDK for Angular",
   "keywords": [
@@ -15,7 +15,8 @@
     "@angular/core": "^10.1.6"
   },
   "dependencies": {
-    "tslib": "^2.0.0"
+    "tslib": "^2.0.0",
+    "@types/resize-observer-browser": "^0.1.5"
   },
   "repository": {
     "type": "git",

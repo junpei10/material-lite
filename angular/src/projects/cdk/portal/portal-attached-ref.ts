@@ -8,12 +8,15 @@ type lifecycleSubjectType = 'afterAttach' | 'beforeDetach' | 'afterDetach';
 const useLifecycle = createLifecycleControllersFactory('afterAttach', 'beforeDetach', 'afterDetach');
 
 export class MlPortalAttachedRef {
+  readonly hasClosed: boolean = false;
+
   readonly data: Readonly<{
     outletKey: string | null;
     attachedOrder: number;
     contentType: MlPortalContentType;
     outletElement: HTMLElement;
     rootContentElement: HTMLElement;
+    isFirstAttached: boolean;
   }>;
 
   private _animateRef: TransitionClasses['animate'];
@@ -38,7 +41,8 @@ export class MlPortalAttachedRef {
       outletElement: _portalData.outletElement,
       get rootContentElement(): HTMLElement {
         return _contentRef.rootElement;
-      }
+      },
+      isFirstAttached: true
     };
 
     [this._lifecycleNextor, this.lifecycle] = useLifecycle();
@@ -67,31 +71,45 @@ export class MlPortalAttachedRef {
   }
 
   private _detach(hasDestroyedOutlet?: boolean): void {
+    if (this.hasClosed) { return; }
+
     this._lifecycleNextor.beforeDetach();
 
     if (hasDestroyedOutlet) {
       const dur = this._portalData.destroyingOutletDuration;
       dur
         ? this._runOutsideNgZone(() =>
-            setTimeout(() => this._animate('leave', () => this._lifecycleNextor.afterDetach()), dur)
+            setTimeout(() => this._animate('leave', () => this._afterDetach()), dur)
           )
-        : this._lifecycleNextor.afterDetach();
+        : this._afterDetach();
 
     } else {
       if (this.animationConfig.cancelOnDetach) {
         this._contentRef.destroy();
-        this._lifecycleNextor.afterDetach();
+        this._afterDetach();
 
       } else {
         this._animate('leave', () => {
           this._contentRef.destroy();
-          this._lifecycleNextor.afterDetach();
+          this._afterDetach();
         });
       }
     }
 
     this._portalData.detachEvents
       .splice(this.data.attachedOrder, 1);
+
+    // @ts-ignore: assign the readonly variable
+    this.hasClosed = true;
+  }
+
+  private _afterDetach(): void {
+    this._lifecycleNextor.afterDetach();
+
+    const data = this.data;
+    if (data.contentType === 'DOM') { // @ts-ignore
+      data.rootContentElement.mlPortalAttachedRef = void 0;
+    }
   }
 
   private _animate(type: TransitionType, onFinalize: () => void): void {
@@ -112,9 +130,7 @@ export class MlPortalAttachedRef {
       });
 
     } else {
-      this._runOutsideNgZone(
-() => setTimeout(onFinalize, duration)
-      );
+      this._runOutsideNgZone(() => setTimeout(onFinalize, duration));
     }
   }
 }
