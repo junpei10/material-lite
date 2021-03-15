@@ -3,7 +3,6 @@ import { DOCUMENT } from '@angular/common';
 import { Falsy, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
 import { MlRippleCore, MlRippleEntrance, MlRippleOverdrive, MlRippleTrigger } from './ripple-core';
 
-// @dynamic
 @Directive({
   selector: '[mlRipple]',
   exportAs: 'mlRipple'
