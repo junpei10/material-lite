@@ -3,7 +3,7 @@ import {
   ComponentFactoryResolver, Inject, Injectable, Injector,
   StaticProvider, TemplateRef, ViewContainerRef
 } from '@angular/core';
-import { Class, ML_DATA, ML_REF, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
+import { Class, MlDocument, ML_DATA, ML_REF, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
 import { MlPortalAttachedRef } from './portal-attached-ref';
 
 
@@ -57,11 +57,11 @@ export type MlPortalDataStorage = Map<string, MlPortalData>;
   providedIn: 'root'
 })
 export class MlPortalOutlet {
-  private _createComment: Document['createComment'];
+  private _createComment: MlDocument['createComment'];
   private _portalDataStorage: MlPortalDataStorage = new Map();
 
   constructor(
-    @Inject(DOCUMENT) _document: Document,
+    @Inject(DOCUMENT) _document: MlDocument,
     @Inject(RUN_OUTSIDE_NG_ZONE) private _runOutsideNgZone: RunOutsideNgZone,
     private _injector: Injector,
   ) {

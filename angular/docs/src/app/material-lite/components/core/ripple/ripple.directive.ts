@@ -1,6 +1,6 @@
 import { Directive, ElementRef, Inject, Input, OnInit } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { Falsy, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
+import { Falsy, MlDocument, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
 import { MlRippleCore, MlRippleEntrance, MlRippleOverdrive, MlRippleTrigger } from './ripple-core';
 
 @Directive({
@@ -57,7 +57,7 @@ export class MlRippleDirective implements OnInit {
 
   constructor(
     elementRef: ElementRef<HTMLElement>,
-    @Inject(DOCUMENT) _document: Document,
+    @Inject(DOCUMENT) _document: MlDocument,
     @Inject(RUN_OUTSIDE_NG_ZONE) runOutsideNgZone: RunOutsideNgZone,
   ) {
     this.core = new MlRippleCore(

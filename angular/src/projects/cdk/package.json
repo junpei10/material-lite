@@ -15,7 +15,9 @@
     "@angular/core": "~11.2.5"
   },
   "dependencies": {
-    "tslib": "^2.0.0",
+    "tslib": "^2.0.0"
+  },
+  "devDependencies": {
     "@types/resize-observer-browser": "^0.1.5"
   },
   "repository": {

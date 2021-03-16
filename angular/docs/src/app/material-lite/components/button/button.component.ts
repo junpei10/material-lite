@@ -1,15 +1,14 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, Inject, Input, OnChanges, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import {
-  CoreDynamicConfig,
-  RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE, Falsy
-} from '@material-lite/angular-cdk/utils';
+  ChangeDetectionStrategy, Component, ElementRef, Inject,
+  Input, OnChanges, OnInit, ViewChild, ViewEncapsulation
+} from '@angular/core';
+import { CoreDynamicConfig, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE, Falsy, MlDocument } from '@material-lite/angular-cdk/utils';
 import { MlRippleCore, MlRippleCoreConfig } from '@material-lite/angular/core';
 
 export type MlButtonVariant = 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
 export type MlButtonHoverAction = 'enabled' | 'disabled' | 'auto';
 
-// @dynamic
 @Component({
   selector: '[mlButton]',
   exportAs: 'mlButton',
@@ -108,12 +107,12 @@ export class MlButtonComponent implements OnInit, OnChanges {
     dynamic: {}
   };
 
-  private _createElement: Document['createElement'];
+  private _createElement: MlDocument['createElement'];
 
   constructor(
     private _hostElementRef: ElementRef<HTMLElement>,
     @Inject(RUN_OUTSIDE_NG_ZONE) private _runOutsideNgZone: RunOutsideNgZone,
-    @Inject(DOCUMENT) _document: Document,
+    @Inject(DOCUMENT) _document: MlDocument,
   ) {
     this._createElement = _document.createElement.bind(_document);
     _hostElementRef.nativeElement.classList.add('ml-button');

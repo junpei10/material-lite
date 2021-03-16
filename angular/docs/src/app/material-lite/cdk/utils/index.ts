@@ -10,3 +10,8 @@ export * from './core';
 export type Class<T, A extends any[] = any[]> = new (...arg: A) => T;
 
 export type Falsy = false | undefined | null | '' | 0;
+
+export interface MlDocument {
+  createElement: (tagName: string, options?: ElementCreationOptions) => HTMLElement;
+  createComment: (data: string) => Comment;
+}

@@ -1,15 +1,15 @@
 import {
-  Directive, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output,
-  SimpleChange, SimpleChanges, ViewContainerRef
+  Directive, ElementRef, EventEmitter, Input, OnChanges,
+  OnDestroy, Output, SimpleChange, ViewContainerRef
 } from '@angular/core';
 import { Falsy } from '@material-lite/angular-cdk/utils';
 import { MlPortalAttachedRef } from './portal-attached-ref';
 import { MlPortalAttachConfig, MlPortalContent, MlPortalData, MlPortalOutlet } from './portal-outlet.service';
 
-interface Changes extends SimpleChanges {
+type Changes = {
   content: SimpleChange;
   key: SimpleChange;
-}
+};
 
 @Directive({
   selector: 'ng-template[mlPortalOutlet]',

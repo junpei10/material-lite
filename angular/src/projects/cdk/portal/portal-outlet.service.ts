@@ -53,15 +53,19 @@ export interface MlPortalContentRef {
 
 export type MlPortalDataStorage = Map<string, MlPortalData>;
 
+interface DocumentType {
+  createComment: (data: string) => Comment;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class MlPortalOutlet {
-  private _createComment: Document['createComment'];
+  private _createComment: DocumentType['createComment'];
   private _portalDataStorage: MlPortalDataStorage = new Map();
 
   constructor(
-    @Inject(DOCUMENT) _document: Document,
+    @Inject(DOCUMENT) _document: DocumentType,
     @Inject(RUN_OUTSIDE_NG_ZONE) private _runOutsideNgZone: RunOutsideNgZone,
     private _injector: Injector,
   ) {

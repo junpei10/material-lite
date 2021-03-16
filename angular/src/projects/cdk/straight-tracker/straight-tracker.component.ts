@@ -12,6 +12,10 @@ interface Changes {
   orientation: MlStraightTrackerOrientation;
 }
 
+interface DocumentType {
+  createElement: (tagName: string, ...arg: any[]) => HTMLElement;
+}
+
 @Component({
   selector: 'ml-straight-tracker',
   exportAs: 'mlStraightTracker',
@@ -88,7 +92,7 @@ export class MlStraightTrackerComponent implements OnInit, AfterContentInit {
   constructor(
     _elementRef: ElementRef<HTMLElement>,
     @Inject(RUN_OUTSIDE_NG_ZONE) _runOutsideNgZone: RunOutsideNgZone,
-    @Inject(DOCUMENT) _document: Document
+    @Inject(DOCUMENT) _document: DocumentType
   ) {
     this._coreFactory = (trackerEl) => new MlStraightTrackerCore(
       this, _elementRef.nativeElement, trackerEl,
