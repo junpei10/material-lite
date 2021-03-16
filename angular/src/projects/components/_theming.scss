@@ -1,84 +1,116 @@
 @function map-unquote($map) {
   @each $key, $value in $map {
-      $newValue: unquote($value);
-      $map: map-merge($map, ($key: $newValue));
+    $newValue: unquote($value);
+    $map: map-merge(
+      $map,
+      (
+        $key: $newValue,
+      )
+    );
   }
   @return $map;
 }
 
 @function contains($list, $var) {
-    @return (null != index($list, $var));
+  @return (null != index($list, $var));
 }
 
-$ml-amt-duration: (
-  faster: 160ms,
-  fast:   200ms,
-  normal: 240ms,
-  slow:   280ms,
-  slower: 320ms
+$ml-z-index: (
+  standard-side-sheet: 0,
+  resting-app-bar: 0,
+  text-button: 0,
+  switch: 1,
+  resting-card: 1,
+  resting-search-bar: 1,
+  resting-contained-button: 2,
+  scrolled-search-bar: 3,
+  scrolled-app-bar: 4,
+  loading-overlay: 5,
+  resting-fab: 6,
+  pressed-contained-button: 8,
+  picked-up-card: 8,
+  menus: 8,
+  floating-app-bar: 8,
+  bottom-app-bar: 8,
+  bottom-navigation-bar: 8,
+  bottom-nav-bar: 8,
+  standard-bottom-sheet: 8,
+  standard-bottom-side-sheet: 8,
+  pressed-fab: 12,
+  overlay: 15,
+  navigation-drawer: 16,
+  nav-drawer: 16,
+  modal-bottom-sheet: 16,
+  modal-side-sheet: 16,
+  dialog: 24,
 );
 
-$ml-amt-function: (
-  angular:      cubic-bezier(.25,.8,.25,1),
-  standard:     cubic-bezier(.4,0,.2,1), // fast-out   => slow-in
-  deceleration: cubic-bezier(0,0,.2,1), // linear-out => slow-in
-  acceleration: cubic-bezier(.4,0,1,1)    // fast-out   => liner-in
+$ml-animation-duration: (
+  veryFast: 160ms,
+  faster: 200ms,
+  fast: 240ms,
+  normal: 280ms,
+  slow: 320ms,
+  slower: 360ms,
+  very-slow: 400ms,
+);
+
+$ml-animation-function: (
+  // ease => fast-in
+  angular: cubic-bezier(0.25, 0.8, 0.25, 1),
+  // fast-out => slow-in
+  standard: cubic-bezier(0.4, 0, 0.2, 1),
+  // linear-out => slow-in
+  deceleration: cubic-bezier(0, 0, 0.2, 1),
+  // fast-out   => liner-in
+  acceleration: cubic-bezier(0.4, 0, 1, 1)
 );
 
 $ml-light-theme: (
   base: white,
   oppositeBase: black,
-
   background: #f5f5f5,
   primaryContainer: #fafafa,
   secondaryContainer: white,
   tertiaryContainer: #eeeeee,
-  disabledContainer: rgba(0,0,0,.12),
-
-  divider: rgba(0,0,0,.12),
+  disabledContainer: rgba(0, 0, 0, 0.12),
+  divider: rgba(0, 0, 0, 0.12),
   elevation: black,
-  scrollbar: rgba(0,0,0,.12),
-
-  text: rgba(0,0,0,.87),
-  secondaryText: rgba(0,0,0,.54),
-  hintText: rgba(0,0,0,.38),
-  disabledText: rgba(0,0,0,.38),
+  scrollbar: rgba(0, 0, 0, 0.12),
+  text: rgba(0, 0, 0, 0.87),
+  secondaryText: rgba(0, 0, 0, 0.54),
+  hintText: rgba(0, 0, 0, 0.38),
+  disabledText: rgba(0, 0, 0, 0.38),
 );
 
 $ml-dark-theme: (
   base: black,
   oppositeBase: white,
-
   background: #212121,
   primaryContainer: #303030,
   secondaryContainer: #424242,
   tertiaryContainer: #616161,
-  disabledContainer: hsla(0,0%,100%,.12),
-
-  divider: rgba(255,255,255,.12),
+  disabledContainer: hsla(0, 0%, 100%, 0.12),
+  divider: rgba(255, 255, 255, 0.12),
   elevation: black,
-  scrollbar: rgba(255,255,255,.12),
-
+  scrollbar: rgba(255, 255, 255, 0.12),
   text: #fff,
-  secondaryText: rgba(255,255,255,.7),
-  hintText: rgba(255,255,255,.5),
-  disabledText: hsla(0,0%,100%,.3),
+  secondaryText: rgba(255, 255, 255, 0.7),
+  hintText: rgba(255, 255, 255, 0.5),
+  disabledText: hsla(0, 0%, 100%, 0.3),
 );
 
 $ml-css-variable-theme: (
   base: var(--ml-base),
   oppositeBase: var(--ml-opposite-base),
-
   background: var(--ml-background),
   primaryContainer: var(--ml-primary-container),
   secondaryContainer: var(--ml-secondary-container),
   tertiaryContainer: var(--ml-tertiary-container),
   disabledContainer: var(--ml-disabled-container),
-
   divider: var(--ml-divider),
   elevation: var(--ml-elevation),
   scrollbar: var(--ml-scrollbar),
-
   text: var(--ml-text),
   secondaryText: var(--ml-secondary-text),
   hintText: var(--ml-hint-text),
@@ -92,12 +124,12 @@ $ml-deepPurple-amber-palette: (
   ),
   accent: (
     color: #ffd740,
-    contrast: rgba(0,0,0,.87),
+    contrast: rgba(0, 0, 0, 0.87),
   ),
   warn: (
     color: #f44336,
     contrast: #fff,
-  )
+  ),
 );
 
 $ml-indigo-pink-palette: (
@@ -112,7 +144,7 @@ $ml-indigo-pink-palette: (
   warn: (
     color: #f44336,
     contrast: #fff,
-  )
+  ),
 );
 
 $ml-pink-blueGrey-palette: (
@@ -127,7 +159,7 @@ $ml-pink-blueGrey-palette: (
   warn: (
     color: #f44336,
     contrast: #fff,
-  )
+  ),
 );
 $ml-pink-blueGray-palette: $ml-pink-blueGrey-palette;
 
@@ -138,12 +170,12 @@ $ml-purple-green-palette: (
   ),
   accent: (
     color: #69f0ae,
-    contrast: rgba(0,0,0,.87),
+    contrast: rgba(0, 0, 0, 0.87),
   ),
   warn: (
     color: #f44336,
     contrast: #fff,
-  )
+  ),
 );
 
 $ml-css-variable-palette: (
@@ -158,129 +190,152 @@ $ml-css-variable-palette: (
   warn: (
     color: var(--ml-warn),
     contrast: var(--ml-warn-contrast),
-  )
+  ),
 );
 
-
 @function _get-umbra-map($color, $opacity) {
-  $shadow-color: if(type-of($color) == color, rgba($color, $opacity * 0.2), $color);
+  $shadow-color: if(
+    type-of($color) == color,
+    rgba($color, $opacity * 0.2),
+    $color
+  );
 
   @return (
-    0: '0px 0px 0px 0px #{$shadow-color}',
-    1: '0px 2px 1px -1px #{$shadow-color}',
-    2: '0px 3px 1px -2px #{$shadow-color}',
-    3: '0px 3px 3px -2px #{$shadow-color}',
-    4: '0px 2px 4px -1px #{$shadow-color}',
-    5: '0px 3px 5px -1px #{$shadow-color}',
-    6: '0px 3px 5px -1px #{$shadow-color}',
-    7: '0px 4px 5px -2px #{$shadow-color}',
-    8: '0px 5px 5px -3px #{$shadow-color}',
-    9: '0px 5px 6px -3px #{$shadow-color}',
-    10: '0px 6px 6px -3px #{$shadow-color}',
-    11: '0px 6px 7px -4px #{$shadow-color}',
-    12: '0px 7px 8px -4px #{$shadow-color}',
-    13: '0px 7px 8px -4px #{$shadow-color}',
-    14: '0px 7px 9px -4px #{$shadow-color}',
-    15: '0px 8px 9px -5px #{$shadow-color}',
-    16: '0px 8px 10px -5px #{$shadow-color}',
-    17: '0px 8px 11px -5px #{$shadow-color}',
-    18: '0px 9px 11px -5px #{$shadow-color}',
-    19: '0px 9px 12px -6px #{$shadow-color}',
-    20: '0px 10px 13px -6px #{$shadow-color}',
-    21: '0px 10px 13px -6px #{$shadow-color}',
-    22: '0px 10px 14px -6px #{$shadow-color}',
-    23: '0px 11px 14px -7px #{$shadow-color}',
-    24: '0px 11px 15px -7px #{$shadow-color}'
+    0: "0px 0px 0px 0px #{$shadow-color}",
+    1: "0px 2px 1px -1px #{$shadow-color}",
+    2: "0px 3px 1px -2px #{$shadow-color}",
+    3: "0px 3px 3px -2px #{$shadow-color}",
+    4: "0px 2px 4px -1px #{$shadow-color}",
+    5: "0px 3px 5px -1px #{$shadow-color}",
+    6: "0px 3px 5px -1px #{$shadow-color}",
+    7: "0px 4px 5px -2px #{$shadow-color}",
+    8: "0px 5px 5px -3px #{$shadow-color}",
+    9: "0px 5px 6px -3px #{$shadow-color}",
+    10: "0px 6px 6px -3px #{$shadow-color}",
+    11: "0px 6px 7px -4px #{$shadow-color}",
+    12: "0px 7px 8px -4px #{$shadow-color}",
+    13: "0px 7px 8px -4px #{$shadow-color}",
+    14: "0px 7px 9px -4px #{$shadow-color}",
+    15: "0px 8px 9px -5px #{$shadow-color}",
+    16: "0px 8px 10px -5px #{$shadow-color}",
+    17: "0px 8px 11px -5px #{$shadow-color}",
+    18: "0px 9px 11px -5px #{$shadow-color}",
+    19: "0px 9px 12px -6px #{$shadow-color}",
+    20: "0px 10px 13px -6px #{$shadow-color}",
+    21: "0px 10px 13px -6px #{$shadow-color}",
+    22: "0px 10px 14px -6px #{$shadow-color}",
+    23: "0px 11px 14px -7px #{$shadow-color}",
+    24: "0px 11px 15px -7px #{$shadow-color}"
   );
 }
 
 @function _get-penumbra-map($color, $opacity) {
-  $shadow-color: if(type-of($color) == color, rgba($color, $opacity * 0.14), $color);
+  $shadow-color: if(
+    type-of($color) == color,
+    rgba($color, $opacity * 0.14),
+    $color
+  );
 
   @return (
-    0: '0px 0px 0px 0px #{$shadow-color}',
-    1: '0px 1px 1px 0px #{$shadow-color}',
-    2: '0px 2px 2px 0px #{$shadow-color}',
-    3: '0px 3px 4px 0px #{$shadow-color}',
-    4: '0px 4px 5px 0px #{$shadow-color}',
-    5: '0px 5px 8px 0px #{$shadow-color}',
-    6: '0px 6px 10px 0px #{$shadow-color}',
-    7: '0px 7px 10px 1px #{$shadow-color}',
-    8: '0px 8px 10px 1px #{$shadow-color}',
-    9: '0px 9px 12px 1px #{$shadow-color}',
-    10: '0px 10px 14px 1px #{$shadow-color}',
-    11: '0px 11px 15px 1px #{$shadow-color}',
-    12: '0px 12px 17px 2px #{$shadow-color}',
-    13: '0px 13px 19px 2px #{$shadow-color}',
-    14: '0px 14px 21px 2px #{$shadow-color}',
-    15: '0px 15px 22px 2px #{$shadow-color}',
-    16: '0px 16px 24px 2px #{$shadow-color}',
-    17: '0px 17px 26px 2px #{$shadow-color}',
-    18: '0px 18px 28px 2px #{$shadow-color}',
-    19: '0px 19px 29px 2px #{$shadow-color}',
-    20: '0px 20px 31px 3px #{$shadow-color}',
-    21: '0px 21px 33px 3px #{$shadow-color}',
-    22: '0px 22px 35px 3px #{$shadow-color}',
-    23: '0px 23px 36px 3px #{$shadow-color}',
-    24: '0px 24px 38px 3px #{$shadow-color}'
+    0: "0px 0px 0px 0px #{$shadow-color}",
+    1: "0px 1px 1px 0px #{$shadow-color}",
+    2: "0px 2px 2px 0px #{$shadow-color}",
+    3: "0px 3px 4px 0px #{$shadow-color}",
+    4: "0px 4px 5px 0px #{$shadow-color}",
+    5: "0px 5px 8px 0px #{$shadow-color}",
+    6: "0px 6px 10px 0px #{$shadow-color}",
+    7: "0px 7px 10px 1px #{$shadow-color}",
+    8: "0px 8px 10px 1px #{$shadow-color}",
+    9: "0px 9px 12px 1px #{$shadow-color}",
+    10: "0px 10px 14px 1px #{$shadow-color}",
+    11: "0px 11px 15px 1px #{$shadow-color}",
+    12: "0px 12px 17px 2px #{$shadow-color}",
+    13: "0px 13px 19px 2px #{$shadow-color}",
+    14: "0px 14px 21px 2px #{$shadow-color}",
+    15: "0px 15px 22px 2px #{$shadow-color}",
+    16: "0px 16px 24px 2px #{$shadow-color}",
+    17: "0px 17px 26px 2px #{$shadow-color}",
+    18: "0px 18px 28px 2px #{$shadow-color}",
+    19: "0px 19px 29px 2px #{$shadow-color}",
+    20: "0px 20px 31px 3px #{$shadow-color}",
+    21: "0px 21px 33px 3px #{$shadow-color}",
+    22: "0px 22px 35px 3px #{$shadow-color}",
+    23: "0px 23px 36px 3px #{$shadow-color}",
+    24: "0px 24px 38px 3px #{$shadow-color}"
   );
 }
 
 @function _get-ambient-map($color, $opacity) {
-  $shadow-color: if(type-of($color) == color, rgba($color, $opacity * 0.12), $color);
+  $shadow-color: if(
+    type-of($color) == color,
+    rgba($color, $opacity * 0.12),
+    $color
+  );
 
   @return (
-    0: '0px 0px 0px 0px #{$shadow-color}',
-    1: '0px 1px 3px 0px #{$shadow-color}',
-    2: '0px 1px 5px 0px #{$shadow-color}',
-    3: '0px 1px 8px 0px #{$shadow-color}',
-    4: '0px 1px 10px 0px #{$shadow-color}',
-    5: '0px 1px 14px 0px #{$shadow-color}',
-    6: '0px 1px 18px 0px #{$shadow-color}',
-    7: '0px 2px 16px 1px #{$shadow-color}',
-    8: '0px 3px 14px 2px #{$shadow-color}',
-    9: '0px 3px 16px 2px #{$shadow-color}',
-    10: '0px 4px 18px 3px #{$shadow-color}',
-    11: '0px 4px 20px 3px #{$shadow-color}',
-    12: '0px 5px 22px 4px #{$shadow-color}',
-    13: '0px 5px 24px 4px #{$shadow-color}',
-    14: '0px 5px 26px 4px #{$shadow-color}',
-    15: '0px 6px 28px 5px #{$shadow-color}',
-    16: '0px 6px 30px 5px #{$shadow-color}',
-    17: '0px 6px 32px 5px #{$shadow-color}',
-    18: '0px 7px 34px 6px #{$shadow-color}',
-    19: '0px 7px 36px 6px #{$shadow-color}',
-    20: '0px 8px 38px 7px #{$shadow-color}',
-    21: '0px 8px 40px 7px #{$shadow-color}',
-    22: '0px 8px 42px 7px #{$shadow-color}',
-    23: '0px 9px 44px 8px #{$shadow-color}',
-    24: '0px 9px 46px 8px #{$shadow-color}'
+    0: "0px 0px 0px 0px #{$shadow-color}",
+    1: "0px 1px 3px 0px #{$shadow-color}",
+    2: "0px 1px 5px 0px #{$shadow-color}",
+    3: "0px 1px 8px 0px #{$shadow-color}",
+    4: "0px 1px 10px 0px #{$shadow-color}",
+    5: "0px 1px 14px 0px #{$shadow-color}",
+    6: "0px 1px 18px 0px #{$shadow-color}",
+    7: "0px 2px 16px 1px #{$shadow-color}",
+    8: "0px 3px 14px 2px #{$shadow-color}",
+    9: "0px 3px 16px 2px #{$shadow-color}",
+    10: "0px 4px 18px 3px #{$shadow-color}",
+    11: "0px 4px 20px 3px #{$shadow-color}",
+    12: "0px 5px 22px 4px #{$shadow-color}",
+    13: "0px 5px 24px 4px #{$shadow-color}",
+    14: "0px 5px 26px 4px #{$shadow-color}",
+    15: "0px 6px 28px 5px #{$shadow-color}",
+    16: "0px 6px 30px 5px #{$shadow-color}",
+    17: "0px 6px 32px 5px #{$shadow-color}",
+    18: "0px 7px 34px 6px #{$shadow-color}",
+    19: "0px 7px 36px 6px #{$shadow-color}",
+    20: "0px 8px 38px 7px #{$shadow-color}",
+    21: "0px 8px 40px 7px #{$shadow-color}",
+    22: "0px 8px 42px 7px #{$shadow-color}",
+    23: "0px 9px 44px 8px #{$shadow-color}",
+    24: "0px 9px 46px 8px #{$shadow-color}"
   );
 }
 
-
-$ml-elevation-amt-duration: map-get($ml-amt-duration, slow);
-$ml-elevation-amt-function: map-get($ml-amt-function, standard);
+$ml-elevation-animation-duration: map-get($ml-animation-duration, slow);
+$ml-elevation-animation-function: map-get($ml-animation-function, standard);
 $ml-elevation-color: black !default;
+$ml-elevation-opacity: 1 !default;
 
-@mixin ml-elevation($zValue, $color: $ml-elevation-color, $opacity: $ml-elevation-opacity) {
+@mixin ml-elevation(
+  $zValue,
+  $color: $ml-elevation-color,
+  $opacity: $ml-elevation-opacity
+) {
+  @if type-of($zValue) != number or not unitless($zValue) {
+    @error '$zValue must be a unitless number';
+  }
+  @if $zValue < 0 or $zValue > 24 {
+    @error '$zValue must be between 0 and 24';
+  }
+
   box-shadow: #{map-get(_get-umbra-map($color, $opacity), $zValue)},
-              #{map-get(_get-penumbra-map($color, $opacity), $zValue)},
-              #{map-get(_get-ambient-map($color, $opacity), $zValue)};
+    #{map-get(_get-penumbra-map($color, $opacity), $zValue)},
+    #{map-get(_get-ambient-map($color, $opacity), $zValue)};
 }
 
 @function ml-elevation-transition-property-value(
-    $duration: $ml-elevation-transition-duration,
-    $easing: $ml-elevation-transition-timing-function) {
+  $duration: $ml-elevation-transition-duration,
+  $easing: $ml-elevation-transition-timing-function
+) {
   @return box-shadow #{$duration} #{$easing};
 }
 
 @mixin ml-elevation-transition(
-    $duration: $ml-elevation-transition-duration,
-    $easing: $ml-elevation-transition-timing-function) {
+  $duration: $ml-elevation-transition-duration,
+  $easing: $ml-elevation-transition-timing-function
+) {
   transition: ml-elevation-transition-property-value($duration, $easing);
 }
-
 
 @mixin ml-button-theme($theme, $palette) {
   $text: map-get($theme, text);
@@ -328,11 +383,9 @@ $ml-elevation-color: black !default;
   }
 }
 
-$ml-theme-component-list: (
-  button
-);
+$ml-theme-component-list: (button);
 
-@mixin ml-theme($theme, $palette, $use: $ml-theme-component-list) {
+@mixin ml-theme-init($theme, $palette, $use: $ml-theme-component-list) {
   $theme: ml-create-theme($theme);
   $palette: ml-create-palette($palette);
 
@@ -342,50 +395,51 @@ $ml-theme-component-list: (
 }
 
 @function ml-create-theme($theme, $base: light) {
-  $template: _pickTemplateTheme($base);
+  $template: ml-template-theme($base);
   $theme: map-unquote($theme);
   $returns: map-merge($base, $theme);
   @return $returns;
 }
 
 @function ml-create-palette($palette, $base: light) {
-  $template: _pickTemplatePalette($base);
+  $template: ml-template-palette($base);
   $palette: map-unquote($palette);
   $returns: map-merge($base, $palette);
   @return $returns;
 }
 
-@function _pickTemplateTheme($theme) {
+@function ml-template-theme($theme) {
   @if $theme == light {
     @return $ml-light-theme;
-
   } @else if $theme == dark {
     @return $ml-dark-theme;
-
   } @else if $theme == css-variable or $theme == cssVariable {
     @return $ml-css-variable-theme;
-
   } @else {
     @return $theme;
   }
 }
-@function _pickTemplatePalette($palette) {
+@function ml-template-palette($palette) {
   @if $palette == css-variable or $palette == cssVariable {
     @return $ml-css-variable-palette;
-
-  } @else if $palette == indigo-pink or $palette == indigoPink {
+  } @else if $palette == indigo-pink {
     @return $ml-indigo-pink-palette;
-
-  } @else if $palette == purple-green or $palette == purpleGreen {
+  } @else if $palette == purple-green {
     @return $ml-purple-green-palette;
-
-  } @else if $palette == deep-purple-amber or $palette == deepPurpleAmber or $palette == deepPurple-amber {
+  } @else if $palette == deep-purple-amber or $palette == deepPurple-amber {
     @return $ml-deepPurple-amber-palette;
-
-  } @else if $palette == pink-blue-grey or $palette == pink-blueGrey or $palette == pinkBlueGrey or $palette == pink-blue-gray or $palette == pink-blueGray or $palette == pinkBlueGray {
+  } @else if
+    $palette ==
+    pink-blue-grey or
+    $palette ==
+    pink-blueGrey or
+    $palette ==
+    pink-blue-gray or
+    $palette ==
+    pink-blueGray
+  {
     @return $ml-pink-blueGrey-palette;
-
-  }@else {
+  } @else {
     @return $palette;
   }
 }

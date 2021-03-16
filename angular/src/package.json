@@ -18,7 +18,7 @@
     "@angular/platform-browser": "~11.2.5",
     "@angular/platform-browser-dynamic": "~11.2.5",
     "@angular/router": "~11.2.5",
-    "@material-lite/angular-cdk": "0.0.3",
+    "@material-lite/angular-cdk": "^1.0.0",
     "@types/resize-observer-browser": "^0.1.5",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

@@ -1,20 +1,18 @@
 import { DOCUMENT } from '@angular/common';
-import { AfterContentInit, ChangeDetectionStrategy, Component, ElementRef, Inject, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Falsy, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
 import {
-  MlStraightTrackerCore, MlStraightTrackerOrientation,
-  MlStraightTrackerPosition, MlStraightTrackerSizingMode,
+  AfterContentInit, ChangeDetectionStrategy, Component, ElementRef,
+  Inject, Input, OnChanges, OnInit, SimpleChange, SimpleChanges, ViewChild, ViewEncapsulation
+} from '@angular/core';
+import { Falsy, MlDocument, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
+import {
+  MlStraightTrackerCore, MlStraightTrackerSizingMode,
   MlStraightTrackerTransitionClasses
 } from './straight-tracker-core';
 
-interface Changes {
-  position: MlStraightTrackerPosition;
-  orientation: MlStraightTrackerOrientation;
-}
-
-interface DocumentType {
-  createElement: (tagName: string, ...arg: any[]) => HTMLElement;
-}
+type Changes = {
+  position: SimpleChange;
+  orientation: SimpleChange;
+};
 
 @Component({
   selector: 'ml-straight-tracker',
@@ -24,7 +22,7 @@ interface DocumentType {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
-export class MlStraightTrackerComponent implements OnInit, AfterContentInit {
+export class MlStraightTrackerComponent implements OnInit, OnChanges, AfterContentInit {
   core: MlStraightTrackerCore;
   private _coreFactory: ((trackerEl: HTMLElement) => MlStraightTrackerCore) | null;
 
@@ -92,7 +90,7 @@ export class MlStraightTrackerComponent implements OnInit, AfterContentInit {
   constructor(
     _elementRef: ElementRef<HTMLElement>,
     @Inject(RUN_OUTSIDE_NG_ZONE) _runOutsideNgZone: RunOutsideNgZone,
-    @Inject(DOCUMENT) _document: DocumentType
+    @Inject(DOCUMENT) _document: MlDocument
   ) {
     this._coreFactory = (trackerEl) => new MlStraightTrackerCore(
       this, _elementRef.nativeElement, trackerEl,

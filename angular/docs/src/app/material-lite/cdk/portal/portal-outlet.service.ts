@@ -6,7 +6,6 @@ import {
 import { Class, MlDocument, ML_DATA, ML_REF, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
 import { MlPortalAttachedRef } from './portal-attached-ref';
 
-
 export type MlPortalContent = Class<any> | TemplateRef<any> | HTMLElement;
 export type MlPortalContentType = 'component' | 'template' | 'DOM' | 'cloneDOM';
 

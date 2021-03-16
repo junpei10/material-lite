@@ -1,93 +1,135 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges } from '@angular/core';
-import { createListenTarget, ListenTarget } from '@material-lite/angular-cdk/utils';
+import { DOCUMENT } from '@angular/common';
+import {
+  ChangeDetectionStrategy, Component, ElementRef, Inject,
+  Input, OnChanges, OnInit, ViewChild, ViewEncapsulation
+} from '@angular/core';
+import { CoreDynamicConfig, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE, Falsy, MlDocument } from '@material-lite/angular-cdk/utils';
+import { MlRippleCore, MlRippleCoreConfig } from '@material-lite/angular/core';
 
-export interface MlButtonBinder {
-  mlButton?: boolean | '';
-  theme?: string;
-  variant?: 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
-  hoverAction?: 'enable' | 'disable' | 'auto';
-  wrapAnchor?: boolean | '';
-  rippleDisabled?: boolean | '';
-  rippleOverdrive?: {
-    width?: number,
-    height?: number
-  } | boolean;
-}
+export type MlButtonVariant = 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
+export type MlButtonHoverAction = 'enabled' | 'disabled' | 'auto';
 
-type Binder = MlButtonBinder;
-
-// @dynamic
 @Component({
   selector: '[mlButton]',
   exportAs: 'mlButton',
   templateUrl: './button.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
 })
-export class MlButtonComponent implements OnChanges {
-  hostElementListenTarget: ListenTarget;
-  private _hostElementClassList: DOMTokenList;
-
+export class MlButtonComponent implements OnInit, OnChanges {
   private _needSetVariant: boolean = true;
 
   private _currClassList: string[] = [];
 
-  @Input() private set mlButton(_enable: Binder['mlButton']) {
-    const enable = this.isEnabled = _enable === '' || _enable;
-    (enable)
-      ? this._hostElementClassList.remove('ml-disabled-button')
-      : this._hostElementClassList.add('ml-disabled-button');
-  }
-  isEnabled: boolean | undefined;
+  @Input('mlButton') set setEnabled(isEnabled: true | Falsy) {
+    // @ts-ignore assign the readonly variable
+    const result = this.isEnabled =
+      isEnabled || isEnabled === '';
 
-  @Input('variant') private set setVariant(variant: Binder['variant']) {
+    const classList = this._hostElementRef.nativeElement.classList;
+
+    (result)
+      ? classList.remove('ml-disabled-button')
+      : classList.add('ml-disabled-button');
+  }
+  readonly isEnabled: boolean;
+
+  @Input('variant') set setVariant(variant: MlButtonVariant) {
+    // @ts-ignore assign the readonly variable
     this.variant = variant;
     this._needSetVariant = true;
   }
-  variant: Binder['variant'];
+  readonly variant: MlButtonVariant;
 
-  @Input('hoverAction') private set setHoverAction(type: Binder['hoverAction']) {
+  @Input('hoverAction') set setHoverAction(type: MlButtonHoverAction) {
+    // @ts-ignore assign the readonly variable
     this.hoverAction = type;
     this._needSetVariant = true;
   }
-  hoverAction: Binder['hoverAction'];
+  readonly hoverAction: MlButtonHoverAction;
 
-  @Input('theme') private set setTheme(nextTheme: Binder['theme']) {
-    const hostClassList = this._hostElementClassList;
+  @Input('theme') set setTheme(nextTheme: string) {
+    const classList = this._hostElementRef.nativeElement.classList;
 
     if (this.theme) {
-      hostClassList.remove('ml-button-' + this.theme);
+      classList.remove('ml-button-' + this.theme);
     }
     if (nextTheme) {
-      hostClassList.add('ml-button-' + nextTheme);
+      classList.add('ml-button-' + nextTheme);
     }
 
+    // @ts-ignore assign the readonly variable
     this.theme = nextTheme;
   }
-  theme: Binder['theme'];
+  readonly theme: string;
 
-  @Input('wrapAnchor') private set setWrapAnchor(_enable: Binder['wrapAnchor']) {
-    const enable = _enable;
-    enable
-      ? this._hostElementClassList.add('ml-anchor-button')
-      : this._hostElementClassList.remove('ml-anchor-button');
+  @Input('wrappedAnchor') set setAnchorToWrapped(isEnabled: true | Falsy) {
+    // @ts-ignore assign the readonly variable
+    const result = this.hasWrappedAnchor =
+      isEnabled || isEnabled === '';
+
+    const classList = this._hostElementRef.nativeElement.classList;
+
+    result
+      ? classList.add('ml-anchor-button')
+      : classList.remove('ml-anchor-button');
   }
-  wrapAnchor?: boolean;
+  readonly hasWrappedAnchor: boolean;
 
-  @Input() rippleDisabled: Binder['rippleDisabled'];
-  @Input() rippleOverdrive: Binder['rippleOverdrive'];
-  public rippleCentered: boolean;
+  rippleCore: MlRippleCore;
 
-  constructor(elementRef: ElementRef<HTMLElement>) {
-    const hostElement = elementRef.nativeElement;
-    this.hostElementListenTarget = createListenTarget(hostElement);
-    const hostClassList = this._hostElementClassList = hostElement.classList;
-    hostClassList.add('ml-button');
+  @ViewChild('mlRippleOutlet', { static: true })
+  private set _setRippleCore(outletElementRef: ElementRef<HTMLElement>) {
+    this.rippleCore = new MlRippleCore(
+      this._rippleConfig, outletElementRef.nativeElement,
+      this._runOutsideNgZone, this._createElement
+    );
+  }
+
+  @Input('disableRipple') set setRippleToDisabled(isDisabled: true | Falsy) {
+    // @ts-ignore: assign the readonly variable
+    const result = this.rippleIsDisabled =
+      isDisabled || isDisabled === '';
+
+    result
+      ? this.rippleCore.setTrigger(null)
+      : this.rippleCore.setTrigger(this._hostElementRef.nativeElement);
+  }
+  readonly rippleIsDisabled: boolean;
+
+  @Input('rippleConfig') set setRippleConfig(config: MlRippleCoreConfig) {
+    this._rippleConfig.dynamic = config;
+  }
+  get rippleConfig(): MlRippleCoreConfig {
+    return this._rippleConfig.dynamic;
+  }
+  private _rippleConfig: CoreDynamicConfig<MlRippleCoreConfig> = {
+    dynamic: {}
+  };
+
+  private _createElement: MlDocument['createElement'];
+
+  constructor(
+    private _hostElementRef: ElementRef<HTMLElement>,
+    @Inject(RUN_OUTSIDE_NG_ZONE) private _runOutsideNgZone: RunOutsideNgZone,
+    @Inject(DOCUMENT) _document: MlDocument,
+  ) {
+    this._createElement = _document.createElement.bind(_document);
+    _hostElementRef.nativeElement.classList.add('ml-button');
+  }
+
+  ngOnInit(): void {
+    if (this.rippleIsDisabled === void 0) {
+      // ダメ(X) => setTrigger('host');
+      this.rippleCore.setTrigger(this._hostElementRef.nativeElement);
+    }
   }
 
   ngOnChanges(): void {
     if (this._needSetVariant) {
       this._needSetVariant = false;
-      const hostClassList = this._hostElementClassList;
+
+      const hostClassList = this._hostElementRef.nativeElement.classList;
       const v = this.variant;
       hostClassList.remove(...this._currClassList);
 
@@ -96,7 +138,7 @@ export class MlButtonComponent implements OnChanges {
           'ml-basic-button',
           'ml-simple-button',
         ];
-        this.rippleCentered = false;
+        this._rippleConfig.dynamic.entrance = null;
         this._setHoverActionForEnabledByDefault();
 
       } else if (v === 'raised') {
@@ -104,7 +146,7 @@ export class MlButtonComponent implements OnChanges {
           'ml-raised-button',
           'ml-filled-button'
         ];
-        this.rippleCentered = false;
+        this._rippleConfig.dynamic.entrance = null;
         this._setHoverActionForDisabledByDefault();
 
       } else if (v === 'icon') {
@@ -112,7 +154,7 @@ export class MlButtonComponent implements OnChanges {
           'ml-icon-button',
           'ml-simple-button'
         ];
-        this.rippleCentered = true;
+        this._rippleConfig.dynamic.entrance = 'center';
         this._setHoverActionForDisabledByDefault();
 
       } else if (v === 'fab') {
@@ -120,7 +162,7 @@ export class MlButtonComponent implements OnChanges {
           'ml-fab',
           'ml-filled-button'
         ];
-        this.rippleCentered = false;
+        this._rippleConfig.dynamic.entrance = null;
         this._setHoverActionForDisabledByDefault();
 
       } else if (v === 'flat') {
@@ -128,7 +170,7 @@ export class MlButtonComponent implements OnChanges {
           'ml-flat-button',
           'ml-filled-button'
         ];
-        this.rippleCentered = false;
+        this._rippleConfig.dynamic.entrance = null;
         this._setHoverActionForDisabledByDefault();
 
       } else if (v === 'stroked') {
@@ -136,7 +178,7 @@ export class MlButtonComponent implements OnChanges {
           'ml-stroked-button',
           'ml-simple-button',
         ];
-        this.rippleCentered = false;
+        this._rippleConfig.dynamic.entrance = null;
         this._setHoverActionForEnabledByDefault();
 
       } else {
@@ -144,7 +186,7 @@ export class MlButtonComponent implements OnChanges {
           'ml-basic-button',
           'ml-simple-button',
         ];
-        this.rippleCentered = false;
+        this._rippleConfig.dynamic.entrance = null;
         this._setHoverActionForEnabledByDefault();
       }
 
@@ -153,13 +195,13 @@ export class MlButtonComponent implements OnChanges {
   }
 
   private _setHoverActionForEnabledByDefault(): void {
-    if (this.hoverAction !== 'disable') {
+    if (this.hoverAction !== 'disabled') {
       this._currClassList.push('ml-button-hover-action');
     }
   }
 
   private _setHoverActionForDisabledByDefault(): void {
-    if (this.hoverAction === 'enable') {
+    if (this.hoverAction === 'enabled') {
       this._currClassList.push('ml-button-hover-action');
     }
   }

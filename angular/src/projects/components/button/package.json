@@ -3,6 +3,7 @@
     "lib": {
       "entryFile": "./index.ts",
       "umdModuleIds": {
+        "@material-lite/angular/core": "core",
         "@material-lite/angular-cdk/utils": "utils"
       }
     }
