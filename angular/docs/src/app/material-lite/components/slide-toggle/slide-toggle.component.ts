@@ -9,7 +9,7 @@ import { Falsy, MlDocument, noop, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '
 import { mixinBundleFactory, mixinDisableRipple, mixinRippleDynamicConfig, mixinTheme, MlRippleCore, MlThemeStyle, MlTheming } from '@material-lite/angular/core';
 import { mixinTabIndex } from '../core/common-behaviors/tabindex';
 
-const STYLE: MlThemeStyle = {
+MlTheming.setStyle({
   base: `
 .ml-slide-toggle {
   display: inline-block;
@@ -173,9 +173,7 @@ const STYLE: MlThemeStyle = {
     background-color: ${color};
   }
 `
-};
-
-MlTheming.setStyle(STYLE);
+});
 
 export const ML_SLIDE_TOGGLE_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,

@@ -39,66 +39,92 @@ export interface MlThemeValue {
 }
 
 export interface MlThemingType {
-  valueStorage: MlThemeValueStorage;
+  readonly valueStorage: MlThemeValueStorage;
 
   init(themeBases: { theme: MlTheme, palette: MlPalette, wrapperClass?: string | null }[]): void;
 
   setStyle(style: MlThemeStyle): void;
 }
 
-const STYLE: MlThemeStyle = {
-  palette: (name, color, contrast) => {
-    const head = '.ml-' + name;
-    return `${head}-style{background-color:${color};color:${contrast}}${head}-bg{background-color:${color}}${head}-color{color:${color}}${head}-contrast{color:${contrast}}`;
-  }
-};
-
 export const MlTheming: MlThemingType = {
   // @ts-ignore
-  _callbacks: [],
+  _themeStyleStacks: [],
 
   init(themeBases): void {
-    this.valueStorage = {
+    const storage = this.valueStorage = {
       keys: []
     };
 
-    let forLen = themeBases.length;
+    let entryStyle = '';
 
-    for (let i = 0; i < forLen; i++) {
-      const base = themeBases[i];
+    const storageKeys = storage.keys;
+    let storageLen = 0;
+
+    let forLen = themeBases.length;
+    while (storageLen < forLen) {
+      const base = themeBases[storageLen];
       const wrapperClass = base.wrapperClass || null!;
 
-      if (this.valueStorage[wrapperClass]) { return; }
+      if (storage[wrapperClass]) { forLen--; return; }
 
-      this.valueStorage.keys.push(wrapperClass);
+      storageKeys.push(wrapperClass);
 
-      const val = this.valueStorage[wrapperClass] = {
+      const palette = base.palette as MlPalette & { keys: string[] };
+
+      storage[wrapperClass] = {
         wrapperClass,
         theme: base.theme,
-        palette: base.palette as MlPalette & { keys: string[] }
+        palette
       };
 
-      val.palette.keys = Object.keys(base.palette);
+      const paletteFactory: MlThemeStyle['palette'] = (name, color, contrast) => {
+        const head = '.ml-' + name;
+        return `${head}-style{background-color:${color};color:${contrast}}${head}-bg{background-color:${color}}${head}-color{color:${color}}${head}-contrast{color:${contrast}}`;
+      };
+
+      const pltKeys = palette.keys = Object.keys(palette);
+      const pltLen = pltKeys.length;
+      let _entryStyle = '';
+      for (let i = 0; i < pltLen; i++) {
+        const pltName = pltKeys[i];
+        const plt = palette[pltName];
+        _entryStyle += paletteFactory(pltName, plt.color, plt.contrast);
+      }
+
+      if (wrapperClass) {
+        const wc = '.' + wrapperClass;
+        // { {
+        _entryStyle = wc + ' ' + _entryStyle.replace(/\}\s*\./g, `}${wc} .`).replace(/\,\s*\./g, `,${wc} .`);
+      }
+
+      entryStyle += _entryStyle;
+
+      storageLen++;
     }
 
-    this.setStyle(STYLE);
+    // init()が呼び出される前に設定されてたスタイルをすべて追加する。
+    const stacks = this._themeStyleStacks as MlThemeStyle[];
+    forLen = stacks.length;
 
-    const callbacks = this._callbacks as (() => void)[];
-    forLen = callbacks.length;
+    for (let index = 0; index < forLen; index++) {
+      const style = stacks[index];
+      entryStyle += style.base || '';
 
-    for (let i = 0; i < forLen; i++) {
-      callbacks[i]();
+      for (let i = 0; i < storageLen; i++) {
+        entryStyle += createThemeStyle(storage[storageKeys[i]], style);
+      }
     }
+
+    insertStyleElement(entryStyle);
 
     this._callbacks = null;
+    this.init = null;
   },
 
   setStyle(style): void {
-    if (style.base === null) { return; }
-
     const storage = this.valueStorage as MlThemeValueStorage;
     if (storage === void 0) {
-      this._callbacks.push(() => this.setStyle(style));
+      this._themeStyleStacks.push(style);
       return;
     }
 
@@ -107,37 +133,34 @@ export const MlTheming: MlThemingType = {
     const storageKeys = storage.keys;
     const storageLen = storageKeys.length;
     for (let i = 0; i < storageLen; i++) {
-      entryStyle += this._createThemeStyle(style, storage[storageKeys[i]]);
+      entryStyle += createThemeStyle(storage[storageKeys[i]], style);
     }
 
     insertStyleElement(entryStyle);
-
-    style.base = null; style.theme = null; style.palette = null;
   },
-
-  // @ts-ignore
-  _createThemeStyle(style: MlThemeStyle, value: MlThemeValue): string {
-    let entryStyle = style.theme?.(value.theme) || '';
-
-    const paletteFactory = style.palette;
-    if (paletteFactory) {
-      const pltValue = value.palette;
-      const pltKeys = pltValue.keys;
-      const pltLen = pltKeys.length;
-
-      for (let i = 0; i < pltLen; i++) {
-        const pltName = pltKeys[i];
-        const plt = pltValue[pltName];
-        entryStyle += paletteFactory(pltName, plt.color, plt.contrast);
-      }
-    }
-
-    if (value.wrapperClass) {
-      const wrapperClass = '.' + value.wrapperClass;
-      // { {
-      entryStyle = wrapperClass + ' ' + entryStyle.replace(/\}\s*\./g, `}${wrapperClass} .`).replace(/\,\s*\./g, `,${wrapperClass} .`);
-    }
-
-    return entryStyle;
-  }
 };
+
+function createThemeStyle(value: MlThemeValue, style: MlThemeStyle): string {
+  let entryStyle = style.theme?.(value.theme) || '';
+
+  const paletteFactory = style.palette;
+  if (paletteFactory) {
+    const pltValue = value.palette;
+    const pltKeys = pltValue.keys;
+    const pltLen = pltKeys.length;
+
+    for (let i = 0; i < pltLen; i++) {
+      const pltName = pltKeys[i];
+      const plt = pltValue[pltName];
+      entryStyle += paletteFactory(pltName, plt.color, plt.contrast);
+    }
+  }
+
+  if (value.wrapperClass) {
+    const wrapperClass = '.' + value.wrapperClass;
+    // { {
+    entryStyle = wrapperClass + ' ' + entryStyle.replace(/\}\s*\./g, `}${wrapperClass} .`).replace(/\,\s*\./g, `,${wrapperClass} .`);
+  }
+
+  return entryStyle;
+}
