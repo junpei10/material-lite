@@ -10,7 +10,8 @@ const routes: Routes = [
     path: 'components', component: ComponentsComponent, children: [
       { path: '', loadChildren: () => import('./views/components/root').then(m => m.RootModule) },
       { path: 'button', loadChildren: () => import('./views/components/button').then(m => m.ButtonModule) },
-      { path: 'ripple', loadChildren: () => import('./views/components/ripple').then(m => m.RippleModule) }
+      { path: 'ripple', loadChildren: () => import('./views/components/ripple').then(m => m.RippleModule) },
+      { path: 'slide-toggle', loadChildren: () => import('./views/components/slide-toggle').then(m => m.SlideToggleModule) }
     ]
   },
   {

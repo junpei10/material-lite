@@ -14,6 +14,11 @@ export const ML_CSS_VARIABLE_THEME: MlTheme = {
   elevation: 'var(--ml-elevation)',
   scrollbar: 'var(--ml-scrollbar)',
 
+  icon: 'var(--ml-icon)',
+  sliderMin: 'var(--ml-slider-min)',
+  sliderOff: 'var(--ml-slider-off)',
+  sliderOffActive: 'var(--ml-slider-off-active)',
+
   text: 'var(--ml-text)',
   secondaryText: 'var(--ml-secondary-text)',
   hintText: 'var(--ml-hint-text)',

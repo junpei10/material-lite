@@ -5,7 +5,8 @@ export type MlThemeKeys = [
 
   'background', 'primaryContainer', 'secondaryContainer', 'tertiaryContainer', 'disabledContainer',
 
-  'divider', 'elevation', 'scrollbar',
+  'divider', 'elevation', 'scrollbar', 'icon',
+  'sliderMin', 'sliderOff', 'sliderOffActive',
 
   'text', 'secondaryText', 'hintText', 'disabledText',
 ];
@@ -26,88 +27,117 @@ export type MlThemeStyle = {
   palette?: (name: string, color: string, contrast: string) => string
 };
 
-export interface MlThemingType {
-  value: { keys: string[] } & {
-    [key: string]: {
-      wrapperClass: string;
-      theme: MlTheme,
-      palette: MlPalette & { keys: string[] },
-    }
-  };
+export type MlThemeValueStorage = {
+  keys: string[] } & {
+  [key: string]: MlThemeValue
+};
 
-  init(themes: { theme: MlTheme, palette: MlPalette, wrapperClass?: string | null }[]): void;
+export interface MlThemeValue {
+  wrapperClass: string;
+  theme: MlTheme;
+  palette: MlPalette & { keys: string[] };
+}
+
+export interface MlThemingType {
+  valueStorage: MlThemeValueStorage;
+
+  init(themeBases: { theme: MlTheme, palette: MlPalette, wrapperClass?: string | null }[]): void;
 
   setStyle(style: MlThemeStyle): void;
 }
 
+const STYLE: MlThemeStyle = {
+  palette: (name, color, contrast) => {
+    const head = '.ml-' + name;
+    return `${head}-style{background-color:${color};color:${contrast}}${head}-bg{background-color:${color}}${head}-color{color:${color}}${head}-contrast{color:${contrast}}`;
+  }
+};
+
 export const MlTheming: MlThemingType = {
   // @ts-ignore
-  value: {
-    keys: []
-  },
+  _callbacks: [],
 
-  init(themes): void {
-    const len = themes.length;
+  init(themeBases): void {
+    this.valueStorage = {
+      keys: []
+    };
 
-    for (let i = 0; i < len; i++) {
-      const argValue = themes[i];
-      const argWc = argValue.wrapperClass || null!;
-      const valRef = this.value;
+    let forLen = themeBases.length;
 
-      if (valRef[argWc]) { return; }
+    for (let i = 0; i < forLen; i++) {
+      const base = themeBases[i];
+      const wrapperClass = base.wrapperClass || null!;
 
-      this.value.keys.push(argWc);
-      const val = this.value[argWc] = {
-        wrapperClass: argWc,
-        theme: argValue.theme,
-        palette: argValue.palette as MlPalette & { keys: string[] }
+      if (this.valueStorage[wrapperClass]) { return; }
+
+      this.valueStorage.keys.push(wrapperClass);
+
+      const val = this.valueStorage[wrapperClass] = {
+        wrapperClass,
+        theme: base.theme,
+        palette: base.palette as MlPalette & { keys: string[] }
       };
-      val.palette.keys = Object.keys(argValue.palette);
+
+      val.palette.keys = Object.keys(base.palette);
     }
 
-    this.setStyle({
-      base: '.ml-top-0{top:0}.ml-right-0{right:0}.ml-left-0{left:0}.ml-bottom-0{bottom:0}',
-      palette: (name, color, contrast) => {
-        const head = '.ml-' + name;
-        return `${head}{background-color:${color};color:${contrast}}${head}-bg{background-color:${color}}${head}-color{color:${color}}${head}-contrast{color:${contrast}}`;
-      }
-    });
+    this.setStyle(STYLE);
+
+    const callbacks = this._callbacks as (() => void)[];
+    forLen = callbacks.length;
+
+    for (let i = 0; i < forLen; i++) {
+      callbacks[i]();
+    }
+
+    this._callbacks = null;
   },
 
   setStyle(style): void {
     if (style.base === null) { return; }
 
-    let returns = style.base || '';
-
-    const valRef = this.value;
-    const valKeys = valRef.keys;
-    const valLen = valKeys.length;
-    for (let index = 0; index < valLen; index++) {
-      const val = valRef[valKeys[index]];
-      let entryStyle = style.theme?.(val.theme) || '';
-
-      if (style.palette) {
-        const pltRef = val.palette;
-        const pltKeys = pltRef.keys;
-        const pltLen = pltKeys.length;
-        for (let i = 0; i < pltLen; i++) {
-          const pltName = pltKeys[i];
-          const plt = pltRef[pltName];
-          entryStyle += style.palette(pltName, plt.color, plt.contrast);
-        }
-      }
-
-      if (val.wrapperClass) {
-        const wc = '.' + val.wrapperClass;
-
-        entryStyle = wc + ' ' + entryStyle.replace(/\}\s*\./g, `}${wc} .`).replace(/\,\s*\./g, `,${wc} .`);
-      }
-      returns += entryStyle;
+    const storage = this.valueStorage as MlThemeValueStorage;
+    if (storage === void 0) {
+      this._callbacks.push(() => this.setStyle(style));
+      return;
     }
 
-    insertStyleElement(returns);
+    let entryStyle = style.base || '';
 
-    // @ts-ignore
+    const storageKeys = storage.keys;
+    const storageLen = storageKeys.length;
+    for (let i = 0; i < storageLen; i++) {
+      entryStyle += this._createThemeStyle(style, storage[storageKeys[i]]);
+    }
+
+    insertStyleElement(entryStyle);
+
     style.base = null; style.theme = null; style.palette = null;
+  },
+
+  // @ts-ignore
+  _createThemeStyle(style: MlThemeStyle, value: MlThemeValue): string {
+    let entryStyle = style.theme?.(value.theme) || '';
+
+    const paletteFactory = style.palette;
+    if (paletteFactory) {
+      const pltValue = value.palette;
+      const pltKeys = pltValue.keys;
+      const pltLen = pltKeys.length;
+
+      for (let i = 0; i < pltLen; i++) {
+        const pltName = pltKeys[i];
+        const plt = pltValue[pltName];
+        entryStyle += paletteFactory(pltName, plt.color, plt.contrast);
+      }
+    }
+
+    if (value.wrapperClass) {
+      const wrapperClass = '.' + value.wrapperClass;
+      // { {
+      entryStyle = wrapperClass + ' ' + entryStyle.replace(/\}\s*\./g, `}${wrapperClass} .`).replace(/\,\s*\./g, `,${wrapperClass} .`);
+    }
+
+    return entryStyle;
   }
 };

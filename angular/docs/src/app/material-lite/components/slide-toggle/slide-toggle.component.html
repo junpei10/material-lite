@@ -1,0 +1,30 @@
+<label class="ml-slide-toggle-label" [attr.for]="id">
+  <div class="ml-slide-toggle-bar">
+    <div class="ml-slide-toggle-bar-palette"></div>
+    <input
+      #input
+      class="ml-slide-toggle-input ml-visually-hidden"
+      type="checkbox"
+      role="switch"
+      [required]="required"
+      [tabIndex]="tabIndex"
+      [checked]="checked"
+      [disabled]="disabled"
+      [attr.name]="name"
+      [attr.aria-checked]="stringChecked"
+      [attr.aria-label]="ariaLabel"
+      [attr.aria-labelledby]="ariaLabelledby"
+      (change)="onChangeEvent($event)"
+      (click)="onInputClick($event)"
+    />
+    <div class="ml-slide-toggle-thumb-container">
+      <div class="ml-slide-toggle-thumb"></div>
+      <div #mlRippleOutlet class="ml-slide-toggle-ripple"></div>
+    </div>
+  </div>
+
+  <span class="ml-slide-toggle-content">
+    <ng-content></ng-content>
+  </span>
+  <span style="display: none">&nbsp;</span>
+</label>

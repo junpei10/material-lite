@@ -3,7 +3,7 @@ export * from './listen';
 export * from './noop';
 export * from './divided-zone';
 export * from './token.service';
-export * from './animation';
+export * from './transition-classes';
 export * from './lifecycle';
 export * from './core';
 
@@ -15,3 +15,5 @@ export interface MlDocument {
   createElement: (tagName: string, options?: ElementCreationOptions) => HTMLElement;
   createComment: (data: string) => Comment;
 }
+
+

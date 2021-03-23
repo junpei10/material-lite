@@ -35,6 +35,8 @@ export class MlRippleDirective implements OnInit {
 
   @Input('mlRippleRadius') radius?: number;
 
+  @Input('mlRippleRadiusMagnification') radiusMagnification?: number;
+
   @Input('mlRippleAnimation') animation: {
     enter?: number;
     leave?: number;

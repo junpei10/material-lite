@@ -14,6 +14,11 @@ export const ML_DARK_THEME: MlTheme = {
   elevation: 'black',
   scrollbar: 'rgba(255,255,255,.12)',
 
+  icon: 'white',
+  sliderMin: 'white',
+  sliderOff: 'rgba(255,255,255,.3)',
+  sliderOffActive: 'rgba(255,255,255,.3)',
+
   text: '#fff',
   secondaryText: 'rgba(255,255,255,.7)',
   hintText: 'rgba(255,255,255,.5)',

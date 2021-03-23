@@ -11,6 +11,7 @@ interface XY {
 }
 
 export interface MlStraightTrackerCoreConfig {
+  disabled?: boolean;
   position?: MlStraightTrackerPosition;
   orientation?: MlStraightTrackerOrientation;
   transitionClasses?: MlStraightTrackerTransitionClasses;
@@ -33,6 +34,8 @@ const ZERO_ORIGIN = {
 };
 
 export class MlStraightTrackerCore {
+  readonly disabled: boolean;
+
   private _onFirstUpdateBrothers: (() => void) | null | undefined;
 
   readonly targetElement: HTMLElement;
@@ -108,6 +111,9 @@ export class MlStraightTrackerCore {
    * - 'initializing'の`Transition classes`を付与。
    */
   initialize(): void {
+    // @ts-ignore: assign the readonly variable
+    this.disabled = false;
+
     if (ResizeObserver) {
       this._resizeObserver =
         new ResizeObserver(this._onResize.bind(this));
@@ -123,6 +129,9 @@ export class MlStraightTrackerCore {
    * - 'finalizing'の`Transition classes`を付与。
    */
   finalize(): void {
+    // @ts-ignore: assign the readonly variable
+    this.disabled = true;
+
     const resizeObs = this._resizeObserver;
     if (resizeObs) {
       resizeObs.disconnect();
@@ -142,6 +151,10 @@ export class MlStraightTrackerCore {
     if (this._onFirstUpdateBrothers !== null) {
       this._onFirstUpdateBrothers =
         () => this.trackTargetByIndex(index);
+
+      return;
+
+    } else if (this._config.disabled) {
       return;
     }
 
@@ -175,7 +188,7 @@ export class MlStraightTrackerCore {
       this._onFirstUpdateBrothers =
         () => this.trackTargetByElement(target);
       return;
-    }
+    } else if (this._config.disabled) { return; }
 
     const brothers = this._hostElement.parentElement!.children;
     const broLen = brothers.length;
@@ -217,7 +230,7 @@ export class MlStraightTrackerCore {
       resizeObs.observe(targetEl, { box: 'border-box' });
 
     } else {
-      const origin = this._hostElement.parentElement.getBoundingClientRect();
+      const origin = this._hostElement.getBoundingClientRect();
       const targetPoint = targetEl.getBoundingClientRect();
 
       this.setTrackerStyle(
@@ -262,7 +275,7 @@ export class MlStraightTrackerCore {
    *
    * - `.ml-top-0`, `.ml-left-0` `.ml-right-0`, `.ml-bottom-0`
    */
-  updateTrackerStyle(): void {
+  updateTrackerStyle(resetTrackerStyle?: boolean): void {
     const trackerEl = this._trackerElement;
     const classList = trackerEl.classList;
 
@@ -273,8 +286,16 @@ export class MlStraightTrackerCore {
     let currPositionClass: string;
 
     if (conf.orientation === 'vertical') {
-      trackerEl.style.removeProperty('width');
-      trackerEl.style.removeProperty('left');
+      if (resetTrackerStyle) {
+        trackerEl.style.removeProperty('width');
+        trackerEl.style.removeProperty('left');
+
+        const origin = this._hostElement.getBoundingClientRect();
+        const targetPoint = this.targetElement.getBoundingClientRect();
+
+        trackerEl.style.top = (targetPoint.y - origin.y) + 'px';
+        trackerEl.style.height = (targetPoint.height) + 'px';
+      }
 
       this._prevPositionClass = currPositionClass =
         (conf.position === 'before')
@@ -282,8 +303,16 @@ export class MlStraightTrackerCore {
           : 'ml-right-0';
 
     } else {
-      trackerEl.style.removeProperty('height');
-      trackerEl.style.removeProperty('top');
+      if (resetTrackerStyle) {
+        trackerEl.style.removeProperty('height');
+        trackerEl.style.removeProperty('top');
+
+        const origin = this._hostElement.getBoundingClientRect();
+        const targetPoint = this.targetElement.getBoundingClientRect();
+
+        trackerEl.style.left = (targetPoint.x - origin.x) + 'px';
+        trackerEl.style.width = (targetPoint.width) + 'px';
+      }
 
       this._prevPositionClass = currPositionClass =
         (conf.position === 'before')
@@ -302,7 +331,6 @@ export class MlStraightTrackerCore {
       ? method()
       : this.trackTargetByIndex(0);
   }
-
 
   /**
    * 追跡される要素(`target`)を監視するか否かを切り替える
@@ -337,10 +365,10 @@ export class MlStraightTrackerCore {
 
     if (this.hasObservedContainer === isEnabled || !resizeObs) { return; }
 
-    // @ts-ignore assign the readonly variable
+    // @ts-ignore: assign the readonly variable
     this.hasObservedContainer = isEnabled;
 
-    const containerEl = this._hostElement.parentElement!;
+    const containerEl = this._hostElement;
 
     isEnabled
       ? resizeObs.observe(containerEl, { box: 'border-box' })
@@ -372,17 +400,17 @@ export class MlStraightTrackerCore {
         break;
 
       case 'strict':
-        this._originFactory = () => this._hostElement.parentElement.getBoundingClientRect();
+        this._originFactory = () => this._hostElement.getBoundingClientRect();
         this._targetPointFactory = () => this.targetElement.getBoundingClientRect();
         break;
 
       case 'strict-origin':
-        this._originFactory = () => this._hostElement.parentElement.getBoundingClientRect();
+        this._originFactory = () => this._hostElement.getBoundingClientRect();
         this._targetPointFactory = () => createLoosePoint(this.targetElement);
         break;
 
       case 'strict-target-point':
-        this._originFactory = () => createLoosePoint(this._hostElement.parentElement);
+        this._originFactory = () => createLoosePoint(this._hostElement);
         this._targetPointFactory = () => this.targetElement.getBoundingClientRect();
     }
   }

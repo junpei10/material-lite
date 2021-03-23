@@ -31,7 +31,7 @@ insertStyleElement(`
 }
 `);
 
-export type MlRippleTrigger = EventTarget | 'host' | Falsy;
+export type MlRippleTrigger = EventTarget | 'host' | 'current' | Falsy;
 
 export type MlRippleOverdrive = {
   width: number;
@@ -47,6 +47,7 @@ export interface MlRippleCoreConfig {
   theme?: string;
 
   radius?: number;
+  radiusMagnification?: number;
   opacity?: number;
 
   entrance?: MlRippleEntrance;
@@ -56,6 +57,7 @@ export interface MlRippleCoreConfig {
     leave?: number;
   };
 
+
   fadeOutEventNames?: string[];
 }
 
@@ -64,7 +66,7 @@ interface RippleElement extends HTMLElement {
 }
 
 export class MlRippleCore {
-  readonly triggerElement: EventTarget;
+  triggerElement: EventTarget;
 
   private _removeTriggerListener: () => void = noop;
 
@@ -145,11 +147,12 @@ export class MlRippleCore {
     let radius: number;
 
     if (conf.radius) {
-      radius = conf.radius;
+      radius = conf.radius * (conf.radiusMagnification || 1);
+
     } else {
       const distX = Math.max(Math.abs(x - containerRect.left), Math.abs(x - containerRect.right));
       const distY = Math.max(Math.abs(y - containerRect.top), Math.abs(y - containerRect.bottom));
-      radius = Math.sqrt(distX * distX + distY * distY);
+      radius = Math.sqrt(distX * distX + distY * distY) * (conf.radiusMagnification || 1);
     }
 
     const enterDur = conf.animation?.enter || 448;
@@ -310,10 +313,18 @@ export class MlRippleCore {
       this._removeTriggerListener = noop;
 
     } else {
-      // @ts-ignore: assign the readonly property
-      const trg = this.triggerElement = (trigger === 'host')
-        ? this._hostElement
-        : trigger;
+      let trg: EventTarget;
+
+      if (trigger === 'current') {
+        trg = this.triggerElement;
+
+      } else {
+        // @ts-ignore: assign the readonly property
+        trg = this.triggerElement = (trigger === 'host')
+          ? this._hostElement
+          : trigger;
+      }
+
 
       this._runOutsideNgZone(() => {
         this._removeTriggerListener =
@@ -322,9 +333,7 @@ export class MlRippleCore {
     }
   }
 
-  /**
-   * デフォルトというか、
-   */
+
   addPointerdownListener(trigger: EventTarget): () => void {
     const removeListener =
       listen(trigger, 'pointerdown', (event) => this._addPointerdownListenerCallback(event, trigger));
