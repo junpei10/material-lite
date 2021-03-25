@@ -101,8 +101,8 @@ $ml-dark-theme: (
 );
 
 $ml-css-variable-theme: (
-  base: var(--ml-base),
-  oppositeBase: var(--ml-opposite-base),
+  base: var(--mlBase),
+  oppositeBase: var(--ml-oppositeBase),
   background: var(--ml-background),
   primaryContainer: var(--ml-primary-container),
   secondaryContainer: var(--ml-secondary-container),
@@ -385,7 +385,7 @@ $ml-elevation-opacity: 1 !default;
 
 $ml-theme-component-list: (button);
 
-@mixin ml-theme-init($theme, $palette, $use: $ml-theme-component-list) {
+@mixin ml-theme($theme, $palette, $use: $ml-theme-component-list) {
   $theme: ml-create-theme($theme);
   $palette: ml-create-palette($palette);
 

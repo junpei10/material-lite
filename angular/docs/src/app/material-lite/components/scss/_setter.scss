@@ -1,4 +1,4 @@
-$ml-theme-component-list: (button);
+$ml-theme-component-list: (button, slide-toggle);
 
 @mixin ml-theme-init($theme, $palette, $use: $ml-theme-component-list) {
   $theme: ml-create-theme($theme);
@@ -6,6 +6,10 @@ $ml-theme-component-list: (button);
 
   @if (contains($use, button)) {
     @include ml-button-theme($theme, $palette);
+  }
+
+  @if (contains($use, slide-toggle)) {
+    @include ml-slide-toggle-theme($theme, $palette);
   }
 }
 

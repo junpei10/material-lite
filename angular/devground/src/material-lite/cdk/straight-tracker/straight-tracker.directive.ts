@@ -20,15 +20,16 @@ export class MlStraightTrackerDirective implements OnChanges, AfterContentChecke
   core: MlStraightTrackerCore;
 
   @Input('mlStraightTracker') set setEnabled(isEnabled: boolean | undefined | '') {
-    // @ts-ignore: assign readonly variable
-    const result = this.isEnabled =
-      isEnabled || isEnabled === '';
+    const result = isEnabled || isEnabled === '';
+
+    // @ts-ignore: assign the readonly variable
+    this.disabled = !result;
 
     result
       ? this.core.initialize()
       : this.core.finalize();
   }
-  readonly isEnabled: boolean;
+  readonly disabled: boolean;
 
   @Input('mlStraightTrackerSizingMode')
   set setSizingMode(mode: MlStraightTrackerSizingMode) {

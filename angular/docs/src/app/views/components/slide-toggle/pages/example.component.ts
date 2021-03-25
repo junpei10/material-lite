@@ -6,7 +6,9 @@ import { DocsService } from 'src/app/services/docs';
   templateUrl: './example.component.html'
 })
 export class ExampleComponent {
+  theme: string = 'primary';
   checked: boolean;
+  disabled: boolean;
 
   constructor(
     docs: DocsService

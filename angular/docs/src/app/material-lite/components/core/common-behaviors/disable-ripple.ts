@@ -17,9 +17,11 @@ export function mixinDisableRipple(base: NoConstructor<any>): NoConstructor<CanD
       const result = this.rippleIsDisabled =
         isDisabled || isDisabled === '';
 
-      result
-        ? this.rippleCore.setTrigger(null)
-        : this.rippleCore.setTrigger('current');
+      if (this.rippleCore) {
+        result
+          ? this.rippleCore.setTrigger(null)
+          : this.rippleCore.setTrigger('current');
+      }
     }
   };
 }

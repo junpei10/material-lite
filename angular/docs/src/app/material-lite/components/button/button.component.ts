@@ -4,12 +4,12 @@ import {
   Input, OnChanges, OnInit, ViewChild, ViewEncapsulation
 } from '@angular/core';
 import { RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE, Falsy, MlDocument } from '@material-lite/angular-cdk/utils';
-import { mixinBundleFactory, mixinDisableRipple, mixinRippleDynamicConfig, mixinTheme, MlRippleCore, MlTheming } from '@material-lite/angular/core';
+import { mixinBundleFactory, mixinDisableRipple, mixinRippleDynamicConfig, mixinTheme, MlRippleCore, theming } from '@material-lite/angular/core';
 
 export type MlButtonVariant = 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 'icon';
 export type MlButtonHoverAction = 'enabled' | 'disabled' | 'auto';
 
-MlTheming.setStyle({
+theming.set({
   base: `
 .ml-button {
   display: inline-flex;
@@ -20,10 +20,12 @@ MlTheming.setStyle({
   vertical-align: middle;
 
   cursor: pointer;
+  user-select: none;
 
   font-weight: 500;
   font-family: inherit;
   font-size: 14px;
+  white-space: nowrap;
 
   border: none;
   outline: none;
@@ -105,16 +107,8 @@ MlTheming.setStyle({
   padding: 0 16px;
 }
 
-.ml-disabled-button {
-  pointer-events: none;
-  box-shadow: 0 0 0 0 transparent !important;
-}
-.ml-disabled-button .ml-button-ripple {
-  box-shadow: 0 0 0 0 transparent !important;
-}
-
 .ml-button-ripple, .ml-button-overlay {
-  position: absolute !important;
+  position: absolute;
   top: 0; left: 0;
   width: 100%;
   height: 100%;
@@ -131,35 +125,46 @@ MlTheming.setStyle({
   display: inline;
   transition: opacity 280ms cubic-bezier(0.35, 0, 0.25, 1);
 }
+
 .ml-button-hover-action:hover .ml-button-overlay {
   opacity: 0.056;
-}`,
+}
+
+.ml-button.ml-disabled {
+  cursor: default;
+  box-shadow: 0 0 0 0 transparent;
+}
+.ml-disabled .ml-button-ripple {
+  box-shadow: 0 0 0 0 transparent;
+}
+
+.ml-disabled .ml-button-overlay {
+  display: none;
+}
+`,
 
 
   theme: (theme) => {
-    const { text, secondaryContainer, disabledContainer, disabledText, divider } = theme;
     return `
-
 .ml-button {
-  color: ${text};
+  color: ${theme.text};
 }
 .ml-filled-button {
-  background-color: ${secondaryContainer};
+  background-color: ${theme.secondaryContainer};
 }
-.ml-filled-button.ml-disabled-button {
-  background-color: ${disabledContainer} !important;
+.ml-filled-button.ml-disabled {
+  background-color: ${theme.disabledContainer} !important;
 }
 .ml-stroked-button {
-  border-color: ${divider} !important;
+  border-color: ${theme.divider};
 }
-.ml-disabled-button {
-  color: ${disabledText} !important;
+.ml-button.ml-disabled {
+  color: ${theme.disabledText} !important;
 }`;
   },
 
 
-  palette: (name, color, contrast) => {
-    return `
+  palette: (name, color, contrast) => `
 
 .ml-simple-button.ml-${name} {
   color: ${color};
@@ -167,9 +172,9 @@ MlTheming.setStyle({
 .ml-filled-button.ml-${name} {
   background-color: ${color};
   color: ${contrast};
-}`;
+}
 
-  }
+`
 
 });
 
@@ -180,26 +185,45 @@ const ButtonMixin = mixinBundleFactory(mixinDisableRipple, mixinRippleDynamicCon
   exportAs: 'mlButton',
   templateUrl: './button.component.html',
   inputs: ['theme', 'disableRipple', 'rippleConfig'],
+  host: {
+    class: 'ml-button',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
 export class MlButtonComponent extends ButtonMixin implements OnInit, OnChanges {
+  readonly isButtonElement: boolean;
+
   private _needSetVariant: boolean = true;
 
-  private _currClassList: string[] = [];
+  private _currentClassList: string[] = [];
 
-  @Input('mlButton') set setEnabled(isEnabled: true | Falsy) {
+  @Input('disabled') set setDisabled(isDisabled: true | Falsy) {
     // @ts-ignore assign the readonly variable
-    const result = this.isEnabled =
-      isEnabled || isEnabled === '';
+    const result = this.disabled =
+      isDisabled || isDisabled === '';
 
-    const classList = this._elementRef.nativeElement.classList;
+    const el = this._elementRef.nativeElement as HTMLButtonElement;
 
-    (result)
-      ? classList.remove('ml-disabled-button')
-      : classList.add('ml-disabled-button');
+    if (result) {
+      el.classList.add('ml-disabled');
+      this.disableRipple = true;
+
+      if (this.isButtonElement) {
+        el.disabled = true;
+      }
+
+    } else {
+      el.classList.remove('ml-disabled');
+      this.disableRipple = false;
+
+      if (this.isButtonElement) {
+        el.disabled = false;
+      }
+
+    }
   }
-  readonly isEnabled: boolean;
+  readonly disabled: boolean = false;
 
   @Input('variant') set setVariant(variant: MlButtonVariant) {
     // @ts-ignore assign the readonly variable
@@ -228,34 +252,44 @@ export class MlButtonComponent extends ButtonMixin implements OnInit, OnChanges 
   }
   readonly hasWrappedAnchor: boolean;
 
-  rippleCore: MlRippleCore;
+  readonly rippleCore: MlRippleCore;
+  private _rippleCoreFactory?: (outletEl: HTMLElement) => MlRippleCore;
 
   @ViewChild('mlRippleOutlet', { static: true })
   private set _setRippleCore(outletElementRef: ElementRef<HTMLElement>) {
-    const core = this.rippleCore = new MlRippleCore(
-      this._rippleDynamicConfig, outletElementRef.nativeElement,
-      this._runOutsideNgZone, this._createElement
-    );
+    // @ts-ignore: assign the readonly variable
+    this.rippleCore =
+      this._rippleCoreFactory(outletElementRef.nativeElement);
 
-    core.triggerElement = this._elementRef.nativeElement;
+    this._rippleCoreFactory = null;
   }
-
-  private _createElement: MlDocument['createElement'];
 
   constructor(
     protected _elementRef: ElementRef<HTMLElement>,
-    @Inject(RUN_OUTSIDE_NG_ZONE) private _runOutsideNgZone: RunOutsideNgZone,
+    @Inject(RUN_OUTSIDE_NG_ZONE) runOutsideNgZone: RunOutsideNgZone,
     @Inject(DOCUMENT) _document: MlDocument,
   ) {
     super();
-    this._createElement = _document.createElement.bind(_document);
-    _elementRef.nativeElement.classList.add('ml-button');
+
+    const el = this._elementRef.nativeElement;
+
+    const isButtonEl = this.isButtonElement = el instanceof HTMLButtonElement;
+    if (!isButtonEl) {
+      el.addEventListener('click', this._haltDisabledEvents.bind(this));
+    }
+
+    this._rippleCoreFactory = (outletEl) =>
+      new MlRippleCore(
+        this._rippleDynamicConfig, outletEl, runOutsideNgZone,
+        _document.createElement.bind(_document), el);
   }
 
   ngOnInit(): void {
     if (this.rippleIsDisabled === void 0) {
       this.rippleCore.setTrigger('current');
     }
+
+    this.ngOnChanges();
   }
 
   ngOnChanges(): void {
@@ -264,78 +298,85 @@ export class MlButtonComponent extends ButtonMixin implements OnInit, OnChanges 
 
       const hostClassList = this._elementRef.nativeElement.classList;
       const v = this.variant;
-      hostClassList.remove(...this._currClassList);
+      hostClassList.remove(...this._currentClassList);
 
       if (!v || v === 'basic') {
-        this._currClassList = [
+        this._currentClassList = [
           'ml-basic-button',
           'ml-simple-button',
         ];
-        this._rippleDynamicConfig.dynamic.entrance = null;
+        this._rippleDynamicConfig._dynamic.entrance = null;
         this._setHoverActionForEnabledByDefault();
 
       } else if (v === 'raised') {
-        this._currClassList = [
+        this._currentClassList = [
           'ml-raised-button',
           'ml-filled-button'
         ];
-        this._rippleDynamicConfig.dynamic.entrance = null;
+        this._rippleDynamicConfig._dynamic.entrance = null;
         this._setHoverActionForDisabledByDefault();
 
       } else if (v === 'icon') {
-        this._currClassList = [
+        this._currentClassList = [
           'ml-icon-button',
           'ml-simple-button'
         ];
-        this._rippleDynamicConfig.dynamic.entrance = 'center';
+        this._rippleDynamicConfig._dynamic.entrance = 'center';
         this._setHoverActionForDisabledByDefault();
 
       } else if (v === 'fab') {
-        this._currClassList = [
+        this._currentClassList = [
           'ml-fab',
           'ml-filled-button'
         ];
-        this._rippleDynamicConfig.dynamic.entrance = null;
+        this._rippleDynamicConfig._dynamic.entrance = null;
         this._setHoverActionForDisabledByDefault();
 
       } else if (v === 'flat') {
-        this._currClassList = [
+        this._currentClassList = [
           'ml-flat-button',
           'ml-filled-button'
         ];
-        this._rippleDynamicConfig.dynamic.entrance = null;
+        this._rippleDynamicConfig._dynamic.entrance = null;
         this._setHoverActionForDisabledByDefault();
 
       } else if (v === 'stroked') {
-        this._currClassList = [
+        this._currentClassList = [
           'ml-stroked-button',
           'ml-simple-button',
         ];
-        this._rippleDynamicConfig.dynamic.entrance = null;
+        this._rippleDynamicConfig._dynamic.entrance = null;
         this._setHoverActionForEnabledByDefault();
 
       } else {
-        this._currClassList = [
+        this._currentClassList = [
           'ml-basic-button',
           'ml-simple-button',
         ];
-        this._rippleDynamicConfig.dynamic.entrance = null;
+        this._rippleDynamicConfig._dynamic.entrance = null;
         this._setHoverActionForEnabledByDefault();
       }
 
-      hostClassList.add(...this._currClassList);
+      hostClassList.add(...this._currentClassList);
     }
   }
 
   private _setHoverActionForEnabledByDefault(): void {
     if (this.hoverAction !== 'disabled') {
-      this._currClassList.push('ml-button-hover-action');
+      this._currentClassList.push('ml-button-hover-action');
     }
   }
 
   private _setHoverActionForDisabledByDefault(): void {
     if (this.hoverAction === 'enabled') {
-      this._currClassList.push('ml-button-hover-action');
+      this._currentClassList.push('ml-button-hover-action');
+    }
+  }
+
+  private _haltDisabledEvents(event: Event): void {
+    if (this.disabled) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
     }
   }
 }

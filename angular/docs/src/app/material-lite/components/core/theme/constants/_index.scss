@@ -1,61 +1,60 @@
 $ml-light-theme: (
   base: white,
   oppositeBase: black,
-
   background: #f5f5f5,
   primaryContainer: #fafafa,
   secondaryContainer: white,
   tertiaryContainer: #eeeeee,
-  disabledContainer: rgba(0,0,0,.12),
-
-  divider: rgba(0,0,0,.12),
+  disabledContainer: rgba(0, 0, 0, 0.12),
+  divider: rgba(0, 0, 0, 0.12),
   elevation: black,
-  scrollbar: rgba(0,0,0,.12),
-
-  text: rgba(0,0,0,.87),
-  secondaryText: rgba(0,0,0,.54),
-  hintText: rgba(0,0,0,.38),
-  disabledText: rgba(0,0,0,.38),
+  scrollbar: rgba(0, 0, 0, 0.12),
+  text: rgba(0, 0, 0, 0.87),
+  secondaryText: rgba(0, 0, 0, 0.54),
+  hintText: rgba(0, 0, 0, 0.38),
+  disabledText: rgba(0, 0, 0, 0.38),
 );
 
 $ml-dark-theme: (
   base: black,
   oppositeBase: white,
-
-  background: #212121,
-  primaryContainer: #303030,
+  background: #303030,
+  primaryContainer: #212121,
   secondaryContainer: #424242,
   tertiaryContainer: #616161,
-  disabledContainer: hsla(0,0%,100%,.12),
-
-  divider: rgba(255,255,255,.12),
+  disabledContainer: hsla(0, 0%, 100%, 0.12),
+  divider: hsla(0, 0%, 100%, 0.12),
   elevation: black,
-  scrollbar: rgba(255,255,255,.12),
-
+  scrollbar: hsla(0, 0%, 100%, 0.12),
+  icon: white,
+  sliderMin: white,
+  sliderOff: rgba(255, 255, 255, 0.3),
+  sliderOffActive: rgba(255, 255, 255, 0.3),
   text: #fff,
-  secondaryText: rgba(255,255,255,.7),
-  hintText: rgba(255,255,255,.5),
-  disabledText: hsla(0,0%,100%,.3),
+  secondaryText: rgba(255, 255, 255, 0.7),
+  hintText: rgba(255, 255, 255, 0.5),
+  disabledText: hsla(0, 0%, 100%, 0.3),
 );
 
 $ml-css-variable-theme: (
   base: var(--ml-base),
-  oppositeBase: var(--ml-opposite-base),
-
+  oppositeBase: var(--ml-oppositeBase),
   background: var(--ml-background),
-  primaryContainer: var(--ml-primary-container),
-  secondaryContainer: var(--ml-secondary-container),
-  tertiaryContainer: var(--ml-tertiary-container),
-  disabledContainer: var(--ml-disabled-container),
-
+  primaryContainer: var(--ml-primaryContainer),
+  secondaryContainer: var(--ml-secondaryContainer),
+  tertiaryContainer: var(--ml-tertiaryContainer),
+  disabledContainer: var(--ml-disabledContainer),
   divider: var(--ml-divider),
   elevation: var(--ml-elevation),
   scrollbar: var(--ml-scrollbar),
-
+  icon: var(--ml-icon),
+  sliderMin: var(--ml-sliderMin),
+  sliderOff: var(--ml-sliderOff),
+  sliderOffActive: var(--ml-sliderOffActive),
   text: var(--ml-text),
-  secondaryText: var(--ml-secondary-text),
-  hintText: var(--ml-hint-text),
-  disabledText: var(--ml-disabled-text),
+  secondaryText: var(--ml-secondaryText),
+  hintText: var(--ml-hintText),
+  disabledText: var(--ml-disabledText),
 );
 
 $ml-deepPurple-amber-palette: (
@@ -65,12 +64,12 @@ $ml-deepPurple-amber-palette: (
   ),
   accent: (
     color: #ffd740,
-    contrast: rgba(0,0,0,.87),
+    contrast: rgba(0, 0, 0, 0.87),
   ),
   warn: (
     color: #f44336,
     contrast: #fff,
-  )
+  ),
 );
 
 $ml-indigo-pink-palette: (
@@ -85,7 +84,7 @@ $ml-indigo-pink-palette: (
   warn: (
     color: #f44336,
     contrast: #fff,
-  )
+  ),
 );
 
 $ml-pink-blueGrey-palette: (
@@ -100,7 +99,7 @@ $ml-pink-blueGrey-palette: (
   warn: (
     color: #f44336,
     contrast: #fff,
-  )
+  ),
 );
 $ml-pink-blueGray-palette: $ml-pink-blueGrey-palette;
 
@@ -111,12 +110,12 @@ $ml-purple-green-palette: (
   ),
   accent: (
     color: #69f0ae,
-    contrast: rgba(0,0,0,.87),
+    contrast: rgba(0, 0, 0, 0.87),
   ),
   warn: (
     color: #f44336,
     contrast: #fff,
-  )
+  ),
 );
 
 $ml-css-variable-palette: (
@@ -131,5 +130,5 @@ $ml-css-variable-palette: (
   warn: (
     color: var(--ml-warn),
     contrast: var(--ml-warn-contrast),
-  )
+  ),
 );

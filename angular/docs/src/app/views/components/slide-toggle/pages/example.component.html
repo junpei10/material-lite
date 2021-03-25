@@ -1,10 +1,28 @@
 <app-docs-viewer>
+  <div form>
+    <div>
+      <span>theme</span>
+      <input placeholder="theme" [(ngModel)]="theme" />
+    </div>
+
+    <label for="checked"
+      ><input
+        type="checkbox"
+        id="checked"
+        [(ngModel)]="checked"
+      />checked</label
+    >
+
+    <label for="disabled"
+      ><input
+        type="checkbox"
+        id="disabled"
+        [(ngModel)]="disabled"
+      />disabled</label
+    >
+  </div>
   <div product>
-    <ml-slide-toggle
-      (click)="checked = !checked"
-      [checked]="checked"
-      theme="primary"
-      labelPosition="before"
+    <ml-slide-toggle [theme]="theme" [checked]="checked" [disabled]="disabled"
       >SLIDER</ml-slide-toggle
     >
   </div>

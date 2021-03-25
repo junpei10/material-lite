@@ -1,6 +1,6 @@
-import { listen, RunOutsideNgZone, noop, insertStyleElement, CoreConfig, setCoreConfig, Falsy } from '@material-lite/angular-cdk/utils';
+import { listen, RunOutsideNgZone, noop, styling, CoreConfig, setCoreConfig, Falsy } from '@material-lite/angular-cdk/utils';
 
-insertStyleElement(`
+styling.insert(`
 .ml-ripple {
   position: relative;
   overflow: hidden;
@@ -31,7 +31,7 @@ insertStyleElement(`
 }
 `);
 
-export type MlRippleTrigger = EventTarget | 'host' | 'current' | Falsy;
+export type MlRippleTrigger = EventTarget | 'outlet' | 'current' | Falsy;
 
 export type MlRippleOverdrive = {
   width: number;
@@ -66,13 +66,13 @@ interface RippleElement extends HTMLElement {
 }
 
 export class MlRippleCore {
-  triggerElement: EventTarget;
+  readonly triggerElement: EventTarget;
 
   private _removeTriggerListener: () => void = noop;
 
   private _removeListeners: (() => void)[] = [];
 
-  private _hostElementRect: DOMRect | null;
+  private _outletElementRect: DOMRect | null;
 
   readonly existingRippleCount: number = 0;
 
@@ -80,13 +80,16 @@ export class MlRippleCore {
 
   constructor(
     config: CoreConfig<MlRippleCoreConfig>,
-    private _hostElement: HTMLElement,
+    private _outletElement: HTMLElement,
     private _runOutsideNgZone: RunOutsideNgZone,
     private _createElement: Document['createElement'],
+    triggerElement?: HTMLElement
   ) {
+    this.triggerElement = triggerElement || _outletElement;
+
     setCoreConfig(this, config);
 
-    _hostElement.classList.add('ml-ripple');
+    _outletElement.classList.add('ml-ripple');
   }
 
   finalize(): void {
@@ -113,10 +116,10 @@ export class MlRippleCore {
 
     rippleClassList.add('ml-ripple-element');
 
-    const containerEl = this._hostElement;
+    const containerEl = this._outletElement;
 
-    const containerRect = this._hostElementRect =
-      this._hostElementRect || containerEl.getBoundingClientRect();
+    const containerRect = this._outletElementRect =
+      this._outletElementRect || containerEl.getBoundingClientRect();
 
     const conf = this._config;
 
@@ -206,7 +209,7 @@ export class MlRippleCore {
     }
 
     rippleEl.setAttribute('style', rippleStyle);
-    this._hostElement.appendChild(rippleEl);
+    this._outletElement.appendChild(rippleEl);
 
     // @ts-ignore: assign the readonly variable
     this.existingRippleCount++;
@@ -235,12 +238,12 @@ export class MlRippleCore {
 
     this._runOutsideNgZone(() => {
       setTimeout(() => {
-        this._hostElement.removeChild(rippleElement);
+        this._outletElement.removeChild(rippleElement);
 
         // @ts-ignore: assign the readonly variable
         const count = this.existingRippleCount -= 1;
         if (count === 0) {
-          this._hostElementRect = null;
+          this._outletElementRect = null;
         }
       }, leaveTiming);
     });
@@ -285,7 +288,7 @@ export class MlRippleCore {
           : listenerHasRemoved = true;
       };
 
-      const target = eventTarget || this._hostElement;
+      const target = eventTarget || this._outletElement;
 
       this._runOutsideNgZone(() => {
         for (let i = 0; i < nameLen; i++) {
@@ -320,8 +323,8 @@ export class MlRippleCore {
 
       } else {
         // @ts-ignore: assign the readonly property
-        trg = this.triggerElement = (trigger === 'host')
-          ? this._hostElement
+        trg = this.triggerElement = (trigger === 'outlet')
+          ? this._outletElement
           : trigger;
       }
 
@@ -349,8 +352,8 @@ export class MlRippleCore {
     let overdrive = conf.overdrive === '' || conf.overdrive;
 
     if (overdrive && overdrive !== true) {
-      const rect = this._hostElementRect =
-        this._hostElementRect || this._hostElement.getBoundingClientRect();
+      const rect = this._outletElementRect =
+        this._outletElementRect || this._outletElement.getBoundingClientRect();
 
       const height = overdrive.height;
       const width = overdrive.width;

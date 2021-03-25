@@ -2,7 +2,7 @@
 @import "./scss/common";
 
 @import "./scss/z-index";
-@import "./scss/animation-constant";
+@import "./scss/animations";
 
 @import "./scss/elevation";
 
@@ -11,6 +11,7 @@
 
 // Component themes
 @import "./button/theme";
+@import "./slide-toggle/theme";
 
-// Finally
+// Finalize
 @import "./scss/setter";

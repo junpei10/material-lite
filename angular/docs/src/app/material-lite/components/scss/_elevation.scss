@@ -106,7 +106,7 @@
   );
 }
 
-$ml-elevation-animation-duration: map-get($ml-animation-duration, slow);
+$ml-elevation-animation-duration: map-get($ml-animation-duration, normal);
 $ml-elevation-animation-function: map-get($ml-animation-function, standard);
 $ml-elevation-color: black !default;
 $ml-elevation-opacity: 1 !default;

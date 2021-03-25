@@ -34,8 +34,6 @@ const ZERO_ORIGIN = {
 };
 
 export class MlStraightTrackerCore {
-  readonly disabled: boolean;
-
   private _onFirstUpdateBrothers: (() => void) | null | undefined;
 
   readonly targetElement: HTMLElement;
@@ -50,7 +48,7 @@ export class MlStraightTrackerCore {
   private _originFactory: () => XY;
   private _targetPointFactory: () => XY;
 
-  private _prevPositionClass: string = 'ml-bottom-0';
+  private _prevPositionClass: string = 'ml-bottom-tracker';
 
   private _config: MlStraightTrackerCoreConfig;
 
@@ -67,7 +65,7 @@ export class MlStraightTrackerCore {
   ) {
     setCoreConfig(this, config);
 
-    _trackerElement.classList.add('ml-bottom-0');
+    _trackerElement.classList.add('ml-bottom-tracker');
 
     this.setSizingMode('loose');
   }
@@ -111,9 +109,6 @@ export class MlStraightTrackerCore {
    * - 'initializing'の`Transition classes`を付与。
    */
   initialize(): void {
-    // @ts-ignore: assign the readonly variable
-    this.disabled = false;
-
     if (ResizeObserver) {
       this._resizeObserver =
         new ResizeObserver(this._onResize.bind(this));
@@ -129,9 +124,6 @@ export class MlStraightTrackerCore {
    * - 'finalizing'の`Transition classes`を付与。
    */
   finalize(): void {
-    // @ts-ignore: assign the readonly variable
-    this.disabled = true;
-
     const resizeObs = this._resizeObserver;
     if (resizeObs) {
       resizeObs.disconnect();
@@ -153,10 +145,7 @@ export class MlStraightTrackerCore {
         () => this.trackTargetByIndex(index);
 
       return;
-
-    } else if (this._config.disabled) {
-      return;
-    }
+    } else if (this._config.disabled) { return; }
 
     const brothers = this._hostElement.parentElement!.children;
 
@@ -187,6 +176,7 @@ export class MlStraightTrackerCore {
     if (this._onFirstUpdateBrothers !== null) {
       this._onFirstUpdateBrothers =
         () => this.trackTargetByElement(target);
+
       return;
     } else if (this._config.disabled) { return; }
 
@@ -299,8 +289,8 @@ export class MlStraightTrackerCore {
 
       this._prevPositionClass = currPositionClass =
         (conf.position === 'before')
-          ? 'ml-left-0'
-          : 'ml-right-0';
+          ? 'ml-left-tracker'
+          : 'ml-right-tracker';
 
     } else {
       if (resetTrackerStyle) {
@@ -316,8 +306,8 @@ export class MlStraightTrackerCore {
 
       this._prevPositionClass = currPositionClass =
         (conf.position === 'before')
-          ? 'ml-top-0'
-          : 'ml-bottom-0';
+          ? 'ml-top-tracker'
+          : 'ml-bottom-tracker';
     }
 
     classList.add(currPositionClass);

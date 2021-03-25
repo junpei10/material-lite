@@ -4,15 +4,15 @@ export const ML_DARK_THEME: MlTheme = {
   base: 'black',
   oppositeBase: 'white',
 
-  background: '#212121',
-  primaryContainer: '#303030',
+  background: '#303030',
+  primaryContainer: '#212121',
   secondaryContainer: '#424242',
   tertiaryContainer: '#616161',
   disabledContainer: 'hsla(0,0%,100%,.12)',
 
-  divider: 'rgba(255,255,255,.12)',
+  divider: 'hsla(0,0%,100%,.12)',
   elevation: 'black',
-  scrollbar: 'rgba(255,255,255,.12)',
+  scrollbar: 'hsla(0,0%,100%,.12)',
 
   icon: 'white',
   sliderMin: 'white',

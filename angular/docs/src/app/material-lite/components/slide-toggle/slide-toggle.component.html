@@ -1,4 +1,4 @@
-<label class="ml-slide-toggle-label" [attr.for]="id">
+<label class="ml-slide-toggle-label" [attr.for]="inputId">
   <div class="ml-slide-toggle-bar">
     <div class="ml-slide-toggle-bar-palette"></div>
     <input
@@ -6,6 +6,7 @@
       class="ml-slide-toggle-input ml-visually-hidden"
       type="checkbox"
       role="switch"
+      [id]="inputId"
       [required]="required"
       [tabIndex]="tabIndex"
       [checked]="checked"

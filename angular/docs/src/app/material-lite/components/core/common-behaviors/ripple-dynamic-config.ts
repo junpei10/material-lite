@@ -12,14 +12,14 @@ export function mixinRippleDynamicConfig(base: NoConstructor<any>): NoConstructo
   // @ts-ignore
   return class extends base {
     _rippleDynamicConfig: CoreDynamicConfig<MlRippleCoreConfig> = {
-      dynamic: {}
+      _dynamic: {}
     };
 
     get rippleConfig(): MlRippleCoreConfig {
-      return this._rippleDynamicConfig.dynamic;
+      return this._rippleDynamicConfig._dynamic;
     }
     set rippleConfig(config: MlRippleCoreConfig) {
-      this._rippleDynamicConfig.dynamic = config;
+      this._rippleDynamicConfig._dynamic = config;
     }
   };
 }

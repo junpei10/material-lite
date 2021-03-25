@@ -72,7 +72,7 @@
 
 <h2 class="docs-h2">Disabled button</h2>
 <p class="docs-h2-desc">
-  <code>[mlButton]</code>に値を代入することで変更できます。
+  <code>[disabled]</code>に値を代入することで変更できます。
 </p>
 <app-docs-viewer
   codeblockName="disabled"
@@ -81,11 +81,15 @@
   disableActions
 >
   <div product>
-    <button [mlButton]="false" variant="basic">Disabled</button>
-    <button [mlButton]="!true" variant="raised">Disabled</button>
-    <button [mlButton]="undefined" variant="stroked">Disabled</button>
-    <button [mlButton]="null" variant="icon"><span mlIcon>home</span></button>
-    <button [mlButton]="0" variant="fab"><span mlIcon>home</span></button>
+    <button mlButton disabled variant="basic">Disabled</button>
+    <button mlButton [disabled]="true" variant="raised">Disabled</button>
+    <button mlButton [disabled]="!false" variant="stroked">Disabled</button>
+    <button mlButton [disabled]="!null" variant="icon">
+      <span mlIcon>home</span>
+    </button>
+    <button mlButton [disabled]="''" variant="fab">
+      <span mlIcon>home</span>
+    </button>
   </div>
 </app-docs-viewer>
 

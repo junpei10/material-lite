@@ -6,10 +6,10 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Falsy, MlDocument, noop, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
-import { mixinBundleFactory, mixinDisableRipple, mixinRippleDynamicConfig, mixinTheme, MlRippleCore, MlThemeStyle, MlTheming } from '@material-lite/angular/core';
+import { mixinBundleFactory, mixinDisableRipple, mixinRippleDynamicConfig, mixinTheme, MlRippleCore, theming } from '@material-lite/angular/core';
 import { mixinTabIndex } from '../core/common-behaviors/tabindex';
 
-MlTheming.setStyle({
+theming.set({
   base: `
 .ml-slide-toggle {
   display: inline-block;
@@ -141,38 +141,33 @@ MlTheming.setStyle({
   width: 40px;
   z-index: 1;
   pointer-events: none;
-  overflow: visible;
-}
-
-.ml-slide-toggle:not(.ml-checked) .ml-ripple-element {
-  background-color: CurrentColor !important;
+  border-radius: 50%;
 }
 `,
+
   theme: (theme) => {
-    const { primaryContainer, sliderOffActive } = theme;
     return `
 .ml-slide-toggle-bar-palette {
-  background-color: ${sliderOffActive};
+  background-color: ${theme.sliderOffActive};
 }
 .ml-slide-toggle-thumb {
-  background-color: ${primaryContainer};
-}
-`;
-
+  background-color: ${theme.primaryContainer};
+}`;
   },
-  palette: (name, color) => `
-  .ml-${name} .ml-slide-toggle-ripple .ml-ripple-element {
-    background: ${color};
-  }
 
-  .ml-checked.ml-${name} .ml-slide-toggle-bar-palette {
-    background-color: ${color};
-    opacity: 0.54;
-  }
-  .ml-checked.ml-${name} .ml-slide-toggle-thumb {
-    background-color: ${color};
-  }
-`
+  palette: (name, color) => `
+.ml-checked.ml-${name} .ml-slide-toggle-ripple .ml-ripple-element {
+  background-color: ${color};
+}
+
+.ml-checked.ml-${name} .ml-slide-toggle-bar-palette {
+  background-color: ${color};
+  opacity: 0.54;
+}
+
+.ml-checked.ml-${name} .ml-slide-toggle-thumb {
+  background-color: ${color};
+}`
 });
 
 export const ML_SLIDE_TOGGLE_VALUE_ACCESSOR: any = {
@@ -199,12 +194,11 @@ let uniqueId: number = 0;
   providers: [ML_SLIDE_TOGGLE_VALUE_ACCESSOR],
   host: {
     class: 'ml-slide-toggle',
+    tabindex: '-1',
     '[id]': 'id',
-    '[attr.tabindex]': 'disabled ? null : -1',
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
     '[class.ml-checked]': 'checked',
-    '[class.ml-disabled]': 'disabled',
     '[class.ml-slide-toggle-label-before]': 'labelPosition == "before"',
   },
   inputs: ['theme', 'tabIndex', 'disableRipple', 'rippleConfig'],
@@ -215,11 +209,34 @@ export class MlSlideToggleComponent extends SlideToggleMixin implements OnInit, 
   private _onChange: (_: any) => any = noop;
   private _onTouched = this._onChange;
 
-  @Input() disabled: boolean;
+  @Input('disabled') set setDisabled(isDisabled: true | Falsy) {
+    // @ts-ignore: assign the readonly variable
+    const result = this.disabled =
+      isDisabled || isDisabled === '';
+
+    const el = this._elementRef.nativeElement;
+    if (result) {
+      el.classList.add('ml-disabled');
+      el.tabIndex = null;
+      this.disableRipple = true;
+
+    } else {
+      el.classList.remove('ml-disabled');
+      el.tabIndex = -1;
+      this.disableRipple = false;
+    }
+  }
+  readonly disabled: boolean = false;
 
   @ViewChild('input') private _inputElement: ElementRef<HTMLInputElement>;
 
-  @Input('id') id: string = `ml-slide-toggle-${++uniqueId}`;
+  @Input('id') set setId(id: string) {
+    // @ts-ignore: assign the readonly variable
+    this.id = id; // @ts-ignore
+    this.inputId = id + '-input';
+  }
+  readonly id: string;
+  readonly inputId: string;
 
   @Input('name') name: string;
 
@@ -232,12 +249,11 @@ export class MlSlideToggleComponent extends SlideToggleMixin implements OnInit, 
     this.stringChecked = result + '';
   }
   readonly checked: boolean;
-  readonly stringChecked: string;
+  readonly stringChecked: 'false' | 'true' = 'false';
 
   @Input('required') set setRequired(isEnabled: true | Falsy) {
     // @ts-ignore
-    this.required =
-      isEnabled || isEnabled === '';
+    this.required = isEnabled || isEnabled === '';
   }
   readonly required: boolean = false;
 
@@ -257,15 +273,16 @@ export class MlSlideToggleComponent extends SlideToggleMixin implements OnInit, 
   }
   private _toggleChangeEmitter?: EventEmitter<void>;
 
-  rippleCore: MlRippleCore;
-  private _createElement;
+  readonly rippleCore: MlRippleCore;
+  private _rippleCoreFactory?: (outletEl: HTMLElement) => MlRippleCore;
 
   @ViewChild('mlRippleOutlet', { static: true })
   private set _setRippleCore(outletElementRef: ElementRef<HTMLElement>) {
+    // @ts-ignore: assign the readonly variable
     const core = this.rippleCore =
-      new MlRippleCore(this._rippleDynamicConfig, outletElementRef.nativeElement, this._runOutsideNgZone, this._createElement);
+      this._rippleCoreFactory(outletElementRef.nativeElement);
 
-    core.triggerElement = this._elementRef.nativeElement;
+    this._rippleCoreFactory = null;
   }
 
   constructor(
@@ -273,26 +290,37 @@ export class MlSlideToggleComponent extends SlideToggleMixin implements OnInit, 
     @Attribute('tabindex') tabIndex: string,
     private _changeDetectorRef: ChangeDetectorRef,
     @Inject(DOCUMENT) _document: MlDocument,
-    @Inject(RUN_OUTSIDE_NG_ZONE) private _runOutsideNgZone: RunOutsideNgZone
+    @Inject(RUN_OUTSIDE_NG_ZONE) runOutsideNgZone: RunOutsideNgZone
   ) {
     super();
 
     this.tabIndex = parseInt(tabIndex, void 0) || 0;
 
-    this._createElement = _document.createElement.bind(_document);
+    const rippleConf = this._rippleDynamicConfig;
 
-    this._rippleDynamicConfig.dynamic = {
+    rippleConf._dynamic = {
       entrance: 'center',
       radius: 20,
       animation: {
-        enter: 150,
+        enter: 160,
       }
     };
+
+    this._rippleCoreFactory = (outletEl) =>
+      new MlRippleCore(
+        rippleConf, outletEl, runOutsideNgZone,
+        _document.createElement.bind(_document),
+        _elementRef.nativeElement
+      );
   }
 
   ngOnInit(): void {
     if (this.rippleIsDisabled === void 0) {
       this.rippleCore.setTrigger('current');
+    }
+
+    if (!this.id) {
+      this.setId = `ml-slide-toggle-${++uniqueId}`;
     }
   }
 
@@ -313,7 +341,8 @@ export class MlSlideToggleComponent extends SlideToggleMixin implements OnInit, 
     event.stopPropagation();
   }
 
-  toggle(): void { // @ts-ignore: assign readonly variable
+  toggle(): void {
+    // @ts-ignore: assign readonly variable
     const checked = this.checked = !this.checked;
     this._onChange(checked);
   }
@@ -338,6 +367,7 @@ export class MlSlideToggleComponent extends SlideToggleMixin implements OnInit, 
     this._onTouched = fn;
   }
   setDisabledState(isDisabled: boolean): void {
+    // @ts-ignore: assign the readonly variable
     this.disabled = isDisabled;
     this._changeDetectorRef.markForCheck();
   }
