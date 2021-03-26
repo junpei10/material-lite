@@ -4,16 +4,6 @@
 @import "./material-lite/components/theming";
 @import "./views/docs";
 
-::ng-deep {
-  body {
-    @include ml-theme(light, deepPurple-amber);
-  }
-
-  .dark-theme {
-    @include ml-theme(dark, deepPurple-amber);
-  }
-}
-
 .root- {
   &header {
     width: 100%;

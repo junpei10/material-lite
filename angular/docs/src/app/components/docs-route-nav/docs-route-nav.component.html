@@ -1,5 +1,6 @@
 <ml-straight-tracker
   [targetIndex]="docs.activeRouteIndex"
+  [transition]="{ duration: '400ms', property: 'left' }"
   [transitionClasses]="{ initializing: true }"
 >
   <div class="docs-route-nav-tracker ml-primary-bg"></div>

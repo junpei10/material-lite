@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
 import { RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
-import { Observable, Subject } from 'rxjs';
 import { Firestore, FIRESTORE } from '../firestore';
 
 export interface DocsCodeData {

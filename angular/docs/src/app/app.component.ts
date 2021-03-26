@@ -20,11 +20,11 @@ export class AppComponent {
     @Inject(DOCUMENT) private _document: MlDocument,
     private _changeDetectorRef: ChangeDetectorRef
   ) {
-    mlTheming.initialize(null);
-    // mlTheming.initialize([
-    //   { theme: ML_LIGHT_THEME, palette: ML_INDIGO_PINK_PALETTE },
-    //   { theme: ML_DARK_THEME, palette: ML_DEEPPURPLE_AMBER_PALETTE, wrapperClass: 'dark-theme' }
-    // ]);
+    // mlTheming.initialize(null);
+    mlTheming.initialize([
+      { theme: ML_LIGHT_THEME, palette: ML_INDIGO_PINK_PALETTE },
+      { theme: ML_DARK_THEME, palette: ML_DEEPPURPLE_AMBER_PALETTE, wrapperClass: 'dark-theme' }
+    ]);
 
     // mlTheming.setCssVariables({ theme: ML_LIGHT_THEME, palette: ML_INDIGO_PINK_PALETTE });
     // mlTheming.setCssVariables({ theme: ML_LIGHT_THEME, palette: ML_INDIGO_PINK_PALETTE, wrapperClass: 'dark-theme' });

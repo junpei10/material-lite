@@ -6,8 +6,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Falsy, MlDocument, noop, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
-import { mixinBundleFactory, mixinDisableRipple, mixinRippleDynamicConfig, mixinTheme, MlRippleCore, theming } from '@material-lite/angular/core';
-import { mixinTabIndex } from '../core/common-behaviors/tabindex';
+import { mixinBundleFactory, mixinDisableRipple, mixinRippleDynamicConfig, mixinTabIndex, mixinTheme, MlRippleCore, theming } from '@material-lite/angular/core';
 
 theming.set({
   theme: (theme) => {

@@ -16,7 +16,7 @@ $ml-animation-function: (
   standard: cubic-bezier(0.4, 0, 0.2, 1),
   
   // fast-out => slow-in
-  strong-acceleration: cubic-bezier(0.35, 0, 0.25, 1),
+  strong-acceleration: cubic-bezier(0.36, 0, 0.24, 1),
   
   // fast-out   => liner-in
   acceleration: cubic-bezier(0.4, 0, 1, 1),

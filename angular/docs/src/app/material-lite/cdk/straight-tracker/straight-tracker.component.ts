@@ -9,6 +9,13 @@ import {
   MlStraightTrackerTransitionClasses
 } from './straight-tracker-core';
 
+export interface MlStraightTrackerTransition {
+  property?: string;
+  duration?: string;
+  timingFunction?: string;
+  delay?: string;
+}
+
 type Changes = {
   position: SimpleChange;
   orientation: SimpleChange;
@@ -17,7 +24,7 @@ type Changes = {
 @Component({
   selector: 'ml-straight-tracker',
   exportAs: 'mlStraightTracker',
-  template: '<div #trackerElement class="ml-tracker" [style.transition]="transition"><ng-content></ng-content></div>',
+  template: '<div #trackerElement class="ml-tracker"><ng-content></ng-content></div>',
   styles: ['ml-straight-tracker{width:100%;height:100%;position:absolute;top:0;pointer-events:none}.ml-tracker{position:absolute;transition-timing-function:cubic-bezier(0.35, 0, 0.25, 1);pointer-events:auto;z-index:1;}.ml-top-tracker{top:0}.ml-right-tracker{right:0}.ml-bottom-tracker{bottom:0}.ml-left-tracker{left:0}'],
   host: {
     class: 'ml-straight-tracker'
@@ -31,8 +38,12 @@ export class MlStraightTrackerComponent implements OnInit, OnChanges, AfterConte
 
   private _initialized: boolean = false;
 
+  private _trackerElementRef: ElementRef<HTMLElement>;
   @ViewChild('trackerElement', { static: true })
   private set _setCore(elementRef: ElementRef<HTMLElement>) {
+    console.log('abc');
+    this._trackerElementRef = elementRef;
+
     this.core = this._coreFactory(elementRef.nativeElement);
     this._coreFactory = null;
   }
@@ -59,7 +70,23 @@ export class MlStraightTrackerComponent implements OnInit, OnChanges, AfterConte
   @Input() orientation?: 'horizontal' | 'vertical';
   @Input() position?: 'before' | 'after';
 
-  @Input() transition?: string;
+  private _transitionsStack?: string | MlStraightTrackerTransition;
+  @Input('transition') set setTransition(style: string | MlStraightTrackerTransition) {
+    const el = this._trackerElementRef?.nativeElement;
+
+    if (el) {
+      if (typeof style === 'string') {
+        el.style.transition = style;
+        return;
+      }
+
+      el.style.transitionProperty = style.property || null;
+      el.style.transitionTimingFunction = style.timingFunction || null;
+      el.style.transitionDuration = style.duration || null;
+      el.style.transitionDelay = style.delay || null;
+
+    } else { this._transitionsStack = style; }
+  }
   @Input() transitionClasses?: MlStraightTrackerTransitionClasses;
 
   @Input('sizingMode')
@@ -103,6 +130,12 @@ export class MlStraightTrackerComponent implements OnInit, OnChanges, AfterConte
   ngOnInit(): void {
     if (this.disabled === void 0) {
       this.setDisabled = false;
+    }
+
+    const stack = this._transitionsStack;
+    if (stack) {
+      this.setTransition = stack;
+      this._transitionsStack = null;
     }
 
     this._initialized = true;
