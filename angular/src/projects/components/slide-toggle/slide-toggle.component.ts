@@ -9,29 +9,8 @@ import { Falsy, MlDocument, noop, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '
 import { mixinBundleFactory, mixinDisableRipple, mixinRippleDynamicConfig, mixinTabIndex, mixinTheme, MlRippleCore, theming } from '@material-lite/angular/core';
 
 theming.set({
-  theme: (theme) => {
-    return `
-.ml-slide-toggle-bar-palette {
-  background-color: ${theme.sliderOffActive};
-}
-.ml-slide-toggle-thumb {
-  background-color: ${theme.sliderThumb};
-}`;
-  },
-
-  palette: (name, color) => `
-.ml-checked.ml-${name} .ml-slide-toggle-bar-palette {
-  background-color: ${color};
-  opacity: 0.56;
-}
-
-.ml-checked.ml-${name} .ml-slide-toggle-thumb {
-  background-color: ${color};
-}
-
-.ml-checked.ml-${name} .ml-slide-toggle-ripple-outlet {
-  color: ${color};
-}`
+  theme: (theme) => `.ml-slide-toggle-bar-palette{background-color:${theme.sliderOffActive}}.ml-slide-toggle-thumb{background-color:${theme.sliderThumb}}`,
+  palette: (name, color) => `.ml-checked.ml-${name} .ml-slide-toggle-bar-palette{background-color:${color};opacity:.56}.ml-checked.ml-${name} .ml-slide-toggle-thumb{background-color:${color}}.ml-checked.ml-${name} .ml-slide-toggle-ripple-outlet{color:${color}}`
 });
 
 export const ML_SLIDE_TOGGLE_VALUE_ACCESSOR: any = {
@@ -139,7 +118,7 @@ export class MlSlideToggleComponent extends SlideToggleMixin implements OnInit, 
   private _toggleChangeEmitter?: EventEmitter<void>;
 
   readonly rippleCore: MlRippleCore;
-  private _rippleCoreFactory?: (outletEl: HTMLElement) => MlRippleCore;
+  private _rippleCoreFactory: ((outletEl: HTMLElement) => MlRippleCore) | null;
 
   @ViewChild('mlRippleOutlet', { static: true })
   private set _setRippleCore(outletElementRef: ElementRef<HTMLElement>) {

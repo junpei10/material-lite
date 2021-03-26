@@ -1,6 +1,6 @@
 {
   "name": "@material-lite/angular",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "MIT",
   "description": "Material Lite Components for Angular",
   "keywords": [
@@ -13,7 +13,7 @@
   "peerDependencies": {
     "@angular/common": "~11.2.5",
     "@angular/core": "~11.2.5",
-    "@material-lite/angular-cdk": "^1.0.0"
+    "@material-lite/angular-cdk": "^1.1.1"
   },
   "dependencies": {
     "tslib": "^2.0.0"

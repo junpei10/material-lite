@@ -115,13 +115,12 @@ export class MlButtonComponent extends ButtonMixin implements OnInit, OnChanges 
   readonly hasWrappedAnchor: boolean;
 
   readonly rippleCore: MlRippleCore;
-  private _rippleCoreFactory?: (outletEl: HTMLElement) => MlRippleCore;
+  private _rippleCoreFactory: ((outletEl: HTMLElement) => MlRippleCore) | null;
 
   @ViewChild('mlRippleOutlet', { static: true })
   private set _setRippleCore(outletElementRef: ElementRef<HTMLElement>) {
     // @ts-ignore: assign the readonly variable
-    this.rippleCore =
-      this._rippleCoreFactory(outletElementRef.nativeElement);
+    this.rippleCore = this._rippleCoreFactory(outletElementRef.nativeElement);
 
     this._rippleCoreFactory = null;
   }

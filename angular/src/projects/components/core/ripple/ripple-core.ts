@@ -1,8 +1,8 @@
-import { listen, RunOutsideNgZone, noop, insertStyleElement, CoreConfig, setCoreConfig, Falsy } from '@material-lite/angular-cdk/utils';
+import { listen, RunOutsideNgZone, noop, styling, CoreConfig, setCoreConfig, Falsy } from '@material-lite/angular-cdk/utils';
 
-insertStyleElement('.ml-ripple{position:relative;overflow:hidden;user-select:none}.ml-ripple-element{will-change:opacity,transform;transform:scale(0);transition-property:opacity,transform;border-radius:50%}.ml-overdrive-element,.ml-ripple-element{transition-timing-function:cubic-bezier(0,0,.2,1);position:absolute;pointer-events:none;background:currentColor}.ml-overdrive-element{will-change:opacity;opacity:0;transition-property:opacity;top:0;left:0;width:100%;height:100%;border-radius:0}');
+styling.insert('.ml-ripple-outlet{position:relative;overflow:hidden;user-select:none}.ml-ripple{will-change:opacity,transform;transform:scale(0);transition-property:opacity,transform;border-radius:50%}.ml-overdrive,.ml-ripple{transition-timing-function:cubic-bezier(0,0,.2,1);position:absolute;pointer-events:none;background:currentColor}.ml-overdrive{will-change:opacity;opacity:0;transition-property:opacity;top:0;left:0;width:100%;height:100%;border-radius:0}');
 
-export type MlRippleTrigger = EventTarget | 'host' | Falsy;
+export type MlRippleTrigger = EventTarget | 'outlet' | 'current' | Falsy;
 
 export type MlRippleOverdrive = {
   width: number;
@@ -18,6 +18,7 @@ export interface MlRippleCoreConfig {
   theme?: string;
 
   radius?: number;
+  radiusMagnification?: number;
   opacity?: number;
 
   entrance?: MlRippleEntrance;
@@ -27,10 +28,11 @@ export interface MlRippleCoreConfig {
     leave?: number;
   };
 
+
   fadeOutEventNames?: string[];
 }
 
-interface RippleElement extends HTMLElement {
+export interface MlRippleElement extends HTMLElement {
   enterDuration: number;
 }
 
@@ -41,7 +43,7 @@ export class MlRippleCore {
 
   private _removeListeners: (() => void)[] = [];
 
-  private _hostElementRect: DOMRect | null;
+  private _outletElementRect: DOMRect | null;
 
   readonly existingRippleCount: number = 0;
 
@@ -49,13 +51,16 @@ export class MlRippleCore {
 
   constructor(
     config: CoreConfig<MlRippleCoreConfig>,
-    private _hostElement: HTMLElement,
+    private _outletElement: HTMLElement,
     private _runOutsideNgZone: RunOutsideNgZone,
     private _createElement: Document['createElement'],
+    triggerElement?: HTMLElement
   ) {
+    this.triggerElement = triggerElement || _outletElement;
+
     setCoreConfig(this, config);
 
-    _hostElement.classList.add('ml-ripple');
+    _outletElement.classList.add('ml-ripple-outlet');
   }
 
   finalize(): void {
@@ -75,17 +80,17 @@ export class MlRippleCore {
    * @returns 出現させたRippleを削除するためのトークン(DOM)を返す。
    * `Ripple`を削除させる方法は複数あるため、関数ではなく`Ripple`の要素を返し、柔軟に対応できるようしている。
    */
-  fadeInRipple(x: number, y: number): RippleElement {
+  fadeInRipple(x: number, y: number): MlRippleElement {
     // @ts-ignore
     const rippleEl = this._createElement('div') as RippleElement;
     const rippleClassList = rippleEl.classList;
 
-    rippleClassList.add('ml-ripple-element');
+    rippleClassList.add('ml-ripple-element', 'ml-ripple');
 
-    const containerEl = this._hostElement;
+    const containerEl = this._outletElement;
 
-    const containerRect = this._hostElementRect =
-      this._hostElementRect || containerEl.getBoundingClientRect();
+    const containerRect = this._outletElementRect =
+      this._outletElementRect || containerEl.getBoundingClientRect();
 
     const conf = this._config;
 
@@ -116,11 +121,12 @@ export class MlRippleCore {
     let radius: number;
 
     if (conf.radius) {
-      radius = conf.radius;
+      radius = conf.radius * (conf.radiusMagnification || 1);
+
     } else {
       const distX = Math.max(Math.abs(x - containerRect.left), Math.abs(x - containerRect.right));
       const distY = Math.max(Math.abs(y - containerRect.top), Math.abs(y - containerRect.bottom));
-      radius = Math.sqrt(distX * distX + distY * distY);
+      radius = Math.sqrt(distX * distX + distY * distY) * (conf.radiusMagnification || 1);
     }
 
     const enterDur = conf.animation?.enter || 448;
@@ -155,12 +161,12 @@ export class MlRippleCore {
    *
    * @returns 出現させたRippleを削除するためのトークン(DOM)を返す。
    */
-  fadeInOverdrive(): RippleElement {
+  fadeInOverdrive(): MlRippleElement {
     // @ts-ignore
     const rippleEl = this._createElement('div') as RippleElement;
     const rippleClassList = rippleEl.classList;
 
-    rippleClassList.add('ml-overdrive-element');
+    rippleClassList.add('ml-ripple-element', 'ml-overdrive');
 
     const conf = this._config;
 
@@ -174,7 +180,7 @@ export class MlRippleCore {
     }
 
     rippleEl.setAttribute('style', rippleStyle);
-    this._hostElement.appendChild(rippleEl);
+    this._outletElement.appendChild(rippleEl);
 
     // @ts-ignore: assign the readonly variable
     this.existingRippleCount++;
@@ -193,7 +199,7 @@ export class MlRippleCore {
    *
    * @param rippleElement `fadeInRipple`と`fadeInOverdrive`の戻り値。
    */
-  fadeOutRipple(rippleElement: RippleElement): void {
+  fadeOutRipple(rippleElement: MlRippleElement): void {
     const conf = this._config;
 
     const leaveTiming = conf.animation?.leave || 400;
@@ -203,12 +209,12 @@ export class MlRippleCore {
 
     this._runOutsideNgZone(() => {
       setTimeout(() => {
-        this._hostElement.removeChild(rippleElement);
+        this._outletElement.removeChild(rippleElement);
 
         // @ts-ignore: assign the readonly variable
         const count = this.existingRippleCount -= 1;
         if (count === 0) {
-          this._hostElementRect = null;
+          this._outletElementRect = null;
         }
       }, leaveTiming);
     });
@@ -220,7 +226,7 @@ export class MlRippleCore {
    * @param rippleElement `fadeInRipple`と`fadeInOverdrive`の戻り値。
    * @param eventTarget 自動で
    */
-  autoFadeOutRipple(rippleElement: RippleElement, eventTarget?: EventTarget): void {
+  autoFadeOutRipple(rippleElement: MlRippleElement, eventTarget?: EventTarget): void {
     let listenerHasRemoved: boolean | undefined;
     let rippleHasEntered: boolean | undefined;
 
@@ -253,7 +259,7 @@ export class MlRippleCore {
           : listenerHasRemoved = true;
       };
 
-      const target = eventTarget || this._hostElement;
+      const target = eventTarget || this._outletElement;
 
       this._runOutsideNgZone(() => {
         for (let i = 0; i < nameLen; i++) {
@@ -281,10 +287,18 @@ export class MlRippleCore {
       this._removeTriggerListener = noop;
 
     } else {
-      // @ts-ignore: assign the readonly property
-      const trg = this.triggerElement = (trigger === 'host')
-        ? this._hostElement
-        : trigger;
+      let trg: EventTarget;
+
+      if (trigger === 'current') {
+        trg = this.triggerElement;
+
+      } else {
+        // @ts-ignore: assign the readonly property
+        trg = this.triggerElement = (trigger === 'outlet')
+          ? this._outletElement
+          : trigger;
+      }
+
 
       this._runOutsideNgZone(() => {
         this._removeTriggerListener =
@@ -293,9 +307,7 @@ export class MlRippleCore {
     }
   }
 
-  /**
-   * デフォルトというか、
-   */
+
   addPointerdownListener(trigger: EventTarget): () => void {
     const removeListener =
       listen(trigger, 'pointerdown', (event) => this._addPointerdownListenerCallback(event, trigger));
@@ -311,8 +323,8 @@ export class MlRippleCore {
     let overdrive = conf.overdrive === '' || conf.overdrive;
 
     if (overdrive && overdrive !== true) {
-      const rect = this._hostElementRect =
-        this._hostElementRect || this._hostElement.getBoundingClientRect();
+      const rect = this._outletElementRect =
+        this._outletElementRect || this._outletElement.getBoundingClientRect();
 
       const height = overdrive.height;
       const width = overdrive.width;

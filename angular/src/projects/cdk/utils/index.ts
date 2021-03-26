@@ -1,9 +1,9 @@
-export * from './insert-style-element';
+export * from './styling';
 export * from './listen';
 export * from './noop';
-export * from './divided-zone';
+export * from './run-outside-ng-zone';
 export * from './token.service';
-export * from './animation';
+export * from './transition-classes';
 export * from './lifecycle';
 export * from './core';
 
@@ -12,6 +12,8 @@ export type Class<T, A extends any[] = any[]> = new (...arg: A) => T;
 export type Falsy = false | undefined | null | '' | 0;
 
 export interface MlDocument {
+  head: HTMLHeadElement;
+  body: HTMLBodyElement;
   createElement: (tagName: string, options?: ElementCreationOptions) => HTMLElement;
   createComment: (data: string) => Comment;
 }

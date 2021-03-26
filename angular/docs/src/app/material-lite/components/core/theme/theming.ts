@@ -51,6 +51,7 @@ export const theming: Theming = {
   themeKeys: ['base', 'oppositeBase', 'background', 'primaryContainer', 'secondaryContainer', 'tertiaryContainer', 'disabledContainer', 'divider', 'elevation', 'scrollbar', 'icon', 'sliderMin', 'sliderOff', 'sliderOffActive', 'sliderThumb', 'text', 'secondaryText', 'hintText', 'disabledText'],
 
   set(style): void {
+    // @ts-ignore
     this._themeStacks.push(style);
   },
 
@@ -58,9 +59,10 @@ export const theming: Theming = {
   _themeStacks: [],
 
   _init(themeBases: ThemeBases): void {
+    // @ts-ignore: assign the readonly variable
     const storage = this.valueStorage = {
       keys: []
-    };
+    } as MlThemeValueStorage;
 
     let entryStyle = '';
 
@@ -71,8 +73,8 @@ export const theming: Theming = {
     let skipCount = 0;
 
     while (storageLen < forLen) {
-      const base = themeBases[storageLen];
-      const wrapperClass = base.wrapperClass || (base.wrapperClass = null);
+      const base = themeBases[storageLen] as MlThemeValue;
+      const wrapperClass = base.wrapperClass || (base.wrapperClass = null!);
 
       storageLen++;
       if (storage[wrapperClass]) { skipCount++; continue; }
@@ -124,6 +126,7 @@ export const theming: Theming = {
     };
 
     // init()が呼び出される前に設定されてたスタイルをすべて追加する。
+    // @ts-ignore
     const stacks = this._themeStacks as MlThemeStyle[];
     forLen = stacks.length;
 
@@ -138,8 +141,8 @@ export const theming: Theming = {
 
     styling.insert(entryStyle);
 
-    this._themeStacks = null;
-    this._init = null;
+    // @ts-ignore
+    this._themeStacks = null; this._init = null;
   }
 };
 
@@ -198,15 +201,16 @@ export class MlTheming {
       // @ts-ignore: assign the readonly variable
       _theming.valueStorage = {};
       _theming.set = noop;
-      _theming._init = null;
-      _theming._themeStacks = null;
+
+      // @ts-ignore
+      _theming._init = null; _theming._themeStacks = null;
     }
 
     styling.setHeadElement(this._document.head);
   }
 
   setCssVariables(base: { theme: MlTheme, palette: MlPalette, wrapperClass?: string | null }): void {
-    const wrapperClass = base.wrapperClass || null;
+    const wrapperClass = base.wrapperClass || null!;
 
     let styleElement = this._cssVariablesStyleElementRef[wrapperClass];
     if (!styleElement) {
@@ -227,7 +231,7 @@ export class MlTheming {
     const theme = base.theme;
     let len = keys.length;
     for (let i = 0; i < len; i++) {
-      const key = keys[i];
+      const key = keys[i]; // @ts-ignore
       entryStyle += '--ml-' + key + ':' + theme[key] + ';';
     }
 

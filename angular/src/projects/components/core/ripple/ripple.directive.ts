@@ -12,18 +12,18 @@ export class MlRippleDirective implements OnInit {
 
   private _hasInitialized: boolean;
 
-  @Input('mlRipple') set setEnabled(isEnable: true | Falsy) {
+  @Input('mlRippleDisabled') set setDisabled(isDisabled: true | Falsy) {
     // @ts-ignore: assign the readonly variable
-    const result = this.isEnabled =
-      isEnable || isEnable === '';
+    const result = this.disabled =
+      isDisabled || isDisabled === '';
 
     if (this._hasInitialized) {
-      (result)
-        ? this.core.setTrigger(this.trigger)
-        : this.core.finalize();
+      result
+        ? this.core.setTrigger(null)
+        : this.core.setTrigger('current');
     }
   }
-  readonly isEnabled: boolean | undefined;
+  readonly disabled: boolean;
 
   @Input('mlRippleOverdrive') overdrive?: MlRippleOverdrive;
 
@@ -34,6 +34,8 @@ export class MlRippleDirective implements OnInit {
   @Input('mlRippleOpacity') opacity?: number;
 
   @Input('mlRippleRadius') radius?: number;
+
+  @Input('mlRippleRadiusMagnification') radiusMagnification?: number;
 
   @Input('mlRippleAnimation') animation: {
     enter?: number;
@@ -47,8 +49,7 @@ export class MlRippleDirective implements OnInit {
     this.trigger = trigger;
 
     this.core.setTrigger(trigger);
-  }
-  // @ts-ignore: 未代入化を判断するために、初期値は 1
+  } // @ts-ignore
   readonly trigger: MlRippleTrigger = 1;
 
   @Input('mlRippleFadeOutEventNames') fadeOutEventNames?: string[] = [
@@ -60,15 +61,26 @@ export class MlRippleDirective implements OnInit {
     @Inject(DOCUMENT) _document: MlDocument,
     @Inject(RUN_OUTSIDE_NG_ZONE) runOutsideNgZone: RunOutsideNgZone,
   ) {
-    this.core = new MlRippleCore(
-      this, elementRef.nativeElement, runOutsideNgZone,
-      _document.createElement.bind(_document)
-    );
+    this.core =
+      new MlRippleCore(this, elementRef.nativeElement, runOutsideNgZone, _document.createElement.bind(_document));
   }
 
   ngOnInit(): void {
-    if (this.isEnabled && this.trigger === 1 as any) {
-      this.setTrigger = 'host';
+    const trigger = this.trigger as MlRippleTrigger & 1;
+
+    if (!this.disabled) {
+      // @ts-ignore
+      this.disabled = false;
+
+      if (trigger === 1) {
+        // @ts-ignore: assign the readonly variable
+        this.trigger = 'outlet';
+        this.core.setTrigger('current');
+      }
+
+    } else if (trigger === 1) {
+      // @ts-ignore: assign the readonly variable
+      this.trigger = 'outlet';
     }
 
     this._hasInitialized = true;

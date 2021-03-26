@@ -2,20 +2,26 @@ import { MlTheme } from '../../theming';
 
 export const ML_CSS_VARIABLE_THEME: MlTheme = {
   base: 'var(--ml-base)',
-  oppositeBase: 'var(--ml-opposite-base)',
+  oppositeBase: 'var(--ml-oppositeBase)',
 
   background: 'var(--ml-background)',
-  primaryContainer: 'var(--ml-primary-container)',
-  secondaryContainer: 'var(--ml-secondary-container)',
-  tertiaryContainer: 'var(--ml-tertiary-container)',
-  disabledContainer: 'var(--ml-disabled-container)',
+  primaryContainer: 'var(--ml-primaryContainer)',
+  secondaryContainer: 'var(--ml-secondaryContainer)',
+  tertiaryContainer: 'var(--ml-tertiaryContainer)',
+  disabledContainer: 'var(--ml-disabledContainer)',
 
   divider: 'var(--ml-divider)',
   elevation: 'var(--ml-elevation)',
   scrollbar: 'var(--ml-scrollbar)',
 
+  icon: 'var(--ml-icon)',
+  sliderMin: 'var(--ml-sliderMin)',
+  sliderOff: 'var(--ml-sliderOff)',
+  sliderOffActive: 'var(--ml-sliderOffActive)',
+  sliderThumb: 'var(--ml-sliderThumb)',
+
   text: 'var(--ml-text)',
-  secondaryText: 'var(--ml-secondary-text)',
-  hintText: 'var(--ml-hint-text)',
-  disabledText: 'var(--ml-disabled-text)'
+  secondaryText: 'var(--ml-secondaryText)',
+  hintText: 'var(--ml-hintText)',
+  disabledText: 'var(--ml-disabledText)'
 } as const;

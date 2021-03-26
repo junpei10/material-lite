@@ -1,13 +1,14 @@
 @function map-unquote($map) {
   @each $key, $value in $map {
-    $newValue: unquote($value);
-    $map: map-merge(
-      $map,
-      (
-        $key: $newValue,
-      )
-    );
+    @if (type-of($value) == string) {
+      $newMap: (
+        $key: unquote($value),
+      );
+
+      $map: map-merge($map, $newMap);
+    }
   }
+
   @return $map;
 }
 
@@ -46,7 +47,7 @@ $ml-z-index: (
 );
 
 $ml-animation-duration: (
-  veryFast: 160ms,
+  very-fast: 160ms,
   faster: 200ms,
   fast: 240ms,
   normal: 280ms,
@@ -58,140 +59,35 @@ $ml-animation-duration: (
 $ml-animation-function: (
   // ease => fast-in
   angular: cubic-bezier(0.25, 0.8, 0.25, 1),
+  
   // fast-out => slow-in
   standard: cubic-bezier(0.4, 0, 0.2, 1),
-  // linear-out => slow-in
-  deceleration: cubic-bezier(0, 0, 0.2, 1),
+  
+  // fast-out => slow-in
+  strong-acceleration: cubic-bezier(0.36, 0, 0.24, 1),
+  
   // fast-out   => liner-in
-  acceleration: cubic-bezier(0.4, 0, 1, 1)
+  acceleration: cubic-bezier(0.4, 0, 1, 1),
+  
+  // linear-out => slow-in
+  deceleration: cubic-bezier(0, 0, 0.2, 1)
 );
 
-$ml-light-theme: (
-  base: white,
-  oppositeBase: black,
-  background: #f5f5f5,
-  primaryContainer: #fafafa,
-  secondaryContainer: white,
-  tertiaryContainer: #eeeeee,
-  disabledContainer: rgba(0, 0, 0, 0.12),
-  divider: rgba(0, 0, 0, 0.12),
-  elevation: black,
-  scrollbar: rgba(0, 0, 0, 0.12),
-  text: rgba(0, 0, 0, 0.87),
-  secondaryText: rgba(0, 0, 0, 0.54),
-  hintText: rgba(0, 0, 0, 0.38),
-  disabledText: rgba(0, 0, 0, 0.38),
-);
+@function ml-create-transition($prop, $duration, $function) {
+  @return $prop map-get($ml-animation-duration, $duration)
+    map-get($ml-animation-function, $function);
+}
 
-$ml-dark-theme: (
-  base: black,
-  oppositeBase: white,
-  background: #212121,
-  primaryContainer: #303030,
-  secondaryContainer: #424242,
-  tertiaryContainer: #616161,
-  disabledContainer: hsla(0, 0%, 100%, 0.12),
-  divider: rgba(255, 255, 255, 0.12),
-  elevation: black,
-  scrollbar: rgba(255, 255, 255, 0.12),
-  text: #fff,
-  secondaryText: rgba(255, 255, 255, 0.7),
-  hintText: rgba(255, 255, 255, 0.5),
-  disabledText: hsla(0, 0%, 100%, 0.3),
-);
+@function ml-opacity-transition($duration: normal, $function: strong-acceleration) {
+  @return ml-create-transition(opacity, $duration, $function);
+}
 
-$ml-css-variable-theme: (
-  base: var(--ml-base),
-  oppositeBase: var(--ml-opposite-base),
-  background: var(--ml-background),
-  primaryContainer: var(--ml-primary-container),
-  secondaryContainer: var(--ml-secondary-container),
-  tertiaryContainer: var(--ml-tertiary-container),
-  disabledContainer: var(--ml-disabled-container),
-  divider: var(--ml-divider),
-  elevation: var(--ml-elevation),
-  scrollbar: var(--ml-scrollbar),
-  text: var(--ml-text),
-  secondaryText: var(--ml-secondary-text),
-  hintText: var(--ml-hint-text),
-  disabledText: var(--ml-disabled-text),
-);
+@function ml-box-shadow-transition($duration: normal, $function: deceleration) {
+  @return ml-create-transition(box-shadow, $duration, $function);
+}
 
-$ml-deepPurple-amber-palette: (
-  primary: (
-    color: #673ab7,
-    contrast: #fff,
-  ),
-  accent: (
-    color: #ffd740,
-    contrast: rgba(0, 0, 0, 0.87),
-  ),
-  warn: (
-    color: #f44336,
-    contrast: #fff,
-  ),
-);
-
-$ml-indigo-pink-palette: (
-  primary: (
-    color: #3f51b5,
-    contrast: #fff,
-  ),
-  accent: (
-    color: #ff4081,
-    contrast: #fff,
-  ),
-  warn: (
-    color: #f44336,
-    contrast: #fff,
-  ),
-);
-
-$ml-pink-blueGrey-palette: (
-  primary: (
-    color: #e91e63,
-    contrast: #fff,
-  ),
-  accent: (
-    color: #607d8b,
-    contrast: #fff,
-  ),
-  warn: (
-    color: #f44336,
-    contrast: #fff,
-  ),
-);
-$ml-pink-blueGray-palette: $ml-pink-blueGrey-palette;
-
-$ml-purple-green-palette: (
-  primary: (
-    color: #9c27b0,
-    contrast: #fff,
-  ),
-  accent: (
-    color: #69f0ae,
-    contrast: rgba(0, 0, 0, 0.87),
-  ),
-  warn: (
-    color: #f44336,
-    contrast: #fff,
-  ),
-);
-
-$ml-css-variable-palette: (
-  primary: (
-    color: var(--ml-primary),
-    contrast: var(--ml-primary-contrast),
-  ),
-  accent: (
-    color: var(--ml-accent),
-    contrast: var(--ml-accent-contrast),
-  ),
-  warn: (
-    color: var(--ml-warn),
-    contrast: var(--ml-warn-contrast),
-  ),
-);
+$ml-hovered-opacity: 0.064;
+$ml-focused-opacity: 0.128; 
 
 @function _get-umbra-map($color, $opacity) {
   $shadow-color: if(
@@ -301,7 +197,7 @@ $ml-css-variable-palette: (
   );
 }
 
-$ml-elevation-animation-duration: map-get($ml-animation-duration, slow);
+$ml-elevation-animation-duration: map-get($ml-animation-duration, normal);
 $ml-elevation-animation-function: map-get($ml-animation-function, standard);
 $ml-elevation-color: black !default;
 $ml-elevation-opacity: 1 !default;
@@ -337,9 +233,176 @@ $ml-elevation-opacity: 1 !default;
   transition: ml-elevation-transition-property-value($duration, $easing);
 }
 
+$ml-light-theme: (
+  base: #fff,
+  oppositeBase: #000,
+  background: #f5f5f5,
+  primaryContainer: #fafafa,
+  secondaryContainer: #fff,
+  tertiaryContainer: #eeeeee,
+  disabledContainer: rgba(0,0,0,.16),
+  divider: rgba(0,0,0,.16),
+  scrollbar: rgba(0,0,0,.16),
+  elevation: #000,
+  icon: rgba(0,0,0,.52),
+  sliderMin: rgba(0,0,0,.88),
+  sliderOff: rgba(0,0,0,.24),
+  sliderOffActive: rgba(0,0,0,.4),
+  sliderThumb: #fafafa,
+  text: rgba(0,0,0,.88),
+  secondaryText: rgba(0,0,0,.56),
+  hintText: rgba(0,0,0,.64),
+  disabledText: rgba(0,0,0,.4),
+);
+
+$ml-dark-theme: (
+  base: #000,
+  oppositeBase: #fff,
+  background: #303030,
+  primaryContainer: #212121,
+  secondaryContainer: #424242,
+  tertiaryContainer: #606060,
+  disabledContainer: rgba(255,255,255,.16),
+  divider: rgba(255,255,255,.16),
+  scrollbar: rgba(255,255,255,.16),
+  elevation: #000,
+  icon: #fff,
+  sliderMin: #fff,
+  sliderOff: rgba(255,255,255,.4),
+  sliderOffActive: rgba(255,255,255,.4),
+  sliderThumb: rgba(255,255,255,.56),
+  text: #fff,
+  secondaryText: rgba(255,255,255,.72),
+  hintText: rgba(255,255,255,.64),
+  disabledText: rgba(255,255,255,.4)
+);
+
+$ml-css-variable-theme: (
+  base: var(--ml-base),
+  oppositeBase: var(--ml-oppositeBase),
+  background: var(--ml-background),
+  primaryContainer: var(--ml-primaryContainer),
+  secondaryContainer: var(--ml-secondaryContainer),
+  tertiaryContainer: var(--ml-tertiaryContainer),
+  disabledContainer: var(--ml-disabledContainer),
+  divider: var(--ml-divider),
+  elevation: var(--ml-elevation),
+  scrollbar: var(--ml-scrollbar),
+  icon: var(--ml-icon),
+  sliderMin: var(--ml-sliderMin),
+  sliderOff: var(--ml-sliderOff),
+  sliderOffActive: var(--ml-sliderOffActive),
+  sliderThumb: var(--ml-sliderThumb),
+  text: var(--ml-text),
+  secondaryText: var(--ml-secondaryText),
+  hintText: var(--ml-hintText),
+  disabledText: var(--ml-disabledText),
+);
+
+$ml-deepPurple-amber-palette: (
+  primary: (
+    color: #673ab7,
+    contrast: #fff,
+  ),
+  accent: (
+    color: #ffd740,
+    contrast: rgba(0, 0, 0, 0.87),
+  ),
+  warn: (
+    color: #f44336,
+    contrast: #fff,
+  ),
+);
+
+$ml-indigo-pink-palette: (
+  primary: (
+    color: #3f51b5,
+    contrast: #fff,
+  ),
+  accent: (
+    color: #ff4081,
+    contrast: #fff,
+  ),
+  warn: (
+    color: #f44336,
+    contrast: #fff,
+  ),
+);
+
+$ml-pink-blueGrey-palette: (
+  primary: (
+    color: #e91e63,
+    contrast: #fff,
+  ),
+  accent: (
+    color: #607d8b,
+    contrast: #fff,
+  ),
+  warn: (
+    color: #f44336,
+    contrast: #fff,
+  ),
+);
+$ml-pink-blueGray-palette: $ml-pink-blueGrey-palette;
+
+$ml-purple-green-palette: (
+  primary: (
+    color: #9c27b0,
+    contrast: #fff,
+  ),
+  accent: (
+    color: #69f0ae,
+    contrast: rgba(0, 0, 0, 0.87),
+  ),
+  warn: (
+    color: #f44336,
+    contrast: #fff,
+  ),
+);
+
+$ml-css-variable-palette: (
+  primary: (
+    color: var(--ml-primary),
+    contrast: var(--ml-primary-contrast),
+  ),
+  accent: (
+    color: var(--ml-accent),
+    contrast: var(--ml-accent-contrast),
+  ),
+  warn: (
+    color: var(--ml-warn),
+    contrast: var(--ml-warn-contrast),
+  ),
+);
+
+
+@mixin ml-palette-style($palette) {
+  @each $name, $value in $palette {
+    $color: map-get($value, color);
+    $contrast: map-get($value, contrast);
+
+    .ml-#{$name}-style {
+      background-color: $color;
+      color: $contrast;
+    }
+
+    .ml-#{$name}-bg {
+      background-color: $color;
+    }
+
+    .ml-#{$name}-color {
+      color: $color;
+    }
+
+    .ml-#{$name}-contrast {
+      color: $contrast;
+    }
+  }
+}
+
 @mixin ml-button-theme($theme, $palette) {
   $text: map-get($theme, text);
-  $secondaryContainer: map-get($theme, oppositeBase);
+  $secondaryContainer: map-get($theme, secondaryContainer);
   $disabledContainer: map-get($theme, disabledContainer);
   $disabledText: map-get($theme, disabledText);
   $divider: map-get($theme, divider);
@@ -348,11 +411,15 @@ $ml-elevation-opacity: 1 !default;
     color: $text;
   }
 
+  .ml-button.ml-disabled {
+    color: $disabledText !important;
+  }
+
   .ml-simple-button {
     @each $name, $value in $palette {
       $color: map-get($value, color);
 
-      .ml-button-#{$name} {
+      &.ml-#{$name} {
         color: $color;
       }
     }
@@ -363,49 +430,85 @@ $ml-elevation-opacity: 1 !default;
       $color: map-get($value, color);
       $contrast: map-get($value, contrast);
 
-      .ml-button-#{$name} {
+      &.ml-#{$name} {
         background-color: $color;
         color: $contrast;
       }
     }
 
-    &.ml-disabled-button {
-      background-color: $disabledContainer;
+    &.ml-disabled {
+      background-color: $disabledContainer !important;
     }
   }
 
   .ml-stroked-button {
     border-color: $divider !important;
   }
+}
 
-  .ml-disabled-button {
-    color: $disabledText;
+@mixin ml-slide-toggle-theme($theme, $palette) {
+  $sliderOffActive: map-get($theme, sliderOffActive);
+  $sliderThumb: map-get($theme, sliderThumb);
+
+  .ml-slide-toggle-bar-palette {
+    background-color: $sliderOffActive;
+  }
+
+  .ml-slide-toggle-thumb {
+    background-color: $sliderThumb;
+  }
+
+  @each $name, $value in $palette {
+    $color: map-get($value, color);
+
+    .ml-checked.ml-#{$name} .ml-slide-toggle-bar-palette {
+      background-color: $color;
+      opacity: 0.56;
+    }
+
+    .ml-checked.ml-#{$name} .ml-slide-toggle-thumb {
+      background-color: $color;
+    }
+
+    .ml-checked.ml-#{$name} .ml-slide-toggle-ripple-outlet {
+      color: $color;
+    }
   }
 }
 
-$ml-theme-component-list: (button);
 
-@mixin ml-theme-init($theme, $palette, $use: $ml-theme-component-list) {
-  $theme: ml-create-theme($theme);
-  $palette: ml-create-palette($palette);
+$ml-theme-component-list: (button, slide-toggle);
+
+@mixin ml-theme($theme, $palette, $use: $ml-theme-component-list) {
+  $theme: ml-create-theme(ml-template-theme($theme));
+  $palette: ml-create-palette(ml-template-palette($palette));
+
+  background-color: map-get($theme, background);
+  color: map-get($theme, text);
+
+  @include ml-palette-style($palette);
 
   @if (contains($use, button)) {
     @include ml-button-theme($theme, $palette);
   }
+
+  @if (contains($use, slide-toggle)) {
+    @include ml-slide-toggle-theme($theme, $palette);
+  }
 }
 
 @function ml-create-theme($theme, $base: light) {
-  $template: ml-template-theme($base);
   $theme: map-unquote($theme);
-  $returns: map-merge($base, $theme);
-  @return $returns;
+  $base: ml-template-theme($base);
+
+  @return map-merge($base, $theme);
 }
 
-@function ml-create-palette($palette, $base: light) {
-  $template: ml-template-palette($base);
+@function ml-create-palette($palette, $base: indigo-pink) {
   $palette: map-unquote($palette);
-  $returns: map-merge($base, $palette);
-  @return $returns;
+  $base: ml-template-palette($base);
+
+  @return map-merge($base, $palette);
 }
 
 @function ml-template-theme($theme) {

@@ -1,13 +1,20 @@
 import { DOCUMENT } from '@angular/common';
 import {
   AfterContentInit, ChangeDetectionStrategy, Component, ElementRef,
-  Inject, Input, OnChanges, OnInit, SimpleChange, SimpleChanges, ViewChild, ViewEncapsulation
+  Inject, Input, OnChanges, OnInit, SimpleChange, ViewChild, ViewEncapsulation
 } from '@angular/core';
 import { Falsy, MlDocument, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
 import {
   MlStraightTrackerCore, MlStraightTrackerSizingMode,
   MlStraightTrackerTransitionClasses
 } from './straight-tracker-core';
+
+export interface MlStraightTrackerTransition {
+  property?: string;
+  duration?: string;
+  timingFunction?: string;
+  delay?: string;
+}
 
 type Changes = {
   position: SimpleChange;
@@ -18,47 +25,68 @@ type Changes = {
   selector: 'ml-straight-tracker',
   exportAs: 'mlStraightTracker',
   template: '<div #trackerElement class="ml-tracker"><ng-content></ng-content></div>',
-  styles: ['ml-straight-tracker{width:100%;height:100%;position:absolute;top:0;pointer-events:none}.ml-tracker{position:absolute;transition-timing-function:cubic-bezier(0.35, 0, 0.25, 1);pointer-events:auto;z-index:1;}'],
+  styles: ['ml-straight-tracker{width:100%;height:100%;position:absolute;top:0;pointer-events:none}.ml-tracker{position:absolute;transition-timing-function:cubic-bezier(0.35, 0, 0.25, 1);pointer-events:auto;z-index:1;}.ml-top-tracker{top:0}.ml-right-tracker{right:0}.ml-bottom-tracker{bottom:0}.ml-left-tracker{left:0}'],
+  host: {
+    class: 'ml-straight-tracker'
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
 export class MlStraightTrackerComponent implements OnInit, OnChanges, AfterContentInit {
   core: MlStraightTrackerCore;
-  private _coreFactory: ((trackerEl: HTMLElement) => MlStraightTrackerCore) | null;
+  private _coreFactory?: (trackerEl: HTMLElement) => MlStraightTrackerCore;
 
+  private _initialized: boolean = false;
+
+  private _trackerElementRef: ElementRef<HTMLElement>;
   @ViewChild('trackerElement', { static: true })
   private set _setCore(elementRef: ElementRef<HTMLElement>) {
+    console.log('abc');
+    this._trackerElementRef = elementRef;
+
     this.core = this._coreFactory(elementRef.nativeElement);
     this._coreFactory = null;
   }
 
   @Input('disabled') set setDisabled(isDisabled: true | Falsy) {
     // @ts-ignore: assign the readonly variable
-    const result = this.isDisabled =
+    const result = this.disabled =
       isDisabled || isDisabled === '';
 
     result
       ? this.core.finalize()
       : this.core.initialize();
   }
-  // @ts-ignore: 代入されたかどうかを確認するために１を代入
-  readonly isDisabled: boolean = 1;
+  readonly disabled: boolean;
 
   @Input('target') set setTarget(target: HTMLElement) {
-    if (!this.isDisabled) {
-      this.core.trackTargetByElement(target);
-    }
+    this.core.trackTargetByElement(target);
   }
 
   @Input('targetIndex') set setTargetIndex(targetIndex: number) {
-    if (!this.isDisabled) {
-      this.core.trackTargetByIndex(targetIndex);
-    }
+    this.core.trackTargetByIndex(targetIndex);
   }
 
   @Input() orientation?: 'horizontal' | 'vertical';
   @Input() position?: 'before' | 'after';
 
+  private _transitionsStack?: string | MlStraightTrackerTransition;
+  @Input('transition') set setTransition(style: string | MlStraightTrackerTransition) {
+    const el = this._trackerElementRef?.nativeElement;
+
+    if (el) {
+      if (typeof style === 'string') {
+        el.style.transition = style;
+        return;
+      }
+
+      el.style.transitionProperty = style.property || null;
+      el.style.transitionTimingFunction = style.timingFunction || null;
+      el.style.transitionDuration = style.duration || null;
+      el.style.transitionDelay = style.delay || null;
+
+    } else { this._transitionsStack = style; }
+  }
   @Input() transitionClasses?: MlStraightTrackerTransitionClasses;
 
   @Input('sizingMode')
@@ -92,23 +120,32 @@ export class MlStraightTrackerComponent implements OnInit, OnChanges, AfterConte
     @Inject(RUN_OUTSIDE_NG_ZONE) _runOutsideNgZone: RunOutsideNgZone,
     @Inject(DOCUMENT) _document: MlDocument
   ) {
-    this._coreFactory = (trackerEl) => new MlStraightTrackerCore(
-      this, _elementRef.nativeElement, trackerEl,
-      _runOutsideNgZone, _document.createElement.bind(_document)
-    );
+    this._coreFactory = (trackerEl) =>
+      new MlStraightTrackerCore(
+        this, _elementRef.nativeElement, trackerEl,
+        _runOutsideNgZone, _document.createElement.bind(_document)
+      );
   }
 
   ngOnInit(): void {
-    if (this.isDisabled === 1 as any) {
-      this.core.initialize();
-      // @ts-ignore: assign the readonly variable
-      this.isDisabled = false;
+    if (this.disabled === void 0) {
+      this.setDisabled = false;
     }
+
+    const stack = this._transitionsStack;
+    if (stack) {
+      this.setTransition = stack;
+      this._transitionsStack = null;
+    }
+
+    this._initialized = true;
   }
 
   ngOnChanges(changes: Changes): void {
-    if (changes.orientation || changes.position) {
-      this.core.updateTrackerStyle();
+    const orientationChanges = !!changes.orientation;
+
+    if (orientationChanges || changes.position) {
+      this.core.updateTrackerStyle(this._initialized && orientationChanges);
     }
   }
 

@@ -1,0 +1,29 @@
+@mixin ml-slide-toggle-theme($theme, $palette) {
+  $sliderOffActive: map-get($theme, sliderOffActive);
+  $sliderThumb: map-get($theme, sliderThumb);
+
+  .ml-slide-toggle-bar-palette {
+    background-color: $sliderOffActive;
+  }
+
+  .ml-slide-toggle-thumb {
+    background-color: $sliderThumb;
+  }
+
+  @each $name, $value in $palette {
+    $color: map-get($value, color);
+
+    .ml-checked.ml-#{$name} .ml-slide-toggle-bar-palette {
+      background-color: $color;
+      opacity: 0.56;
+    }
+
+    .ml-checked.ml-#{$name} .ml-slide-toggle-thumb {
+      background-color: $color;
+    }
+
+    .ml-checked.ml-#{$name} .ml-slide-toggle-ripple-outlet {
+      color: $color;
+    }
+  }
+}
