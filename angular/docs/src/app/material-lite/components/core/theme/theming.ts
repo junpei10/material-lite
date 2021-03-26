@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { Falsy, MlDocument, styling } from '@material-lite/angular-cdk/utils';
+import { noop } from 'rxjs';
 
 export type MlThemeKeys = [
   'base', 'oppositeBase',
@@ -8,7 +9,7 @@ export type MlThemeKeys = [
   'background', 'primaryContainer', 'secondaryContainer', 'tertiaryContainer', 'disabledContainer',
 
   'divider', 'elevation', 'scrollbar', 'icon',
-  'sliderMin', 'sliderOff', 'sliderOffActive',
+  'sliderMin', 'sliderOff', 'sliderOffActive', 'sliderThumb',
 
   'text', 'secondaryText', 'hintText', 'disabledText',
 ];
@@ -24,7 +25,6 @@ export type MlPalette = {
 };
 
 export type MlThemeStyle = {
-  base?: string,
   theme?: (theme: MlTheme) => string,
   palette?: (name: string, color: string, contrast: string) => string
 };
@@ -48,7 +48,7 @@ interface Theming {
 }
 
 export const theming: Theming = {
-  themeKeys: ['base', 'oppositeBase', 'background', 'primaryContainer', 'secondaryContainer', 'tertiaryContainer', 'disabledContainer', 'divider', 'elevation', 'scrollbar', 'icon', 'sliderMin', 'sliderOff', 'sliderOffActive', 'text', 'secondaryText', 'hintText', 'disabledText'],
+  themeKeys: ['base', 'oppositeBase', 'background', 'primaryContainer', 'secondaryContainer', 'tertiaryContainer', 'disabledContainer', 'divider', 'elevation', 'scrollbar', 'icon', 'sliderMin', 'sliderOff', 'sliderOffActive', 'sliderThumb', 'text', 'secondaryText', 'hintText', 'disabledText'],
 
   set(style): void {
     this._themeStacks.push(style);
@@ -114,7 +114,7 @@ export const theming: Theming = {
     storageLen -= skipCount;
 
     this.set = (style: MlThemeStyle) => {
-      let es: string = style.base || '';
+      let es: string = '';
 
       for (let i = 0; i < storageLen; i++) {
         es += createThemeStyle(storage[storageKeys[i]], style);
@@ -129,7 +129,7 @@ export const theming: Theming = {
 
     for (let index = 0; index < forLen; index++) {
       const style = stacks[index];
-      entryStyle += style.base || '';
+      entryStyle += '';
 
       for (let i = 0; i < storageLen; i++) {
         entryStyle += createThemeStyle(storage[storageKeys[i]], style);
@@ -185,13 +185,24 @@ export class MlTheming {
     @Inject(DOCUMENT) private _document: MlDocument
   ) {}
 
-  initialize(themeBases: ThemeBases): void {
-    const _theming = theming as Theming & { _init: (b: ThemeBases) => void};
+  initialize(themeBases: ThemeBases | null): void {
+    const _theming = theming as Theming & { _init: (b: ThemeBases) => void, _themeStacks: any[] };
 
-    if (_theming._init) {
+    // 一度しか反映されない
+    if (!_theming._init) { return; }
+
+    if (themeBases) {
       _theming._init(themeBases);
-      styling.setHeadElement(this._document.head);
+
+    } else {
+      // @ts-ignore: assign the readonly variable
+      _theming.valueStorage = {};
+      _theming.set = noop;
+      _theming._init = null;
+      _theming._themeStacks = null;
     }
+
+    styling.setHeadElement(this._document.head);
   }
 
   setCssVariables(base: { theme: MlTheme, palette: MlPalette, wrapperClass?: string | null }): void {
@@ -211,7 +222,7 @@ export class MlTheming {
 
     const themeValue = theming.valueStorage[wrapperClass];
 
-    let entryStyle = (wrapperClass || ':root') + '{';
+    let entryStyle = (wrapperClass ? '.' + wrapperClass : ':root') + '{';
 
     const theme = base.theme;
     let len = keys.length;

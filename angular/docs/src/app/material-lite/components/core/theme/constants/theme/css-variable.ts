@@ -18,6 +18,7 @@ export const ML_CSS_VARIABLE_THEME: MlTheme = {
   sliderMin: 'var(--ml-sliderMin)',
   sliderOff: 'var(--ml-sliderOff)',
   sliderOffActive: 'var(--ml-sliderOffActive)',
+  sliderThumb: 'var(--ml-sliderThumb)',
 
   text: 'var(--ml-text)',
   secondaryText: 'var(--ml-secondaryText)',

@@ -1,11 +1,17 @@
 @function map-unquote($map) {
   @each $key, $value in $map {
-      $newValue: unquote($value);
-      $map: map-merge($map, ($key: $newValue));
+    @if (type-of($value) == string) {
+      $newMap: (
+        $key: unquote($value),
+      );
+
+      $map: map-merge($map, $newMap);
+    }
   }
+
   @return $map;
 }
 
 @function contains($list, $var) {
-    @return (null != index($list, $var));
+  @return (null != index($list, $var));
 }

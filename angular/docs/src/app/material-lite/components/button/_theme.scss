@@ -1,38 +1,15 @@
 @mixin ml-button-theme($theme, $palette) {
-  $text: map-get($theme, text);
-  $secondaryContainer: map-get($theme, oppositeBase);
+  $secondaryContainer: map-get($theme, secondaryContainer);
   $disabledContainer: map-get($theme, disabledContainer);
   $disabledText: map-get($theme, disabledText);
   $divider: map-get($theme, divider);
-
-  .ml-button {
-    color: $text;
-  }
 
   .ml-button.ml-disabled {
     color: $disabledText !important;
   }
 
-  .ml-simple-button {
-    @each $name, $value in $palette {
-      $color: map-get($value, color);
-
-      &.ml-#{$name} {
-        color: $color;
-      }
-    }
-  }
   .ml-filled-button {
     background-color: $secondaryContainer;
-    @each $name, $value in $palette {
-      $color: map-get($value, color);
-      $contrast: map-get($value, contrast);
-
-      &.ml-#{$name} {
-        background-color: $color;
-        color: $contrast;
-      }
-    }
 
     &.ml-disabled {
       background-color: $disabledContainer !important;
@@ -40,6 +17,20 @@
   }
 
   .ml-stroked-button {
-    border-color: $divider;
+    border-color: $divider !important;
+  }
+
+  @each $name, $value in $palette {
+    $color: map-get($value, color);
+    $contrast: map-get($value, contrast);
+
+    .ml-simple-button.ml-#{$name} {
+      color: $color;
+    }
+
+    .ml-filled-button.ml-#{$name} {
+      background-color: $color;
+      color: $contrast;
+    }
   }
 }

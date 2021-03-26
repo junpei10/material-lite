@@ -1,12 +1,12 @@
 import { listen, RunOutsideNgZone, noop, styling, CoreConfig, setCoreConfig, Falsy } from '@material-lite/angular-cdk/utils';
 
 styling.insert(`
-.ml-ripple {
+.ml-ripple-outlet {
   position: relative;
   overflow: hidden;
   user-select: none;
 }
-.ml-ripple-element {
+.ml-ripple {
   will-change: opacity, transform;
   transform: scale(0);
   transition-property: opacity, transform;
@@ -16,7 +16,7 @@ styling.insert(`
   pointer-events: none;
   background: currentColor;
 }
-.ml-overdrive-element {
+.ml-overdrive {
   will-change: opacity;
   opacity: 0;
   transition-property: opacity;
@@ -28,8 +28,7 @@ styling.insert(`
   border-radius: 0;
   pointer-events: none;
   background: currentColor;
-}
-`);
+}`);
 
 export type MlRippleTrigger = EventTarget | 'outlet' | 'current' | Falsy;
 
@@ -61,7 +60,7 @@ export interface MlRippleCoreConfig {
   fadeOutEventNames?: string[];
 }
 
-interface RippleElement extends HTMLElement {
+export interface MlRippleElement extends HTMLElement {
   enterDuration: number;
 }
 
@@ -89,7 +88,7 @@ export class MlRippleCore {
 
     setCoreConfig(this, config);
 
-    _outletElement.classList.add('ml-ripple');
+    _outletElement.classList.add('ml-ripple-outlet');
   }
 
   finalize(): void {
@@ -109,12 +108,12 @@ export class MlRippleCore {
    * @returns 出現させたRippleを削除するためのトークン(DOM)を返す。
    * `Ripple`を削除させる方法は複数あるため、関数ではなく`Ripple`の要素を返し、柔軟に対応できるようしている。
    */
-  fadeInRipple(x: number, y: number): RippleElement {
+  fadeInRipple(x: number, y: number): MlRippleElement {
     // @ts-ignore
     const rippleEl = this._createElement('div') as RippleElement;
     const rippleClassList = rippleEl.classList;
 
-    rippleClassList.add('ml-ripple-element');
+    rippleClassList.add('ml-ripple-element', 'ml-ripple');
 
     const containerEl = this._outletElement;
 
@@ -190,12 +189,12 @@ export class MlRippleCore {
    *
    * @returns 出現させたRippleを削除するためのトークン(DOM)を返す。
    */
-  fadeInOverdrive(): RippleElement {
+  fadeInOverdrive(): MlRippleElement {
     // @ts-ignore
     const rippleEl = this._createElement('div') as RippleElement;
     const rippleClassList = rippleEl.classList;
 
-    rippleClassList.add('ml-overdrive-element');
+    rippleClassList.add('ml-ripple-element', 'ml-overdrive');
 
     const conf = this._config;
 
@@ -228,7 +227,7 @@ export class MlRippleCore {
    *
    * @param rippleElement `fadeInRipple`と`fadeInOverdrive`の戻り値。
    */
-  fadeOutRipple(rippleElement: RippleElement): void {
+  fadeOutRipple(rippleElement: MlRippleElement): void {
     const conf = this._config;
 
     const leaveTiming = conf.animation?.leave || 400;
@@ -255,7 +254,7 @@ export class MlRippleCore {
    * @param rippleElement `fadeInRipple`と`fadeInOverdrive`の戻り値。
    * @param eventTarget 自動で
    */
-  autoFadeOutRipple(rippleElement: RippleElement, eventTarget?: EventTarget): void {
+  autoFadeOutRipple(rippleElement: MlRippleElement, eventTarget?: EventTarget): void {
     let listenerHasRemoved: boolean | undefined;
     let rippleHasEntered: boolean | undefined;
 

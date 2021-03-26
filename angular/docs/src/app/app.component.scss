@@ -1,8 +1,18 @@
 // コード整形： https://codepen.io/junpei10/pen/KKgPobR
 // HTMLエスケープ： https://www.freeformatter.com/html-escape.html
 
-@import "./material-lite/components/theming-bundle";
+@import "./material-lite/components/theming";
 @import "./views/docs";
+
+::ng-deep {
+  body {
+    @include ml-theme(light, deepPurple-amber);
+  }
+
+  .dark-theme {
+    @include ml-theme(dark, deepPurple-amber);
+  }
+}
 
 .root- {
   &header {

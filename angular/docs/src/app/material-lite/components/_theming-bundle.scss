@@ -2,12 +2,15 @@
 @import "./scss/common";
 
 @import "./scss/z-index";
+@import "./scss/constant";
+
 @import "./scss/animations";
 
 @import "./scss/elevation";
 
 // Theme constants
 @import "./core/theme/constants/";
+@import "./core/theme/palette-style";
 
 // Component themes
 @import "./button/theme";

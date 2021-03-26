@@ -13,6 +13,7 @@ export type Falsy = false | undefined | null | '' | 0;
 
 export interface MlDocument {
   head: HTMLHeadElement;
+  body: HTMLBodyElement;
   createElement: (tagName: string, options?: ElementCreationOptions) => HTMLElement;
   createComment: (data: string) => Comment;
 }

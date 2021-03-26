@@ -1,5 +1,5 @@
 $ml-animation-duration: (
-  veryFast: 160ms,
+  very-fast: 160ms,
   faster: 200ms,
   fast: 240ms,
   normal: 280ms,
@@ -11,10 +11,29 @@ $ml-animation-duration: (
 $ml-animation-function: (
   // ease => fast-in
   angular: cubic-bezier(0.25, 0.8, 0.25, 1),
+  
   // fast-out => slow-in
   standard: cubic-bezier(0.4, 0, 0.2, 1),
-  // linear-out => slow-in
-  deceleration: cubic-bezier(0, 0, 0.2, 1),
+  
+  // fast-out => slow-in
+  strong-acceleration: cubic-bezier(0.35, 0, 0.25, 1),
+  
   // fast-out   => liner-in
-  acceleration: cubic-bezier(0.4, 0, 1, 1)
+  acceleration: cubic-bezier(0.4, 0, 1, 1),
+
+  // linear-out => slow-in,
+  deceleration: cubic-bezier(0, 0, 0.2, 1)
 );
+
+@function ml-create-transition($prop, $duration, $function) {
+  @return $prop map-get($ml-animation-duration, $duration)
+    map-get($ml-animation-function, $function);
+}
+
+@function ml-opacity-transition($duration: normal, $function: strong-acceleration) {
+  @return ml-create-transition(opacity, $duration, $function);
+}
+
+@function ml-box-shadow-transition($duration: normal, $function: deceleration) {
+  @return ml-create-transition(box-shadow, $duration, $function);
+}

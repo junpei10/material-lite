@@ -1,0 +1,23 @@
+@mixin ml-palette-style($palette) {
+  @each $name, $value in $palette {
+    $color: map-get($value, color);
+    $contrast: map-get($value, contrast);
+
+    .ml-#{$name}-style {
+      background-color: $color;
+      color: $contrast;
+    }
+
+    .ml-#{$name}-bg {
+      background-color: $color;
+    }
+
+    .ml-#{$name}-color {
+      color: $color;
+    }
+
+    .ml-#{$name}-contrast {
+      color: $contrast;
+    }
+  }
+}

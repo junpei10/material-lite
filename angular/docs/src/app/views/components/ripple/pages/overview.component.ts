@@ -9,7 +9,7 @@ import { DocsService } from 'src/app/services/docs';
       padding: 8px;
     }
 
-    .ml-ripple {
+    .ml-ripple-outlet {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -18,12 +18,12 @@ import { DocsService } from 'src/app/services/docs';
       margin: 8px 16px;
     }
 
-    .first-product .ml-ripple {
+    .first-product .ml-ripple-outlet {
       width: 80px;
       height: 80px;
     }
 
-    .second-product .ml-ripple, .fourth-product .ml-ripple {
+    .second-product .ml-ripple-outlet, .fourth-product .ml-ripple-outlet {
       width: 160px;
       height: 80px;
     }

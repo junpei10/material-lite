@@ -1,8 +1,13 @@
 $ml-theme-component-list: (button, slide-toggle);
 
-@mixin ml-theme-init($theme, $palette, $use: $ml-theme-component-list) {
-  $theme: ml-create-theme($theme);
-  $palette: ml-create-palette($palette);
+@mixin ml-theme($theme, $palette, $use: $ml-theme-component-list) {
+  $theme: ml-create-theme(ml-template-theme($theme));
+  $palette: ml-create-palette(ml-template-palette($palette));
+
+  background-color: map-get($theme, background);
+  color: map-get($theme, text);
+
+  @include ml-palette-style($palette);
 
   @if (contains($use, button)) {
     @include ml-button-theme($theme, $palette);
@@ -14,17 +19,17 @@ $ml-theme-component-list: (button, slide-toggle);
 }
 
 @function ml-create-theme($theme, $base: light) {
-  $template: ml-template-theme($base);
   $theme: map-unquote($theme);
-  $returns: map-merge($base, $theme);
-  @return $returns;
+  $base: ml-template-theme($base);
+
+  @return map-merge($base, $theme);
 }
 
-@function ml-create-palette($palette, $base: light) {
-  $template: ml-template-palette($base);
+@function ml-create-palette($palette, $base: indigo-pink) {
   $palette: map-unquote($palette);
-  $returns: map-merge($base, $palette);
-  @return $returns;
+  $base: ml-template-palette($base);
+
+  @return map-merge($base, $palette);
 }
 
 @function ml-template-theme($theme) {

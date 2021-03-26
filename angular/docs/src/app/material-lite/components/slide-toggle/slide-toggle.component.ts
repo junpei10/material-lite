@@ -10,163 +10,28 @@ import { mixinBundleFactory, mixinDisableRipple, mixinRippleDynamicConfig, mixin
 import { mixinTabIndex } from '../core/common-behaviors/tabindex';
 
 theming.set({
-  base: `
-.ml-slide-toggle {
-  display: inline-block;
-  height: 24px;
-  max-width: 100%;
-
-  line-height: 24px;
-  white-space: nowrap;
-  outline: none;
-
-  -webkit-tap-highlight-color: transparent;
-}
-
-.ml-slide-toggle.ml-checked .ml-slide-toggle-thumb-container {
-  transform: translate3d(16px , 0, 0);
-}
-[dir='rtl'] .ml-slide-toggle.ml-checked .ml-slide-toggle-thumb-container {
-  transform: translate3d(-16px , 0, 0);
-}
-
-.ml-slide-toggle.ml-disabled {
-  opacity: 0.38;
-}
-.ml-slide-toggle.ml-disabled .ml-slide-toggle-label, .ml-slide-toggle.ml-disabled .ml-slide-toggle-thumb-container {
-  cursor: default;
-}
-
-.ml-slide-toggle-label {
-  display: flex;
-  flex: 1;
-  flex-direction: row;
-  align-items: center;
-  height: inherit;
-  cursor: pointer;
-}
-
-.ml-slide-toggle-content {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.ml-slide-toggle-label-before .ml-slide-toggle-label {
-  order: 1;
-}
-.ml-slide-toggle-label-before .ml-slide-toggle-bar {
-  order: 2;
-}
-
-[dir='rtl'] .ml-slide-toggle-label-before .ml-slide-toggle-content, .ml-slide-toggle-content {
-  margin-right: 0;
-  margin-left: 8px;
-}
-[dir='rtl'] .ml-slide-toggle-content, .ml-slide-toggle-label-before .ml-slide-toggle-content {
-  margin-left: 0;
-  margin-right: 8px;
-}
-
-.ml-slide-toggle-content:empty {
-  margin-left: 0;
-  margin-right: 0;
-}
-
-.ml-slide-toggle-thumb-container {
-  position: absolute;
-  z-index: 1;
-  width: 20px;
-  height: 20px;
-  top: -3px;
-  left: 0;
-  transform: translate3d(0, 0, 0);
-  transition: all 80ms linear;
-  transition-property: transform;
-}
-
-.ml-animation-noopable .ml-slide-toggle-thumb-container {
-  transition: none;
-}
-
-[dir='rtl'] .ml-slide-toggle-thumb-container {
-  left: auto;
-  right: 0;
-}
-
-.ml-slide-toggle-thumb {
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-}
-.ml-slide-toggle-bar {
-  position: relative;
-  width: 36px;
-  height: 14px;
-  flex-shrink: 0;
-}
-.ml-slide-toggle-bar-palette {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-}
-
-.ml-slide-toggle-input {
-  bottom: 0;
-  left: 10px;
-}
-[dir='rtl'] .ml-slide-toggle-input {
-  left: auto;
-  right: 10px;
-}
-
-.ml-slide-toggle-thumb {
-  box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%);
-}
-
-.ml-slide-toggle-bar, .ml-slide-toggle-thumb {
-  transition: all 80ms linear;
-  transition-property: background-color;
-  transition-delay: 50ms;
-}
-.ml-animation-noopable .ml-slide-toggle-bar, .ml-animation-noopable .ml-slide-toggle-thumb {
-  transition: none;
-}
-.ml-slide-toggle-ripple {
-  position: absolute;
-  top: calc(50% - 20px);
-  left: calc(50% - 20px);
-  height: 40px;
-  width: 40px;
-  z-index: 1;
-  pointer-events: none;
-  border-radius: 50%;
-}
-`,
-
   theme: (theme) => {
     return `
 .ml-slide-toggle-bar-palette {
   background-color: ${theme.sliderOffActive};
 }
 .ml-slide-toggle-thumb {
-  background-color: ${theme.primaryContainer};
+  background-color: ${theme.sliderThumb};
 }`;
   },
 
   palette: (name, color) => `
-.ml-checked.ml-${name} .ml-slide-toggle-ripple .ml-ripple-element {
-  background-color: ${color};
-}
-
 .ml-checked.ml-${name} .ml-slide-toggle-bar-palette {
   background-color: ${color};
-  opacity: 0.54;
+  opacity: 0.56;
 }
 
 .ml-checked.ml-${name} .ml-slide-toggle-thumb {
   background-color: ${color};
+}
+
+.ml-checked.ml-${name} .ml-slide-toggle-ripple-outlet {
+  color: ${color};
 }`
 });
 
@@ -191,6 +56,7 @@ let uniqueId: number = 0;
   selector: 'ml-slide-toggle',
   exportAs: 'mlSlideToggle',
   templateUrl: './slide-toggle.component.html',
+  styleUrls: ['./slide-toggle.component.scss'],
   providers: [ML_SLIDE_TOGGLE_VALUE_ACCESSOR],
   host: {
     class: 'ml-slide-toggle',
