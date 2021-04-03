@@ -131,49 +131,97 @@
     <button
       mlButton
       variant="raised"
-      (click)="triggerVisualizeRipple = !triggerVisualizeRipple"
+      (click)="
+        forthProdTriggerVisualizeRipple = !forthProdTriggerVisualizeRipple
+      "
     >
-      {{ triggerVisualizeRipple ? "Invisualize" : "Visualize" }} Ripple
+      {{ forthProdTriggerVisualizeRipple ? "Invisualize" : "Visualize" }} Ripple
     </button>
   </div>
 
   <div product class="fourth-product">
     <div class="fourth-product-wrapper">
-      <div #trigger1>Trigger</div>
+      <div #trigger1 class="ml-ripple-outlet">Trigger</div>
       <span class="arrow"> → </span>
       <div
         mlRipple
         [mlRippleTrigger]="trigger1"
-        [style]="triggerVisualizeRipple ? 'overflow: visible' : ''"
+        [style]="forthProdTriggerVisualizeRipple ? 'overflow: visible' : ''"
       >
         Default
       </div>
     </div>
 
     <div class="fourth-product-wrapper">
-      <div #trigger2>Trigger2</div>
+      <div #trigger2 class="ml-ripple-outlet">Trigger 2</div>
       <span class="arrow"> → </span>
       <div
         mlRipple
         [mlRippleTrigger]="trigger2"
         [mlRippleEntrance]="'center'"
-        [style]="triggerVisualizeRipple ? 'overflow: visible' : ''"
+        [style]="forthProdTriggerVisualizeRipple ? 'overflow: visible' : ''"
       >
         Center
       </div>
     </div>
 
     <div class="fourth-product-wrapper">
-      <div #trigger3>Trigger3</div>
+      <div #trigger3 class="ml-ripple-outlet">Trigger 3</div>
       <span class="arrow"> → </span>
       <div
         mlRipple
         [mlRippleTrigger]="trigger3"
         [mlRippleEntrance]="'resonance'"
-        [style]="triggerVisualizeRipple ? 'overflow: visible' : ''"
+        [style]="forthProdTriggerVisualizeRipple ? 'overflow: visible' : ''"
       >
         Resonance
       </div>
     </div>
+  </div>
+</app-docs-viewer>
+
+<h2 class="docs-h2">Multiple triggers</h2>
+<p class="docs-h2-desc">
+  Rippleを呼び出せるElementを変更することができ、Rippleが出現するポイントも指定することができます。
+</p>
+<app-docs-viewer disableActions>
+  <div form>
+    <button
+      mlButton
+      variant="raised"
+      (click)="
+        fifthProdTriggerVisualizeRipple = !fifthProdTriggerVisualizeRipple
+      "
+    >
+      {{ fifthProdTriggerVisualizeRipple ? "Invisualize" : "Visualize" }} Ripple
+    </button>
+    <button
+      mlButton
+      variant="raised"
+      (click)="fifthProdRippleIsDisabled = !fifthProdRippleIsDisabled"
+    >
+      {{ fifthProdRippleIsDisabled ? "Enable" : "Disable" }} Ripple
+    </button>
+  </div>
+
+  <div product class="fifth-product">
+    <div #fifthProdTrigger class="ml-ripple-outlet">Trigger 1</div>
+
+    <div class="fifth-product-center">
+      <div #fifthProdTrigger class="ml-ripple-outlet">Trigger 2</div>
+
+      <div
+        mlRipple
+        #fifthProdRippleRef="mlRipple"
+        mlRippleEntrance="resonance"
+        [mlRippleTrigger]="null"
+        [mlRippleDisabled]="fifthProdRippleIsDisabled"
+        [style.overflow]="fifthProdTriggerVisualizeRipple ? 'visible' : ''"
+      ></div>
+
+      <div #fifthProdTrigger class="ml-ripple-outlet">Trigger 4</div>
+    </div>
+
+    <div #fifthProdTrigger class="ml-ripple-outlet">Trigger 3</div>
   </div>
 </app-docs-viewer>

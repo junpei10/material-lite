@@ -1,4 +1,3 @@
-import { OnInit } from '@angular/core';
 import { CoreConfig, Falsy, listen, RunOutsideNgZone, setCoreConfig, styling } from '@material-lite/angular-cdk/utils';
 
 styling.insert('.ml-ripple-outlet{position:relative;overflow:hidden;user-select:none}.ml-ripple{will-change:opacity,transform;transform:scale(0);transition-property:opacity,transform;transition-timing-function:cubic-bezier(0,0,.2,1);position:absolute;border-radius:50%;pointer-events:none;background:currentColor}.ml-overdrive{will-change:opacity;opacity:0;transition-property:opacity;transition-timing-function:cubic-bezier(0,0,.2,1);position:absolute;top:0;left:0;width:100%;height:100%;border-radius:0;pointer-events:none;background:currentColor}');

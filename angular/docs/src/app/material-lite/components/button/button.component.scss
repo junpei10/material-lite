@@ -67,6 +67,8 @@ a.ml-button {
   width: 40px;
   padding: 0;
   border-radius: 50%;
+  font-size: 24px;
+  fill: currentColor;
 }
 
 .ml-raised-button {
@@ -90,12 +92,6 @@ a.ml-button {
 .ml-stroked-button {
   padding: 0 15px;
   border: 1px solid;
-}
-
-.ml-icon-button {
-  height: 40px;
-  width: 40px;
-  font-size: 24px;
 }
 
 .ml-fab {

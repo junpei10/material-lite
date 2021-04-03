@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { MlRippleDirective, MlRippleEntrance } from '@material-lite/angular/core';
 import { DocsService } from 'src/app/services/docs';
 
 @Component({
@@ -23,9 +24,15 @@ import { DocsService } from 'src/app/services/docs';
       height: 80px;
     }
 
-    .second-product .ml-ripple-outlet, .fourth-product .ml-ripple-outlet {
+    .second-product .ml-ripple-outlet, .fourth-product .ml-ripple-outlet{
       width: 160px;
       height: 80px;
+    }
+
+    .fifth-product .ml-ripple-outlet {
+      width: 160px;
+      height: 80px;
+      margin: 24px 16px;
     }
 
     .third-form {
@@ -61,14 +68,33 @@ import { DocsService } from 'src/app/services/docs';
 
   `]
 })
-export class OverviewComponent {
+export class OverviewComponent implements AfterViewInit {
   typeBpViewer = 0;
   typeBpRippleWidth: 250 | 500 = 250;
   typeBpRippleHeight: 250 | 500 = 250;
 
-  triggerVisualizeRipple: boolean;
+  forthProdTriggerVisualizeRipple: boolean;
+
+
+  fifthProdRippleIsDisabled: boolean;
+  fifthProdTriggerVisualizeRipple: boolean;
+  fifthProdTriggerRippleEntrance: MlRippleEntrance = 'resonance';
+
+  @ViewChild('fifthProdRippleRef') fifthProdRipple: MlRippleDirective;
+
+  @ViewChildren('fifthProdTrigger')
+  fifthProdTriggers: QueryList<ElementRef<HTMLElement>>;
+
 
   constructor(
     docs: DocsService
   ) { docs.setActiveRoute('overview'); }
+
+  ngAfterViewInit(): void {
+    const core = this.fifthProdRipple.core;
+
+    this.fifthProdTriggers.forEach((elementRef) => {
+      core.addPointerdownListener(elementRef.nativeElement);
+    });
+  }
 }
