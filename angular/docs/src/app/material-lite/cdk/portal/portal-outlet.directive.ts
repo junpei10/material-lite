@@ -98,7 +98,7 @@ export class MlPortalOutletDirective implements OnChanges, OnDestroy {
 
         const keyOrData = this.key || this._portalData;
 
-        // @ts-ignore: assign the readonly property
+        // @ts-expect-error: Assign to readonly variable
         const attachedRef = this.attachedRef =
           this._portalOutlet.attach(content, keyOrData, this.attachConfig);
 

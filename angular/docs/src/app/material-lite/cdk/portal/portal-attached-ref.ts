@@ -25,6 +25,8 @@ export class MlPortalAttachedRef {
   private _lifecycleNextor: LifecycleSubjectNextor<lifecycleSubjectType>;
   lifecycle: LifecycleObservableGetter<lifecycleSubjectType>;
 
+  private _boundedDetachEvent: () => void;
+
   constructor(
     contentType: MlPortalContentType,
     outletKey: string | null,
@@ -48,8 +50,8 @@ export class MlPortalAttachedRef {
     [this._lifecycleNextor, this.lifecycle] = useLifecycle();
     this.animationConfig = animationConfig || {};
 
-    this._portalData.detachEvents
-      .push(this._detach.bind(this));
+    const detachEvent = this._boundedDetachEvent = this._detach.bind(this);
+    this._portalData.detachEvents.push(detachEvent);
   }
 
   /**
@@ -96,10 +98,20 @@ export class MlPortalAttachedRef {
       }
     }
 
-    this._portalData.detachEvents
-      .splice(this.data.attachedOrder, 1);
+    const boundedDetachEvent = this._boundedDetachEvent;
+    const detachEvents = this._portalData.detachEvents;
+    let index = this.data.attachedOrder;
 
-    // @ts-ignore: assign the readonly variable
+    while (0 <= index) {
+      if (detachEvents[index] === boundedDetachEvent) {
+        detachEvents.splice(index, 1);
+        break;
+      }
+
+      index--;
+    }
+
+    // @ts-expect-error: Assign to readonly variable
     this.hasClosed = true;
   }
 

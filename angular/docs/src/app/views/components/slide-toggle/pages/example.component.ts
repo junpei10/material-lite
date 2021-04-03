@@ -8,7 +8,7 @@ import { DocsService } from 'src/app/services/docs';
 export class ExampleComponent {
   theme: string = 'primary';
   checked: boolean;
-  disabled: boolean;
+  disabled: boolean = true;
 
   constructor(
     docs: DocsService

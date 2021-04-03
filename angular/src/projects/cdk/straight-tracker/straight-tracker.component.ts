@@ -41,7 +41,6 @@ export class MlStraightTrackerComponent implements OnInit, OnChanges, AfterConte
   private _trackerElementRef: ElementRef<HTMLElement>;
   @ViewChild('trackerElement', { static: true })
   private set _setCore(elementRef: ElementRef<HTMLElement>) {
-    console.log('abc');
     this._trackerElementRef = elementRef;
 
     this.core = this._coreFactory(elementRef.nativeElement);

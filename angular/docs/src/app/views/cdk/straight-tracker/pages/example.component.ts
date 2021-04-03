@@ -13,7 +13,7 @@ import { DocsService } from 'src/app/services/docs';
 export class ExampleComponent {
   selectedIndex: number = 0;
 
-  disabled: boolean;
+  disabled: boolean = true;
 
   position: MlStraightTrackerPosition;
   orientation: MlStraightTrackerOrientation;

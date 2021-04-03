@@ -19,8 +19,8 @@ export function mixinDisableRipple(base: NoConstructor<any>): NoConstructor<CanD
 
       if (this.rippleCore) {
         result
-          ? this.rippleCore.setTrigger(null)
-          : this.rippleCore.setTrigger('current');
+          ? this.rippleCore.teardown()
+          : this.rippleCore.setup();
       }
     }
   };

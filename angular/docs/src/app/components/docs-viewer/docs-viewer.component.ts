@@ -2,6 +2,7 @@ import {
   Attribute, ChangeDetectionStrategy, ChangeDetectorRef, Component,
   Input, OnInit, SkipSelf, ViewEncapsulation
 } from '@angular/core';
+import { Falsy } from '@material-lite/angular-cdk/utils';
 import { DocsCodeData, DocsService } from 'src/app/services/docs';
 
 @Component({
@@ -24,8 +25,8 @@ export class DocsViewerComponent implements OnInit {
 
   @Input() codeData?: DocsCodeData;
 
-  @Input('showCodeblock') hasShownCodeblock: boolean;
-  @Input('disableActions') actionsIsDisabled: boolean;
+  @Input('showCodeblock') hasShownCodeblock: true | Falsy;
+  @Input('disableActions') actionsIsDisabled: true | Falsy;
 
   constructor(
     @Attribute('codeblockName') public codeblockName: string,

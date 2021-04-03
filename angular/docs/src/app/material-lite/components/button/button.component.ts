@@ -10,8 +10,12 @@ export type MlButtonVariant = 'basic' | 'raised' | 'stroked' | 'flat' | 'fab' | 
 export type MlButtonHoverAction = 'enabled' | 'disabled' | 'auto';
 
 theming.set({
-  theme: (theme) => {
-    return `
+  theme: (theme) => `.ml-button.ml-disabled{color:${theme.disabledText} !important}.ml-filled-button{background-color:${theme.secondaryContainer}}.ml-filled-button.ml-disabled{background-color:${theme.disabledContainer} !important}.ml-stroked-button{border-color:${theme.divider} !important}`,
+  palette: (name, color, contrast) => `.ml-simple-button.ml-${name}{color:${color}}.ml-filled-button.ml-${name}{background-color:${color};color:${contrast}}`
+});
+
+/*
+<theme>
 .ml-button.ml-disabled {
   color: ${theme.disabledText} !important;
 }
@@ -24,10 +28,8 @@ theming.set({
 .ml-stroked-button {
   border-color: ${theme.divider} !important;
 }
-`;
-  },
 
-  palette: (name, color, contrast) => `
+<palette>
 .ml-simple-button.ml-${name} {
   color: ${color};
 }
@@ -35,9 +37,7 @@ theming.set({
   background-color: ${color};
   color: ${contrast};
 }
-
-`
-});
+*/
 
 const ButtonMixin = mixinBundleFactory(mixinDisableRipple, mixinRippleDynamicConfig, mixinTheme);
 
@@ -61,7 +61,7 @@ export class MlButtonComponent extends ButtonMixin implements OnInit, OnChanges 
   private _currentClassList: string[] = [];
 
   @Input('disabled') set setDisabled(isDisabled: true | Falsy) {
-    // @ts-ignore assign the readonly variable
+    // @ts-expect-error Assign to readonly variable
     const result = this.disabled =
       isDisabled || isDisabled === '';
 
@@ -82,27 +82,26 @@ export class MlButtonComponent extends ButtonMixin implements OnInit, OnChanges 
       if (this.isButtonElement) {
         el.disabled = false;
       }
-
     }
   }
   readonly disabled: boolean = false;
 
   @Input('variant') set setVariant(variant: MlButtonVariant) {
-    // @ts-ignore assign the readonly variable
+    // @ts-expect-error Assign to readonly variable
     this.variant = variant;
     this._needSetVariant = true;
   }
   readonly variant: MlButtonVariant;
 
   @Input('hoverAction') set setHoverAction(type: MlButtonHoverAction) {
-    // @ts-ignore assign the readonly variable
+    // @ts-expect-error Assign to readonly variable
     this.hoverAction = type;
     this._needSetVariant = true;
   }
   readonly hoverAction: MlButtonHoverAction;
 
   @Input('wrappedAnchor') set setAnchorToWrapped(isEnabled: true | Falsy) {
-    // @ts-ignore assign the readonly variable
+    // @ts-expect-error Assign to readonly variable
     const result = this.hasWrappedAnchor =
       isEnabled || isEnabled === '';
 
@@ -119,10 +118,11 @@ export class MlButtonComponent extends ButtonMixin implements OnInit, OnChanges 
 
   @ViewChild('mlRippleOutlet', { static: true })
   private set _setRippleCore(outletElementRef: ElementRef<HTMLElement>) {
-    // @ts-ignore: assign the readonly variable
-    this.rippleCore = this._rippleCoreFactory(outletElementRef.nativeElement);
-
+    // @ts-expect-error: Assign to readonly variable
+    const core = this.rippleCore = this._rippleCoreFactory(outletElementRef.nativeElement);
     this._rippleCoreFactory = null;
+
+    core.setTrigger(this._elementRef.nativeElement);
   }
 
   constructor(
@@ -142,12 +142,14 @@ export class MlButtonComponent extends ButtonMixin implements OnInit, OnChanges 
     this._rippleCoreFactory = (outletEl) =>
       new MlRippleCore(
         this._rippleDynamicConfig, outletEl, runOutsideNgZone,
-        _document.createElement.bind(_document), el);
+        _document.createElement.bind(_document)
+      );
   }
 
   ngOnInit(): void {
+    // Rippleが設定されていないとき
     if (this.rippleIsDisabled === void 0) {
-      this.rippleCore.setTrigger('current');
+      this.rippleCore.setup();
     }
 
     this.ngOnChanges();

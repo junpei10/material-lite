@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MlRippleEntrance } from 'src/app/material-lite/components/core';
 import { DocsService } from 'src/app/services/docs';
 
@@ -8,9 +8,12 @@ import { DocsService } from 'src/app/services/docs';
   styleUrls: ['./example.component.css']
 })
 export class ExampleComponent {
-  type: 0 | 1 | 2 = 0;
+  @ViewChild('triggerRef', { static: true, })
+  set onSetRef(elementRef: ElementRef<HTMLElement>) {
+    this.trigger = elementRef.nativeElement;
+  }
 
-  disabled: boolean;
+  disabled: boolean = true;
   overdrive: boolean;
 
   theme: string;
@@ -25,6 +28,8 @@ export class ExampleComponent {
   } = {};
 
   entrance: MlRippleEntrance;
+
+  trigger: HTMLElement | null;
 
   constructor(
     docs: DocsService

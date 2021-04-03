@@ -8,12 +8,10 @@ import { DocsService } from 'src/app/services/docs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExampleComponent {
-  type: 0 | 1 | 2 = 0;
-
   theme: string;
   variant: MlButtonVariant = 'basic';
   hoverAction: MlButtonHoverAction = 'auto';
-  disabled: boolean;
+  disabled: boolean = true;
 
   constructor(docs: DocsService) {
     docs.setActiveRoute('example', 2);

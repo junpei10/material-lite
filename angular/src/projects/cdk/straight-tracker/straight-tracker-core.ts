@@ -33,6 +33,11 @@ const ZERO_ORIGIN = {
   y: 0
 };
 
+interface OverwriteOnResizeEntry extends ResizeObserverEntry { borderBoxSize: any; }
+interface OnResizeEntry extends OverwriteOnResizeEntry {
+  borderBoxSize: ReadonlyArray<ResizeObserverSize> | ResizeObserverSize;
+}
+
 export class MlStraightTrackerCore {
   private _onFirstUpdateBrothers: (() => void) | null | undefined;
 
@@ -74,7 +79,7 @@ export class MlStraightTrackerCore {
    * `resizeObserver`が変更を感知したときに呼び出される関数。
    * 引数に渡される値から、`target`のサイズの情報だけをくり抜き、`setTrackerStyle`関数を呼び出す。
    */
-  private _onResize(entries: ResizeObserverEntry[]): void {
+  private _onResize(entries: OnResizeEntry[]): void {
     const targetEl = this.targetElement;
 
     const entry0 = entries[0];
@@ -83,14 +88,16 @@ export class MlStraightTrackerCore {
     let targetSize: WH | undefined;
 
     if (entry0.target === targetEl) {
-      const base = entry0.borderBoxSize[0];
+      const base = entry0.borderBoxSize[0] || entry0.borderBoxSize;
+
       targetSize = {
         width: base.inlineSize,
         height: base.blockSize
       };
 
     } else if (entry1 && entry1.target === targetEl) {
-      const base = entry1.borderBoxSize[0];
+      const base = entry1.borderBoxSize[0] || entry1.borderBoxSize;
+
       targetSize = {
         width: base.inlineSize,
         height: base.blockSize

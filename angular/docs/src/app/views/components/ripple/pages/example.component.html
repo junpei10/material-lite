@@ -94,9 +94,16 @@
       [mlRippleOpacity]="opacity"
       [mlRippleRadius]="radius"
       [mlRippleAnimation]="animation"
+      [mlRippleTrigger]="trigger"
       class="example-ripple"
     >
       RIPPLE
+    </div>
+
+    <div #triggerRef>TRIGGER</div>
+
+    <div mlButton (click)="trigger = trigger === null ? triggerRef : null">
+      Toggle trigger
     </div>
   </div>
 </app-docs-viewer>

@@ -38,10 +38,10 @@ export class DocsService {
       .collection(collectionPath)
       .doc(docPath);
 
-    // @ts-ignore: assign the readonly variable
+    // @ts-expect-error: Assign to readonly variable
     this.routes = docRoutes || ['overview', 'reference', 'example'];
 
-    // @ts-ignore: assign the readonly variable
+    // @ts-expect-error: Assign to readonly variable
     this.routeNames = docRouteNames || ['Overview', 'Reference', 'Example'];
   }
 
@@ -65,10 +65,10 @@ export class DocsService {
   }
 
   setActiveRoute(activeRoute: string, activeRouteIndex?: number): void {
-    // @ts-ignore: assign the readonly variable
+    // @ts-expect-error: Assign to readonly variable
     this.activeRoute = activeRoute;
 
-    // @ts-ignore: assign the readonly variable
+    // @ts-expect-error: Assign to readonly variable
     this.activeRouteIndex = activeRouteIndex || this.routes.indexOf(activeRoute);
   }
 }
