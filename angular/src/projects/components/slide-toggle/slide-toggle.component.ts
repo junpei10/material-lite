@@ -13,6 +13,30 @@ theming.set({
   palette: (name, color) => `.ml-checked.ml-${name} .ml-slide-toggle-bar-palette{background-color:${color};opacity:.56}.ml-checked.ml-${name} .ml-slide-toggle-thumb{background-color:${color}}.ml-checked.ml-${name} .ml-slide-toggle-ripple-outlet{color:${color}}`
 });
 
+/*
+<theme>
+.ml-slide-toggle-bar-palette {
+  background-color: ${theme.sliderOffActive};
+}
+.ml-slide-toggle-thumb {
+  background-color: ${theme.sliderThumb};
+}
+
+<palette>
+.ml-checked.ml-${name} .ml-slide-toggle-bar-palette {
+  background-color: ${color};
+  opacity: 0.56;
+}
+
+.ml-checked.ml-${name} .ml-slide-toggle-thumb {
+  background-color: ${color};
+}
+
+.ml-checked.ml-${name} .ml-slide-toggle-ripple-outlet {
+  color: ${color};
+}
+*/
+
 export const ML_SLIDE_TOGGLE_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
   useExisting: forwardRef(() => MlSlideToggleComponent),
@@ -54,7 +78,7 @@ export class MlSlideToggleComponent extends SlideToggleMixin implements OnInit, 
   private _onTouched = this._onChange;
 
   @Input('disabled') set setDisabled(isDisabled: true | Falsy) {
-    // @ts-ignore: assign the readonly variable
+    // @ts-expect-error: Assign to readonly variable
     const result = this.disabled =
       isDisabled || isDisabled === '';
 
@@ -75,8 +99,8 @@ export class MlSlideToggleComponent extends SlideToggleMixin implements OnInit, 
   @ViewChild('input') private _inputElement: ElementRef<HTMLInputElement>;
 
   @Input('id') set setId(id: string) {
-    // @ts-ignore: assign the readonly variable
-    this.id = id; // @ts-ignore
+    // @ts-expect-error: Assign to readonly variable
+    this.id = id; // @ts-expect-error
     this.inputId = id + '-input';
   }
   readonly id: string;
@@ -122,10 +146,12 @@ export class MlSlideToggleComponent extends SlideToggleMixin implements OnInit, 
 
   @ViewChild('mlRippleOutlet', { static: true })
   private set _setRippleCore(outletElementRef: ElementRef<HTMLElement>) {
-    // @ts-ignore: assign the readonly variable
-    this.rippleCore = this._rippleCoreFactory(outletElementRef.nativeElement);
+    // @ts-expect-error: Assign to readonly variable
+    const core = this.rippleCore = this._rippleCoreFactory(outletElementRef.nativeElement);
 
     this._rippleCoreFactory = null;
+
+    core.setTrigger(this._elementRef.nativeElement);
   }
 
   constructor(
@@ -153,13 +179,12 @@ export class MlSlideToggleComponent extends SlideToggleMixin implements OnInit, 
       new MlRippleCore(
         rippleConf, outletEl, runOutsideNgZone,
         _document.createElement.bind(_document),
-        _elementRef.nativeElement
       );
   }
 
   ngOnInit(): void {
     if (this.rippleIsDisabled === void 0) {
-      this.rippleCore.setTrigger('current');
+      this.rippleCore.setup();
     }
 
     if (!this.id) {
@@ -185,7 +210,7 @@ export class MlSlideToggleComponent extends SlideToggleMixin implements OnInit, 
   }
 
   toggle(): void {
-    // @ts-ignore: assign readonly variable
+    // @ts-expect-error: Assign to readonly variable
     const checked = this.checked = !this.checked;
     this._onChange(checked);
   }
@@ -200,7 +225,7 @@ export class MlSlideToggleComponent extends SlideToggleMixin implements OnInit, 
   }
 
   /** Implemented as part of ControlValueAccessor. */
-  writeValue(value: any): void { // @ts-ignore: assign the readonly variable
+  writeValue(value: any): void { // @ts-expect-error: Assign to readonly variable
     this.checked = !!value;
   }
   registerOnChange(fn: any): void {
@@ -210,7 +235,7 @@ export class MlSlideToggleComponent extends SlideToggleMixin implements OnInit, 
     this._onTouched = fn;
   }
   setDisabledState(isDisabled: boolean): void {
-    // @ts-ignore: assign the readonly variable
+    // @ts-expect-error: Assign to readonly variable
     this.disabled = isDisabled;
     this._changeDetectorRef.markForCheck();
   }

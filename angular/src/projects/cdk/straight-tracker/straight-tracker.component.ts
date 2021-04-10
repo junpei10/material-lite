@@ -34,7 +34,7 @@ type Changes = {
 })
 export class MlStraightTrackerComponent implements OnInit, OnChanges, AfterContentInit {
   core: MlStraightTrackerCore;
-  private _coreFactory?: (trackerEl: HTMLElement) => MlStraightTrackerCore;
+  private _coreFactory: ((trackerEl: HTMLElement) => MlStraightTrackerCore) | null;
 
   private _initialized: boolean = false;
 
@@ -43,33 +43,33 @@ export class MlStraightTrackerComponent implements OnInit, OnChanges, AfterConte
   private set _setCore(elementRef: ElementRef<HTMLElement>) {
     this._trackerElementRef = elementRef;
 
-    this.core = this._coreFactory(elementRef.nativeElement);
+    this.core = this._coreFactory!(elementRef.nativeElement);
     this._coreFactory = null;
   }
 
   @Input('disabled') set setDisabled(isDisabled: true | Falsy) {
-    // @ts-ignore: assign the readonly variable
+    // @ts-expect-error: Assign to readonly variable
     const result = this.disabled =
       isDisabled || isDisabled === '';
 
     result
-      ? this.core.finalize()
-      : this.core.initialize();
+      ? this.core.teardown()
+      : this.core.setup();
   }
   readonly disabled: boolean;
 
-  @Input('target') set setTarget(target: HTMLElement) {
+  @Input('target') set setTarget(target: HTMLElement | Falsy) {
     this.core.trackTargetByElement(target);
   }
 
-  @Input('targetIndex') set setTargetIndex(targetIndex: number) {
+  @Input('targetIndex') set setTargetIndex(targetIndex: number | Falsy) {
     this.core.trackTargetByIndex(targetIndex);
   }
 
   @Input() orientation?: 'horizontal' | 'vertical';
   @Input() position?: 'before' | 'after';
 
-  private _transitionsStack?: string | MlStraightTrackerTransition;
+  private _transitionsStack: string | MlStraightTrackerTransition | null;
   @Input('transition') set setTransition(style: string | MlStraightTrackerTransition) {
     const el = this._trackerElementRef?.nativeElement;
 
@@ -79,20 +79,21 @@ export class MlStraightTrackerComponent implements OnInit, OnChanges, AfterConte
         return;
       }
 
-      el.style.transitionProperty = style.property || null;
-      el.style.transitionTimingFunction = style.timingFunction || null;
-      el.style.transitionDuration = style.duration || null;
-      el.style.transitionDelay = style.delay || null;
+      el.style.transitionProperty = style.property || null!;
+      el.style.transitionTimingFunction = style.timingFunction || null!;
+      el.style.transitionDuration = style.duration || null!;
+      el.style.transitionDelay = style.delay || null!;
 
     } else { this._transitionsStack = style; }
   }
+
   @Input() transitionClasses?: MlStraightTrackerTransitionClasses;
 
   @Input('sizingMode')
   set setSizingMode(mode: MlStraightTrackerSizingMode) {
     this.core.setSizingMode(mode);
 
-    // @ts-ignore: assign the readonly variable
+    // @ts-expect-error: Assign to readonly variable
     this.sizingMode = mode;
   }
   readonly sizingMode: MlStraightTrackerCore;
@@ -144,7 +145,7 @@ export class MlStraightTrackerComponent implements OnInit, OnChanges, AfterConte
     const orientationChanges = !!changes.orientation;
 
     if (orientationChanges || changes.position) {
-      this.core.updateTrackerStyle(this._initialized && orientationChanges);
+      this.core.updateTrackerPosition(this._initialized && orientationChanges);
     }
   }
 

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { MlButtonComponent } from './button.component';
 
 @NgModule({
-  exports: [MlButtonComponent],
   declarations: [MlButtonComponent],
+  exports: [MlButtonComponent]
 })
 export class MlButtonModule {}

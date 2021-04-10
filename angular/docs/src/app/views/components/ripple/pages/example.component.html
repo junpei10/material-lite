@@ -41,8 +41,19 @@
         placeholder="radius"
         type="number"
         min="0"
-        step="10"
+        step="40"
         [(ngModel)]="radius"
+      />
+    </div>
+
+    <div>
+      <span>radiusMagnification</span>
+      <input
+        placeholder="radiusMagnification"
+        type="number"
+        min="0"
+        step="0.1"
+        [(ngModel)]="radiusMagnification"
       />
     </div>
 
@@ -93,17 +104,11 @@
       [mlRippleColor]="color"
       [mlRippleOpacity]="opacity"
       [mlRippleRadius]="radius"
+      [mlRippleRadiusMagnification]="radiusMagnification"
       [mlRippleAnimation]="animation"
-      [mlRippleTrigger]="trigger"
       class="example-ripple"
     >
       RIPPLE
-    </div>
-
-    <div #triggerRef>TRIGGER</div>
-
-    <div mlButton (click)="trigger = trigger === null ? triggerRef : null">
-      Toggle trigger
     </div>
   </div>
 </app-docs-viewer>

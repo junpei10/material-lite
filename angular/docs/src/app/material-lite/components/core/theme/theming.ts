@@ -63,7 +63,7 @@ const shadowTheming: ShadowTheming = {
   },
 
   _init(themeBases: ThemeBases): void {
-    // @ts-expect-error: Assign to readonly variable
+    // @ts-ignore: Assign to readonly variable
     const storage = this.valueStorage = {
       keys: []
     } as MlThemeValueStorage;
@@ -90,11 +90,13 @@ const shadowTheming: ShadowTheming = {
       const paletteFactory: MlThemeStyle['palette'] = (name, color, contrast) =>
         `.ml-${name}-style{background-color:${color};color:${contrast}}.ml-${name}-bg{background-color:${color}}.ml-${name}-color{color:${color}}.ml-${name}-contrast{color:${contrast}}`;
 
-      const palette = base.palette as MlThemeValue['palette'];
+      const theme = base.theme;
 
+      const palette = base.palette as MlThemeValue['palette'];
       const pltKeys = palette.keys = Object.keys(palette);
       const pltLen = pltKeys.length;
-      let _entryStyle = '';
+
+      let _entryStyle = `.ml-hint{color:${theme.hintText}}.ml-divider{background-color:${theme.divider}}`;
       for (let i = 0; i < pltLen; i++) {
         const pltName = pltKeys[i];
         const plt = palette[pltName];
@@ -102,8 +104,6 @@ const shadowTheming: ShadowTheming = {
       }
 
       const wrapperTagName = base.wrapperTagName === void 0 ? 'body' : base.wrapperTagName;
-      const theme = base.theme;
-
       if (wrapperClass) {
         const wc = '.' + wrapperClass; // { {
         _entryStyle =

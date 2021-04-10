@@ -1,7 +1,7 @@
 import { Directive, ElementRef, Inject, Input, OnInit } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { Falsy, MlDocument, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
-import { MlRippleCore, MlRippleEntrance, MlRippleOverdrive, MlRippleTrigger } from './ripple-core';
+import { Falsy, MlDocument, noop, RunOutsideNgZone, RUN_OUTSIDE_NG_ZONE } from '@material-lite/angular-cdk/utils';
+import { MlRippleAnimation, MlRippleCore, MlRippleEntrance, MlRippleOverdrive } from './ripple-core';
 
 @Directive({
   selector: '[mlRipple]',
@@ -10,18 +10,14 @@ import { MlRippleCore, MlRippleEntrance, MlRippleOverdrive, MlRippleTrigger } fr
 export class MlRippleDirective implements OnInit {
   core: MlRippleCore;
 
-  private _hasInitialized: boolean;
-
   @Input('mlRippleDisabled') set setDisabled(isDisabled: true | Falsy) {
-    // @ts-ignore: assign the readonly variable
+    // @ts-expect-error: Assign to readonly variable
     const result = this.disabled =
       isDisabled || isDisabled === '';
 
-    if (this._hasInitialized) {
-      result
-        ? this.core.setTrigger(null)
-        : this.core.setTrigger('current');
-    }
+    result
+      ? this.core.teardown()
+      : this.core.setup();
   }
   readonly disabled: boolean;
 
@@ -37,52 +33,53 @@ export class MlRippleDirective implements OnInit {
 
   @Input('mlRippleRadiusMagnification') radiusMagnification?: number;
 
-  @Input('mlRippleAnimation') animation: {
-    enter?: number;
-    leave?: number;
-  };
+  @Input('mlRippleAnimation') animation?: MlRippleAnimation;
 
   @Input('mlRippleEntrance') entrance?: MlRippleEntrance;
 
-  @Input('mlRippleTrigger') set setTrigger(trigger: MlRippleTrigger) {
-    // @ts-ignore: assign the readonly variable
-    this.trigger = trigger;
+  @Input('mlRippleTrigger') set setTrigger(trigger: EventTarget | 'outlet' | Falsy) {
+    this._removeTriggerListener();
 
-    this.core.setTrigger(trigger);
-  } // @ts-ignore
-  readonly trigger: MlRippleTrigger = 1;
+    if (trigger) {
+      // @ts-expect-error: Assign to readonly variable
+      const entryTrigger = this.trigger =
+        trigger === 'outlet'
+          ? this._elementRef.nativeElement
+          : trigger;
 
-  @Input('mlRippleFadeOutEventNames') fadeOutEventNames?: string[] = [
-    'pointerup', 'pointerout'
-  ];
+      this._removeTriggerListener =
+        this.core.addPointerdownListener(entryTrigger);
+
+    } else {
+      // @ts-expect-error: Assign to readonly variable
+      this.trigger = null;
+      this._removeTriggerListener = noop;
+    }
+  }
+  readonly trigger: EventTarget | null;
+  private _removeTriggerListener: () => void = noop;
+
+  @Input('mlRippleFadeOutEventNames') fadeOutEventNames?: string[];
 
   constructor(
-    elementRef: ElementRef<HTMLElement>,
+    private _elementRef: ElementRef<HTMLElement>,
     @Inject(DOCUMENT) _document: MlDocument,
     @Inject(RUN_OUTSIDE_NG_ZONE) runOutsideNgZone: RunOutsideNgZone,
   ) {
     this.core =
-      new MlRippleCore(this, elementRef.nativeElement, runOutsideNgZone, _document.createElement.bind(_document));
+      new MlRippleCore(
+        this, _elementRef.nativeElement, runOutsideNgZone,
+        _document.createElement.bind(_document)
+      );
   }
 
   ngOnInit(): void {
-    const trigger = this.trigger as MlRippleTrigger & 1;
-
-    if (!this.disabled) {
-      // @ts-ignore
-      this.disabled = false;
-
-      if (trigger === 1) {
-        // @ts-ignore: assign the readonly variable
-        this.trigger = 'outlet';
-        this.core.setTrigger('current');
-      }
-
-    } else if (trigger === 1) {
-      // @ts-ignore: assign the readonly variable
-      this.trigger = 'outlet';
+    if (this.disabled === void 0) {
+      this.setDisabled = false;
     }
 
-    this._hasInitialized = true;
+    if (this.trigger === void 0) {
+      this.setTrigger = 'outlet';
+    }
   }
 }

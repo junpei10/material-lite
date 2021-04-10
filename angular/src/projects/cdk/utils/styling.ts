@@ -3,9 +3,13 @@ interface Styling {
   setHeadElement: (headElement: HTMLHeadElement) => void;
 }
 
-export const styling: Styling = {
+interface ShadowStyling extends Styling {
+  _stackStyle: string;
+}
+
+const shadowStyling: ShadowStyling = {
   insert(style: string): void {
-    this._stackingStyle += style;
+    this._stackStyle += style;
   },
 
   setHeadElement(headElement): void {
@@ -13,13 +17,30 @@ export const styling: Styling = {
       headElement.insertAdjacentHTML('beforeend', '<style>' + style + '</style>');
     };
 
-    const stackingStyle = this._stackingStyle as string;
-    if (stackingStyle) {
-      insert(stackingStyle);
-      this._stackingStyle = null;
+    const stackStyle = this._stackStyle;
+    if (stackStyle) {
+      insert(stackStyle);
+      this._stackStyle = null!;
     }
   },
 
-  // @ts-ignore
-  _stackingStyle: '.ml-visually-hidden{border:0;clip:rect(0 0 0 0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;outline:0;-webkit-appearance:none;-moz-appearance:none}',
+  _stackStyle: '.ml-visually-hidden{border:0;clip:rect(0 0 0 0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;outline:0;-webkit-appearance:none;-moz-appearance:none}'
 };
+
+export const styling: Styling = shadowStyling;
+
+/*
+.ml-visually-hidden{
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  outline: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+*/

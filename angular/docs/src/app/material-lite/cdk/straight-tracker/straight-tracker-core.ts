@@ -5,9 +5,9 @@ interface WH {
   height: number;
 }
 
-interface XY {
-  x: number;
-  y: number;
+interface TL {
+  top: number;
+  left: number;
 }
 
 export interface MlStraightTrackerCoreConfig {
@@ -28,8 +28,8 @@ export interface MlStraightTrackerTransitionClasses {
 export type MlStraightTrackerSizingMode = 'loose' | 'strict' | 'strict-origin' | 'strict-target-point';
 
 const ZERO_ORIGIN = {
-  x: 0,
-  y: 0
+  left: 0,
+  top: 0
 };
 
 export class MlStraightTrackerCore {
@@ -50,8 +50,8 @@ export class MlStraightTrackerCore {
   readonly hasObservedTarget: boolean = true;
   private _unobserveTargetObserver: () => void = noop;
 
-  private _originFactory: () => XY;
-  private _targetPointFactory: () => XY;
+  private _originFactory: () => TL;
+  private _targetPointFactory: () => TL;
 
   private _calledSetTrackerStyle: boolean;
 
@@ -74,7 +74,7 @@ export class MlStraightTrackerCore {
 
     _trackerElement.classList.add('ml-bottom-tracker');
 
-    this.setSizingMode('loose');
+    this.setSizingMode('strict');
   }
 
   /**
@@ -85,7 +85,7 @@ export class MlStraightTrackerCore {
     if (this._isEnabled) { return; }
     this._isEnabled = true;
 
-    const ResizeObsClass = ResizeObserver;
+    const ResizeObsClass = window.ResizeObserver;
 
     if (ResizeObsClass) {
       const resizeObs = this._resizeObserver =
@@ -144,7 +144,9 @@ export class MlStraightTrackerCore {
     let targetSize: WH | undefined;
 
     if (entry0.target === targetEl) {
-      const base = entry0.borderBoxSize[0] || entry0.borderBoxSize;
+      // @ts-ignore
+      const base: ResizeObserverSize =
+        entry0.borderBoxSize[0] || entry0.borderBoxSize;
 
       targetSize = {
         width: base.inlineSize,
@@ -152,7 +154,9 @@ export class MlStraightTrackerCore {
       };
 
     } else if (entry1 && entry1.target === targetEl) {
-      const base = entry1.borderBoxSize[0] || entry1.borderBoxSize;
+      // @ts-ignore
+      const base: ResizeObserverSize =
+        entry0.borderBoxSize[0] || entry0.borderBoxSize;
 
       targetSize = {
         width: base.inlineSize,
@@ -310,21 +314,21 @@ export class MlStraightTrackerCore {
    * - `orientation="vertical"`のとき => `height`, `top` のスタイルが付与。
    * - `orientation="horizontal"`のとき => `width`, `left` のスタイルが付与。
    */
-  setTrackerStyle(origin: XY, targetPoint: XY, targetSize?: WH | undefined): void {
+  setTrackerStyle(origin: TL, targetPoint: TL, targetSize?: WH | undefined): void {
     this._calledSetTrackerStyle = true;
 
     const el = this._trackerElement;
     const conf = this._config;
 
     if (conf.orientation === 'vertical') {
-      el.style.top = `${targetPoint.y - origin.y}px`;
+      el.style.top = `${targetPoint.top - origin.top}px`;
 
       if (targetSize) {
         el.style.height = `${targetSize.height}px`;
       }
 
     } else {
-      el.style.left = `${targetPoint.x - origin.x}px`;
+      el.style.left = `${targetPoint.left - origin.left}px`;
 
       if (targetSize) {
         el.style.width = `${targetSize.width}px`;
@@ -511,9 +515,9 @@ export class MlStraightTrackerCore {
   }
 }
 
-function createLoosePoint(element: HTMLElement): XY {
+function createLoosePoint(element: HTMLElement): TL {
   return {
-    x: element.offsetLeft,
-    y: element.offsetTop,
+    left: element.offsetLeft,
+    top: element.offsetTop,
   };
 }

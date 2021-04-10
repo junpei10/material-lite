@@ -194,7 +194,7 @@ export class MlPortalOutlet {
           content.mlPortalAttachedRef as MlPortalAttachedRef | undefined;
 
         if (prevMlPortalAttachedRef) {
-          // @ts-ignore: assign the readonly variable
+          // @ts-expect-error: Assign to readonly variable
           prevMlPortalAttachedRef.data.isFirstAttached = false;
           return prevMlPortalAttachedRef;
         }

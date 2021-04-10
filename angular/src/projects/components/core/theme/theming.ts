@@ -47,19 +47,23 @@ interface Theming {
   set: (style: MlThemeStyle) => void;
 }
 
-export const theming: Theming = {
+interface ShadowTheming extends Omit<Theming, 'valueStorage'> {
+  valueStorage?: MlThemeValueStorage;
+  _init: (themeBases: ThemeBases) => void;
+  _themeStacks: MlThemeStyle[];
+}
+
+const shadowTheming: ShadowTheming = {
   themeKeys: ['base', 'oppositeBase', 'background', 'primaryContainer', 'secondaryContainer', 'tertiaryContainer', 'disabledContainer', 'divider', 'elevation', 'scrollbar', 'icon', 'sliderMin', 'sliderOff', 'sliderOffActive', 'sliderThumb', 'text', 'secondaryText', 'hintText', 'disabledText'],
 
+  _themeStacks: [],
+
   set(style): void {
-    // @ts-ignore
     this._themeStacks.push(style);
   },
 
-  // @ts-ignore
-  _themeStacks: [],
-
   _init(themeBases: ThemeBases): void {
-    // @ts-ignore: assign the readonly variable
+    // @ts-ignore: Assign to readonly variable
     const storage = this.valueStorage = {
       keys: []
     } as MlThemeValueStorage;
@@ -86,11 +90,13 @@ export const theming: Theming = {
       const paletteFactory: MlThemeStyle['palette'] = (name, color, contrast) =>
         `.ml-${name}-style{background-color:${color};color:${contrast}}.ml-${name}-bg{background-color:${color}}.ml-${name}-color{color:${color}}.ml-${name}-contrast{color:${contrast}}`;
 
-      const palette = base.palette as MlThemeValue['palette'];
+      const theme = base.theme;
 
+      const palette = base.palette as MlThemeValue['palette'];
       const pltKeys = palette.keys = Object.keys(palette);
       const pltLen = pltKeys.length;
-      let _entryStyle = '';
+
+      let _entryStyle = `.ml-hint{color:${theme.hintText}}.ml-divider{background-color:${theme.divider}}`;
       for (let i = 0; i < pltLen; i++) {
         const pltName = pltKeys[i];
         const plt = palette[pltName];
@@ -98,8 +104,6 @@ export const theming: Theming = {
       }
 
       const wrapperTagName = base.wrapperTagName === void 0 ? 'body' : base.wrapperTagName;
-      const theme = base.theme;
-
       if (wrapperClass) {
         const wc = '.' + wrapperClass; // { {
         _entryStyle =
@@ -126,8 +130,7 @@ export const theming: Theming = {
     };
 
     // init()が呼び出される前に設定されてたスタイルをすべて追加する。
-    // @ts-ignore
-    const stacks = this._themeStacks as MlThemeStyle[];
+    const stacks = this._themeStacks;
     forLen = stacks.length;
 
     for (let index = 0; index < forLen; index++) {
@@ -141,10 +144,11 @@ export const theming: Theming = {
 
     styling.insert(entryStyle);
 
-    // @ts-ignore
-    this._themeStacks = null; this._init = null;
+    this._themeStacks = null!; this._init = null!;
   }
 };
+
+export const theming = shadowTheming as Theming;
 
 function createThemeStyle(value: MlThemeValue, style: MlThemeStyle): string {
   let entryStyle = style.theme?.(value.theme) || '';
@@ -198,18 +202,17 @@ export class MlTheming {
       _theming._init(themeBases);
 
     } else {
-      // @ts-ignore: assign the readonly variable
-      _theming.valueStorage = {};
+      // @ts-expect-error: Assign to readonly variable
+      _theming.valueStorage = { keys: [] };
       _theming.set = noop;
 
-      // @ts-ignore
-      _theming._init = null; _theming._themeStacks = null;
+      _theming._init = null!; _theming._themeStacks = null!;
     }
 
     styling.setHeadElement(this._document.head);
   }
 
-  setCssVariables(base: { theme: MlTheme, palette: MlPalette, wrapperClass?: string | null }): void {
+  setCssVariables(base: { theme: MlTheme, palette: MlPalette, wrapperClass?: string | Falsy }): void {
     const wrapperClass = base.wrapperClass || null!;
 
     let styleElement = this._cssVariablesStyleElementRef[wrapperClass];
