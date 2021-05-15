@@ -83,5 +83,5 @@
   "cli": {
     "analytics": "300aa598-7b5b-4857-a12f-53e82a45a9e2"
   },
-  "defaultProject": "cdk"
+  "defaultProject": "components"
 }
